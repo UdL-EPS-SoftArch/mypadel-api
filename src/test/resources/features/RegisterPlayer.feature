@@ -10,6 +10,7 @@ Feature: Register player
     And It has been created a player with username "player", email "player@udl.cat" and the password is not returned
 
   Scenario: Register new player without authentication
+    Given I'm not logged in
     When I register a new player with username "player", email "player@udl.cat" and password "password"
     Then The response code is 401
     And It has not been created a player with username "player"
