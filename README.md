@@ -7,12 +7,13 @@ Class project for the Software Architecture 2017-18 Course, Polytechnic School, 
 
 ## Vision
 
-**For** ... **who** ...
+**For** padel players **who** are interested in organizing padel matches with people of their same level.
+The project **Padel match organizer** is a field reservation manager **that** also allows users to:
 
-The project **Padel Match Organizer** is a ... \
-**that** allows ...
 
-**Unlike** other ...
+
+**Unlike** other field reservation management apps, our project allows players to join matches with people 
+of their same padel level. Additionally, they do not have to worry about reserving a field.
 
 
 ## Features per Stakeholder
@@ -26,8 +27,3 @@ The project **Padel Match Organizer** is a ... \
 
 
 Class project for the Software Architecture 2017-18 Course, Polytechnic School, University of Lleida
-
-## Vision
-
-**For** padel players **who** are interested in organizing padel matches with people of their same level.
-The project **Padel match organizer** is a field reservation manager **that** also allows users to:
