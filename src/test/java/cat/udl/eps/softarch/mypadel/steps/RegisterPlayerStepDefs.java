@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RegisterPlayerStepDefs {
     private static final Logger logger = LoggerFactory.getLogger(RegisterPlayerStepDefs.class);
@@ -48,5 +49,13 @@ public class RegisterPlayerStepDefs {
                 .andExpect(jsonPath("$.username", is(username)))
                 .andExpect(jsonPath("$.email", is(email)))
                 .andExpect(jsonPath("$.password").doesNotExist());
+    }
+
+    @And("^It has not been created a player with username \"([^\"]*)\"$")
+    public void itHasNotBeenCreatedAPlayerWithUsername(String username) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/players/{username}", username)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
