@@ -32,8 +32,8 @@ of their same padel level. Additionally, they do not have to worry about reservi
 | Add match result              | Add match result              |
 | Confirm match result          | Confirm match result          |
 | Invite players to match       | Invite players to match       |
-| Accept invitation to match    | Create field                  |
-|                               | Remove field                  |
+| Accept invitation to match    | Create court                  |
+|                               | Remove court                  |
 |                               | Create player                 |
 |                               | Remove player                 |               |
 
