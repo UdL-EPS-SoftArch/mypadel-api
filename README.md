@@ -22,21 +22,20 @@ of their same padel level. Additionally, they do not have to worry about reservi
 
 ## Features per Stakeholder
 
-| Player                        | Admin                        |
+| Player                        | Admin                         |
 | ------------------------------| ------------------------------|
 | Create match                  | Create match                  |
 | Join match                    | Add player match              |
 | Leave match                   | Remove player from match      |
-| Invite players to match       | Buyer offer                   |
-| Accept invitation to match    | Private message               |
 | Reserve court                 | Reserve court for a player    |
 | Cancel reservation            | Cancel reservation            |
 | Add match result              | Add match result              |
 | Confirm match result          | Confirm match result          |
-|                               | Create field                  |
+| Invite players to match       | Invite players to match       |
+| Accept invitation to match    | Create field                  |
 |                               | Remove field                  |
 |                               | Create player                 |
-|                               | Remove player                 |
+|                               | Remove player                 |               |
 
 ## Entities Model
 
