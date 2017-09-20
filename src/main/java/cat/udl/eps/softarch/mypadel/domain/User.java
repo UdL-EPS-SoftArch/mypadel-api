@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Player extends UriEntity<String> {
+public abstract class User extends UriEntity<String> {
 
     @Id
     private String username;

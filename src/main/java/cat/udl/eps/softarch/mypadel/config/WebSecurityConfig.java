@@ -24,7 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
 
-                .antMatchers(HttpMethod.POST, "/players*/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/admins*/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic().realmName("MyPaddle")

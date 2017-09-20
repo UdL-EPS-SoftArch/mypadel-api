@@ -1,9 +1,7 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.domain.Player;
-import cucumber.api.PendingException;
+import cat.udl.eps.softarch.mypadel.domain.Admin;
 import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,21 +15,21 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class RegisterPlayerStepDefs {
-    private static final Logger logger = LoggerFactory.getLogger(RegisterPlayerStepDefs.class);
+public class RegisterAdminStepDefs {
+    private static final Logger logger = LoggerFactory.getLogger(RegisterAdminStepDefs.class);
 
     @Autowired
     private StepDefs stepDefs;
 
-    @When("^I register a new player with username \"([^\"]*)\", email \"([^\"]*)\" and password \"([^\"]*)\"$")
-    public void iRegisterANewPlayerWithUsernameEmailAndPassword(String username, String email, String password) throws Throwable {
-        Player player = new Player();
-        player.setUsername(username);
-        player.setEmail(email);
-        player.setPassword(password);
-        String message = stepDefs.mapper.writeValueAsString(player);
+    @When("^I register a new admin with username \"([^\"]*)\", email \"([^\"]*)\" and password \"([^\"]*)\"$")
+    public void iRegisterANewAdminWithUsernameEmailAndPassword(String username, String email, String password) throws Throwable {
+        Admin admin = new Admin();
+        admin.setUsername(username);
+        admin.setEmail(email);
+        admin.setPassword(password);
+        String message = stepDefs.mapper.writeValueAsString(admin);
         stepDefs.result = stepDefs.mockMvc.perform(
-                post("/players")
+                post("/admins")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(message)
                         .accept(MediaType.APPLICATION_JSON)
@@ -39,10 +37,10 @@ public class RegisterPlayerStepDefs {
                 .andDo(print());
     }
 
-    @And("^It has been created a player with username \"([^\"]*)\", email \"([^\"]*)\" and the password is not returned$")
-    public void itHasBeenCreatedAPlayerWithUsernameEmailAndPassword(String username, String email) throws Throwable {
+    @And("^It has been created a admin with username \"([^\"]*)\", email \"([^\"]*)\" and the password is not returned$")
+    public void itHasBeenCreatedAAdminWithUsernameEmailAndPassword(String username, String email) throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/players/{username}", username)
+                get("/admins/{username}", username)
                     .accept(MediaType.APPLICATION_JSON)
                     .with(authenticate()))
                 .andDo(print())
@@ -51,10 +49,10 @@ public class RegisterPlayerStepDefs {
                 .andExpect(jsonPath("$.password").doesNotExist());
     }
 
-    @And("^It has not been created a player with username \"([^\"]*)\"$")
-    public void itHasNotBeenCreatedAPlayerWithUsername(String username) throws Throwable {
+    @And("^It has not been created a admin with username \"([^\"]*)\"$")
+    public void itHasNotBeenCreatedAAdminWithUsername(String username) throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/players/{username}", username)
+                get("/admins/{username}", username)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
