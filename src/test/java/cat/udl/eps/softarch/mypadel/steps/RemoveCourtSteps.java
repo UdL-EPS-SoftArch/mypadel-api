@@ -17,7 +17,7 @@ public class RemoveCourtSteps {
         throw new PendingException();
     }
 
-    @And("^A court is unavaliable$")
+    @And("^A court is unavailable")
     public void aCourtIsUnavaliable() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
@@ -29,7 +29,7 @@ public class RemoveCourtSteps {
         throw new PendingException();
     }
 
-    @And("^The court is avaliable$")
+    @And("^The court is available")
     public void theCourtIsAvaliable() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();

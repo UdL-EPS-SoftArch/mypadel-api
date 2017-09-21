@@ -8,7 +8,7 @@ Feature Remove court
     And There is an existing court
     When I remove a court
     Then The response code is 201
-    And A court is unavaliable
+    And A court is unavailable
 
   Scenario: Remove a court that does not exist
     Given I login as "admin" with password "password"
@@ -21,4 +21,4 @@ Feature Remove court
     And There is an existing court
     When I remove a court
     Then The response code is 401
-    And The court is avaliable
+    And The court is available
