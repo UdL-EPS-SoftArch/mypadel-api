@@ -3,8 +3,13 @@ package cat.udl.eps.softarch.mypadel.steps;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class RemoveCourtSteps {
+
+    @Autowired
+    private StepDefs stepDefs;
+
     @And("^There is an existing court$")
     public void thereIsAnExistingCourt() throws Throwable {
         // Write code here that turns the phrase above into concrete actions

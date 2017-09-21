@@ -1,4 +1,4 @@
-Feature Create court
+Feature: Create court
   In order to make available a new court
   As an admin
   I want to create a new court
