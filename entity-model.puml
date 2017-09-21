@@ -1,0 +1,95 @@
+[plantuml,jdot,png]
+----
+!pragma graphviz_dot jdot
+@startuml
+skinparam dpi 200
+skinparam classAttributeFontSize 8
+skinparam classArrowFontSize 9
+skinparam classFontSize 10
+skinparam nodesep 90
+skinparam ranksep 40
+hide stereotype
+skinparam class {
+	BackgroundColor White
+	BackgroundColor<<Match>> LightPink
+	BackgroundColor<<MatchResult>> #B4A7E5
+	BackgroundColor<<User>> LightBlue
+	BackgroundColor<<Court>> LightGreen
+	BackgroundColor<<Reservation>> LightYellow
+}
+
+class User <<User>> {
+    String username
+    String email, password
+}
+User "1" -- "many" Match
+
+
+
+class Admin <<User>> extends User {
+}
+
+class Player <<User>> extends User {
+    Integer score
+    Enum level
+}
+
+class Match <<Match>> {
+    Datetime startDate
+    Duration duration
+    Enum courtType
+    Datetime cancelationDeadline
+}
+
+class PublicMatch <<Match>> extends Match {
+    Enum level
+}
+
+class PrivateMatch <<Match>> extends Match {
+}
+
+class CustomMatch <<Match>> extends Match {
+}
+
+class MatchJoin <<Match>> {
+    Datetime eventDate
+}
+MatchJoin "many" -- "1" User
+MatchJoin "1..4" -- "1" Match
+
+class MatchInvitation <<Match>> {
+    Datetime eventDate
+}
+MatchInvitation "many" -- "1" User
+MatchInvitation "many" -- "1" Player
+MatchInvitation "many" -- "1" Match
+
+class MatchResult <<MatchResult>> {
+    List<Player> winningPair
+    List<Player> loosingPair
+    Boolean isDraw;
+}
+MatchResult "many" -- "1" User
+MatchResult "0..1" -- "1" Match
+
+class MatchResultVerification <<MatchResult>> {
+    Boolean agrees
+}
+MatchResultVerification "*" -- "1" User
+MatchResultVerification "1..4" -- "1" MatchResult
+
+class Reservation <<Reservation>> {
+    Datetime startDate
+    Duration duration
+    Enum courtType
+}
+Reservation "0..1" -- "1" Match
+Reservation "many" -- "1" User
+
+class Court <<Court>> {
+    Boolean isIndoor
+    Boolean available
+}
+Court "1" -- "many" Reservation
+
+@enduml
