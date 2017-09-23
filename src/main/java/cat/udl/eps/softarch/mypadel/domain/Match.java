@@ -14,4 +14,36 @@ public class Match extends UriEntity<String> {
     public String getId() {
         return null;
     }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public Enum getCourtType() {
+        return courtType;
+    }
+
+    public void setCourtType(Enum courtType) {
+        this.courtType = courtType;
+    }
+
+    public Date getCancelationDeadline() {
+        return cancelationDeadline;
+    }
+
+    public void setCancelationDeadline(Date cancelationDeadline) {
+        this.cancelationDeadline = cancelationDeadline;
+    }
 }
