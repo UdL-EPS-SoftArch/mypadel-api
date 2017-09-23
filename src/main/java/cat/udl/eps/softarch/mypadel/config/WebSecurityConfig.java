@@ -1,11 +1,10 @@
 package cat.udl.eps.softarch.mypadel.config;
 
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.http.*;
+import org.springframework.security.config.annotation.web.builders.*;
+import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.http.*;
+import org.springframework.security.web.access.channel.*;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -26,6 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, "/admins*/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/courts*/**").hasRole("ADMIN")
+
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic().realmName("MyPaddle")
