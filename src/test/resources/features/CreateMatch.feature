@@ -10,6 +10,6 @@ Feature: Create match
     And A match has been created
 
   Scenario: Unlogged person tries to create a match
-    Given I am not logged in
+    Given I'm not logged in
     When I click into create public match option
     Then The response code is 401
