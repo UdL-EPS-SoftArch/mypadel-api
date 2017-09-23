@@ -20,7 +20,8 @@ public class CreateCourtSteps {
     @When("^I create a new court$")
     public void iCreateANewCourt() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+
+        //throw new PendingException();
     }
 
     @And("^A new court has not been created$")
