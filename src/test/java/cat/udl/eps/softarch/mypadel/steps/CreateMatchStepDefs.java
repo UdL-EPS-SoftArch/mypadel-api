@@ -16,6 +16,12 @@ public class CreateMatchStepDefs {
         throw new PendingException();
     }
 
+    @And("^I confirm with the correct match parameters$")
+    public void iConfirmWithTheCorrectMatchParameters() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
     @And("^A match has been created$")
     public void aMatchHasBeenCreated() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
