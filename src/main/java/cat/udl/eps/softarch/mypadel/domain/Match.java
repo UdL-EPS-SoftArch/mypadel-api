@@ -17,7 +17,7 @@ public class Match extends UriEntity<String> {
 
     private Duration duration;
 
-    private Enum courtType;
+    private boolean courtIsIndoor;
 
     private Date cancelationDeadline;
 
@@ -42,12 +42,12 @@ public class Match extends UriEntity<String> {
         this.duration = duration;
     }
 
-    public Enum getCourtType() {
-        return courtType;
+    public boolean getCourtType() {
+        return courtIsIndoor;
     }
 
-    public void setCourtType(Enum courtType) {
-        this.courtType = courtType;
+    public void setCourtType(boolean courtType) {
+        this.courtIsIndoor = courtType;
     }
 
     public Date getCancelationDeadline() {
