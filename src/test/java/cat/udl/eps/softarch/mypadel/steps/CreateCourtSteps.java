@@ -13,6 +13,7 @@ public class CreateCourtSteps {
     @And("^A new court is available$")
     public void aNewCourtIsAvailable() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
+
         throw new PendingException();
     }
 
