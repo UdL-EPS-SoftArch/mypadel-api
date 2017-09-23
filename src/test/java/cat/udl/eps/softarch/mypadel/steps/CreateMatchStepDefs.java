@@ -11,7 +11,7 @@ public class CreateMatchStepDefs {
     private StepDefs stepDefs;
 
     @When("^I click into create public match option$")
-    public void aNewCourtIsAvailable() throws Throwable {
+    public void iClickIntoCreatePublicMatchOption() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
