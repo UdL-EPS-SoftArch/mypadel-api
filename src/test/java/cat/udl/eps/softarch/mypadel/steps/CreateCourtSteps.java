@@ -16,6 +16,7 @@ public class CreateCourtSteps {
     @Autowired
     private StepDefs stepDefs;
 
+
     @And("^A new court is available$")
     public void aNewCourtIsAvailable() throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -28,16 +29,9 @@ public class CreateCourtSteps {
 
     @When("^I create a new court$")
     public void iCreateANewCourt() throws Throwable {
-        Court court = new Court();
-        String message = stepDefs.mapper.writeValueAsString(court);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/courts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(message)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andDo(print());
+        stepDefs.createCourt();
     }
+
 
     @And("^A new court has not been created$")
     public void aNewCourtHasNotBeenCreated() throws Throwable {

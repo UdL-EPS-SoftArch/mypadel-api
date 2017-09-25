@@ -7,7 +7,7 @@ Feature: Remove court
     Given  I login as "admin" with password "password"
     And There is an existing court
     When I remove a court
-    Then The response code is 201
+    Then The response code is 204
     And A court is unavailable
 
   Scenario: Remove a court that does not exist

@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.MyPadelApiApplication;
+import cat.udl.eps.softarch.mypadel.domain.Court;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import cucumber.api.java.Before;
@@ -9,6 +10,7 @@ import cucumber.api.java.en.Then;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,12 +19,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ActiveProfiles("Test")
 public class StepDefs {
+    
     @Autowired
     protected WebApplicationContext wac;
     protected MockMvc mockMvc;
@@ -65,4 +72,17 @@ public class StepDefs {
         else
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
     }
+
+    public void createCourt() throws Exception {
+        Court court = new Court();
+        String message = mapper.writeValueAsString(court);
+        result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/courts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(message)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                        .andDo(MockMvcResultHandlers.print());
+    }
+
 }

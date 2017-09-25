@@ -1,31 +1,44 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
+import cat.udl.eps.softarch.mypadel.domain.Court;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+
+import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RemoveCourtSteps {
 
     @Autowired
     private StepDefs stepDefs;
 
+
     @And("^There is an existing court$")
     public void thereIsAnExistingCourt() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        stepDefs.createCourt();
     }
 
     @When("^I remove a court$")
     public void iRemoveACourt() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        stepDefs.result = stepDefs.mockMvc.perform(
+                delete("/courts/1")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(authenticate()));
     }
 
     @And("^A court is unavailable")
     public void aCourtIsUnavaliable() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/courts/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
     }
 
     @And("^The court does not exist$")
