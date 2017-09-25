@@ -14,3 +14,9 @@ Feature: Create court
     When I create a new court
     Then The response code is 401
     And A new court has not been created
+
+  Scenario: Create a new court as non admin
+    Given I'm not logged in
+    When I create a new court
+    Then The response code is 401
+    And A new court has not been created
