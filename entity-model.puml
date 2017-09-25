@@ -83,7 +83,7 @@ class Reservation <<Reservation>> {
     Duration duration
     Enum courtType
 }
-Reservation "0..1 reserves" -left- "1 toPlay" Match
+Reservation "0..1 reserves" -- "1 toPlay" Match
 Reservation "many directReservations" -- "1 submittedBy" User
 
 class Court <<Court>> {
