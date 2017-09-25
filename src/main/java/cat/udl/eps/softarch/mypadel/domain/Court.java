@@ -6,10 +6,10 @@ import javax.persistence.*;
 public class Court extends UriEntity<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "available", nullable = false)
-    private boolean available;
+    private boolean available = true;
 
     @Column(name = "isIndoor", nullable = false)
     private boolean isIndoor;

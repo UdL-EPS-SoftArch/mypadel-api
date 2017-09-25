@@ -6,7 +6,7 @@ import org.springframework.data.repository.*;
 import org.springframework.data.rest.core.annotation.*;
 
 @RepositoryRestResource
-public interface CourtRepository extends PagingAndSortingRepository<Court, String> {
+public interface CourtRepository extends PagingAndSortingRepository<Court, Integer> {
 
 }
 
