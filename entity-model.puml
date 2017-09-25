@@ -1,7 +1,5 @@
-[plantuml,jdot,png]
-----
-!pragma graphviz_dot jdot
 @startuml
+
 skinparam dpi 200
 skinparam classAttributeFontSize 8
 skinparam classArrowFontSize 9
