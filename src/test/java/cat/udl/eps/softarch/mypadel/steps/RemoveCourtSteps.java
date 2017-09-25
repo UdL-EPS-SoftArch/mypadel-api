@@ -1,18 +1,13 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.domain.Court;
-import cucumber.api.PendingException;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.When;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import cucumber.api.*;
+import cucumber.api.java.en.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 
-import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class RemoveCourtSteps {
 
@@ -38,7 +33,7 @@ public class RemoveCourtSteps {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/courts/1")
                         .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound());
     }
 
     @And("^The court does not exist$")

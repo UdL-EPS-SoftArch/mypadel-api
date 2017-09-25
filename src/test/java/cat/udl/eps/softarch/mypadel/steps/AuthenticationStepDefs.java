@@ -1,15 +1,10 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import cucumber.api.java.*;
+import cucumber.api.java.en.*;
+import org.springframework.test.web.servlet.request.*;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 public class AuthenticationStepDefs {
 
@@ -24,7 +19,7 @@ public class AuthenticationStepDefs {
     }
 
     static RequestPostProcessor authenticate() {
-        return currentUsername!=null ? httpBasic(currentUsername, currentPassword) : anonymous();
+        return currentUsername != null ? httpBasic(currentUsername, currentPassword) : anonymous();
     }
 
     @Given("^I login as \"([^\"]*)\" with password \"([^\"]*)\"$")
