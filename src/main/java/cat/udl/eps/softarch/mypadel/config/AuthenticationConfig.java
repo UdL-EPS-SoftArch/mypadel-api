@@ -1,10 +1,9 @@
 package cat.udl.eps.softarch.mypadel.config;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.context.annotation.*;
+import org.springframework.security.config.annotation.authentication.builders.*;
+import org.springframework.security.config.annotation.authentication.configurers.*;
+import org.springframework.security.crypto.bcrypt.*;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -23,6 +22,9 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
                     .roles("PLAYER").and()
                 .withUser("admin")
                     .password("$2a$10$B1dcscvS/lgiBnGdkhhupew8AhbjqUL7TjdA2ggvxQhs5jN7KVSMC")
-                    .roles("ADMIN");
+                .roles("ADMIN").and()
+                .withUser("nopolfavol")
+                .password("$2a$10$B1dcscvS/lgiBnGdkhhupew8AhbjqUL7TjdA2ggvxQhs5jN7KVSMC")
+                .roles("PLAYER");
     }
 }

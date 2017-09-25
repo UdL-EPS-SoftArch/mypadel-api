@@ -10,7 +10,7 @@ Feature: Create court
     And A new court is available
 
   Scenario: Create a new court as non admin
-    Given I login as "non-admin" with password "patata"
+    Given I login as "nopolfavol" with password "password"
     When I create a new court
     Then The response code is 401
     And A new court has not been created
