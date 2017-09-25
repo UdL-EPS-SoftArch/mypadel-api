@@ -22,9 +22,6 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
                     .roles("PLAYER").and()
                 .withUser("admin")
                     .password("$2a$10$B1dcscvS/lgiBnGdkhhupew8AhbjqUL7TjdA2ggvxQhs5jN7KVSMC")
-                .roles("ADMIN").and()
-                .withUser("nopolfavol")
-                .password("$2a$10$B1dcscvS/lgiBnGdkhhupew8AhbjqUL7TjdA2ggvxQhs5jN7KVSMC")
-                .roles("PLAYER");
+                .roles("ADMIN");
     }
 }
