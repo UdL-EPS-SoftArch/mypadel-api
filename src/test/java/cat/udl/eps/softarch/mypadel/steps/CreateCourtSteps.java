@@ -19,11 +19,11 @@ public class CreateCourtSteps {
     @Autowired
     private StepDefs stepDefs;
 
-
-    @When("^I create a new indoor court$")
-    public void iCreateANewCourt() throws Throwable {
+    @When("^I create a new \"([^\"]*)\" court$")
+    public void iCreateANewCourt(String indoorOrOutdoor) throws Throwable {
+        boolean indoor = indoorOrOutdoor.equalsIgnoreCase("indoor");
         Court court = new Court();
-        court.setIndoor(true);
+        court.setIndoor(indoor);
         String message = stepDefs.mapper.writeValueAsString(court);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/courts")
@@ -32,43 +32,6 @@ public class CreateCourtSteps {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
                 .andDo(print());
-    }
-
-    @And("^A new indoor court is available$")
-    public void aNewCourtIsAvailable() throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/courts/1")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.available", is(true)))
-                .andExpect(jsonPath("$.indoor", is(true)));
-    }
-
-
-    @When("^I create a new outdoor court$")
-    public void iCreateANewOutdoorCourt() throws Throwable {
-        Court court = new Court();
-        court.setIndoor(false);
-        String message = stepDefs.mapper.writeValueAsString(court);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/courts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(message)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andDo(print());
-    }
-
-    @And("^A new outdoor court is available$")
-    public void aNewCourtOutdoorIsAvailable() throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/courts/1")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.available", is(true)))
-                .andExpect(jsonPath("$.indoor", is(false)));
     }
 
     @And("^A new court has not been created$")
@@ -77,5 +40,18 @@ public class CreateCourtSteps {
                 get("/courts/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @And("^A new \"([^\"]*)\" court is \"([^\"]*)\"$")
+    public void aNewCourtIs(String indoorOrOutdoor, String available) throws Throwable {
+        boolean indoor = indoorOrOutdoor.equalsIgnoreCase("indoor");
+        boolean isAvailable = available.equalsIgnoreCase("available");
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/courts/1")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.available", is(isAvailable)))
+                .andExpect(jsonPath("$.indoor", is(indoor)));
     }
 }
