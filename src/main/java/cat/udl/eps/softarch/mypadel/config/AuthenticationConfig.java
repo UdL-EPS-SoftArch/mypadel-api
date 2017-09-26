@@ -16,12 +16,12 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .inMemoryAuthentication()
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .withUser("user")
-                    .password("$2a$04$Fh70rZF0oXCW3XA2uY83aOXi5mCMzaGfgmceRSXKNnL/CZwfGuisy")
+//                .passwordEncoder(new BCryptPasswordEncoder())
+                .withUser("player")
+                    .password("playerpassword")
                     .roles("PLAYER").and()
                 .withUser("admin")
-                    .password("$2a$10$B1dcscvS/lgiBnGdkhhupew8AhbjqUL7TjdA2ggvxQhs5jN7KVSMC")
-                .roles("ADMIN");
+                    .password("adminpassword")
+                    .roles("ADMIN");
     }
 }
