@@ -1,8 +1,11 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
+import cat.udl.eps.softarch.mypadel.domain.*;
 import cucumber.api.java.en.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
+import org.springframework.test.web.servlet.request.*;
+import org.springframework.test.web.servlet.result.*;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.*;
 import static org.hamcrest.Matchers.*;
@@ -28,7 +31,7 @@ public class CreateCourtSteps {
 
     @When("^I create a new court$")
     public void iCreateANewCourt() throws Throwable {
-        stepDefs.createCourt();
+        createCourt();
     }
 
 
@@ -38,5 +41,17 @@ public class CreateCourtSteps {
                 get("/courts/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    public void createCourt() throws Exception {
+        Court court = new Court();
+        String message = stepDefs.mapper.writeValueAsString(court);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                MockMvcRequestBuilders.post("/courts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(message)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(MockMvcResultHandlers.print());
     }
 }
