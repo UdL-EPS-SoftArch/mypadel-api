@@ -1,0 +1,31 @@
+language: java
+jdk:
+- oraclejdk8
+
+sudo: required
+
+services:
+  - docker
+
+branches:
+  only:
+  - master
+
+after_success:
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker login -u $DOCKER_USER -p $DOCKER_PASS;
+      export REPO=udlepssoftarch/mypadel-api;
+      export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`;
+      docker build -f Dockerfile -t $REPO:$TRAVIS_COMMIT .;
+      docker tag $REPO:$TRAVIS_COMMIT $REPO:$TAG;
+      docker push $REPO;
+      docker login --username=_ --password=$HEROKU_TOKEN registry.heroku.com;
+      docker tag $REPO:$TRAVIS_COMMIT registry.heroku.com/mypadel-api/web;
+      docker push registry.heroku.com/mypadel-api/web;
+    fi
+
+notifications:
+  slack: softarch-1718:WVeN5WpGz9bqcaZrf7Exis0E
+    on_success: change
+    on_failure: always
+    secure: kut1YmBV4IkttKS7ybDjioLT21LwWgaUv3conq1FEBk86iN4vcqJy34ATJfRbK0XxfhEP0FgNlTRe3ZeyorZeTzbY59zorkf1G6cdJvMWSbZOHdUy9rqiz/aoct/rvAOuW2D2EiG/TtnRrvH81cS3o64Pfw5ZBKx7qEStTkfAvvz4GqQ8zkSqJKMZZqzZ/HYa4jfA4r9SswsPfHxsYWeQ+PlBVdTSWJU4cAmxASha5QvPhcB+3xglYSj3fXxQ6A1/jezCP8P8rvrvx0W58DGf7NdDMLg/Fi67PmVn19h6EwWo0cfOlyBUy6T3jN5EFGFuFBNx7Byf+cmnnNfG7zQa7nt3FUnItGN3DFs4kiEWGJauZEW5BoIgu18ScL7LRnxzM6SDwtSFhZl4brjyWXCJWQ/1jryiWlBYHiENirEYe8oYLBZiD+xto4Yu28kxF4T6lTh4u1jyZvum3CHzoXWkjMSGVyNVEi1zKte8KcaufjNbHoWCqjkElVWnf1mmM2Czjs79DeALGGKrlpWAc8TgTuYYGizPA8yp+1V/rEZ1Xyi7ICm7AjEu7vbAW1kRUBKnH5vmmtP1Y1KnJhJhNtuh0WQ1CoLVO4fAsgystR3gH2eElt6YdDlzTw8YX6IfjV2VOZdA9xRTK5vSEFZn2L9lI25GAPIpqySLDn+vAf+48w=
