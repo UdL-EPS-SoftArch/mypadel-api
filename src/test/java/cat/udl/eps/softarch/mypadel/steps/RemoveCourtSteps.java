@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cucumber.api.*;
+import cat.udl.eps.softarch.mypadel.domain.*;
+import cat.udl.eps.softarch.mypadel.repository.*;
 import cucumber.api.java.en.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
@@ -13,11 +14,14 @@ public class RemoveCourtSteps {
 
     @Autowired
     private StepDefs stepDefs;
+    @Autowired
+    private CourtRepository courtRepository;
 
 
     @And("^There is an existing court$")
     public void thereIsAnExistingCourt() throws Throwable {
-        stepDefs.createCourt();
+        Court court = new Court();
+        courtRepository.save(court);
     }
 
     @When("^I remove a court$")
@@ -38,13 +42,14 @@ public class RemoveCourtSteps {
 
     @And("^The court does not exist$")
     public void theCourtDoesNotExist() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+
     }
 
     @And("^The court is available")
     public void theCourtIsAvaliable() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/courts/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

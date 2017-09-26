@@ -1,6 +1,5 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.domain.*;
 import cucumber.api.java.en.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;

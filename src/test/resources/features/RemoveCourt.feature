@@ -17,7 +17,7 @@ Feature: Remove court
     Then The response code is 404
 
   Scenario: Remove a court as non admin
-    Given I login as "non-admin" with password "patata"
+    Given I login as "user" with password "password"
     And There is an existing court
     When I remove a court
     Then The response code is 401
