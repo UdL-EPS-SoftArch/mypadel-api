@@ -5,12 +5,11 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,7 +32,15 @@ public class CreateCourtSteps {
 
     @When("^I create a new court$")
     public void iCreateANewCourt() throws Throwable {
-        createCourt();
+        Court court = new Court();
+        String message = stepDefs.mapper.writeValueAsString(court);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/courts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(message)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(authenticate()))
+                .andDo(print());
     }
 
 
@@ -45,15 +52,4 @@ public class CreateCourtSteps {
                 .andExpect(status().isNotFound());
     }
 
-    public void createCourt() throws Exception {
-        Court court = new Court();
-        String message = stepDefs.mapper.writeValueAsString(court);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                MockMvcRequestBuilders.post("/courts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(message)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(MockMvcResultHandlers.print());
-    }
 }
