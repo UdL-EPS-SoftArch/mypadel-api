@@ -1,17 +1,22 @@
+package cat.udl.eps.softarch.mypadel.domain;
+
+import cat.udl.eps.softarch.mypadel.domain.UriEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 @Entity
-public abstract class MatchJoin extends UriEntity<String>{
+public class MatchJoin extends UriEntity<String> {
 
     private long id;
 
-    private Date date;
+    private GregorianCalendar eventDate;
 
     @Override
     public String getId() { return Long.toString(id); }
 
-    public String getDate() { return date; }
+    public GregorianCalendar getDate() { return this.eventDate; }
 
 }
