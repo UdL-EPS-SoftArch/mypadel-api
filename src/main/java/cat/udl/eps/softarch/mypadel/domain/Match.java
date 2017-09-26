@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.time.Duration;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Match extends UriEntity<String> {
 
@@ -14,10 +14,10 @@ public class Match extends UriEntity<String> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "startDate", nullable = false)
-    private Date startDate;
+    @Column(nullable = false)
+    private GregorianCalendar startDate;
 
-    @Column(name = "duration", nullable = false)
+    @Column(nullable = false)
     private Duration duration;
 
     private enum courtType{
@@ -26,19 +26,22 @@ public class Match extends UriEntity<String> {
         UNDEFINED
     };
 
+    @Column(name = "courtType", nullable = false)
+    private courtType court;
+
     @Column(name = "cancelationDeadLine")
-    private Date cancelationDeadline;
+    private GregorianCalendar cancelationDeadline;
 
     @Override
     public String getId() {
         return Long.toString(id);
     }
 
-    public Date getStartDate() {
+    public GregorianCalendar getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(GregorianCalendar startDate) {
         this.startDate = startDate;
     }
 
@@ -50,11 +53,11 @@ public class Match extends UriEntity<String> {
         this.duration = duration;
     }
 
-    public Date getCancelationDeadline() {
+    public GregorianCalendar getCancelationDeadline() {
         return cancelationDeadline;
     }
 
-    public void setCancelationDeadline(Date cancelationDeadline) {
+    public void setCancelationDeadline(GregorianCalendar cancelationDeadline) {
         this.cancelationDeadline = cancelationDeadline;
     }
 }
