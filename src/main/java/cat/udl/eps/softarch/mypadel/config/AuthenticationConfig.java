@@ -16,13 +16,13 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .inMemoryAuthentication()
+            .inMemoryAuthentication()
 //                .passwordEncoder(new BCryptPasswordEncoder())
                 .withUser("player")
-                .password("playerpassword")
-                .roles("PLAYER").and()
+                    .password("playerpassword")
+                    .roles("PLAYER").and()
                 .withUser("admin")
-                .password("adminpassword")
-                .roles("ADMIN");
+                    .password("adminpassword")
+                    .roles("ADMIN");
     }
 }
