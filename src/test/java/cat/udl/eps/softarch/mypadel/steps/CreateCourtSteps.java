@@ -16,14 +16,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class CreateCourtSteps {
 
+    public static final String INDOOR = "indoor";
+    public static final String AVAILABLE = "available";
+
     @Autowired
     private StepDefs stepDefs;
 
     @When("^I create a new \"([^\"]*)\" court$")
     public void iCreateANewCourt(String indoorOrOutdoor) throws Throwable {
-        boolean indoor = indoorOrOutdoor.equalsIgnoreCase("indoor");
+        boolean indoor = indoorOrOutdoor.equalsIgnoreCase(INDOOR);
         Court court = new Court();
         court.setIndoor(indoor);
+        createCourt(court);
+    }
+
+    private void createCourt(Court court) throws Exception {
         String message = stepDefs.mapper.writeValueAsString(court);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/courts")
@@ -43,15 +50,19 @@ public class CreateCourtSteps {
     }
 
     @And("^A new \"([^\"]*)\" court is \"([^\"]*)\"$")
-    public void aNewCourtIs(String indoorOrOutdoor, String available) throws Throwable {
-        boolean indoor = indoorOrOutdoor.equalsIgnoreCase("indoor");
-        boolean isAvailable = available.equalsIgnoreCase("available");
+    public void aNewCourtIs(String indoorOrOutdoor, String availability) throws Throwable {
+        boolean indoor = indoorOrOutdoor.equalsIgnoreCase(INDOOR);
+        boolean available = availability.equalsIgnoreCase(AVAILABLE);
+        checkIfCourtIs(indoor, available);
+    }
+
+    private void checkIfCourtIs(boolean indoor, boolean available) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/courts/1")
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
                 .andDo(print())
-                .andExpect(jsonPath("$.available", is(isAvailable)))
+                .andExpect(jsonPath("$.available", is(available)))
                 .andExpect(jsonPath("$.indoor", is(indoor)));
     }
 }
