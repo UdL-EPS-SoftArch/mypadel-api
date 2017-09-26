@@ -20,16 +20,16 @@ public class Match extends UriEntity<String> {
     @Column(nullable = false)
     private Duration duration;
 
-    private enum courtType{
+    public enum courtType{
         INDOOR,
         OUTDOOR,
         UNDEFINED
-    };
+    }
 
     @Column(name = "courtType", nullable = false)
     private courtType court;
 
-    @Column(name = "cancelationDeadLine")
+    @Column(name = "cancelationDeadLine", nullable = false)
     private GregorianCalendar cancelationDeadline;
 
     @Override
@@ -51,6 +51,14 @@ public class Match extends UriEntity<String> {
 
     public void setDuration(Duration duration) {
         this.duration = duration;
+    }
+
+    public courtType getCourt() {
+        return court;
+    }
+
+    public void setCourt(courtType court) {
+        this.court = court;
     }
 
     public GregorianCalendar getCancelationDeadline() {
