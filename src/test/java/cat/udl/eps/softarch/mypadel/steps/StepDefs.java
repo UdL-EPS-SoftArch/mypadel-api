@@ -1,24 +1,30 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.datatype.jsr310.*;
-import cucumber.api.java.*;
-import cucumber.api.java.en.*;
-import org.junit.runner.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.*;
-import org.springframework.security.test.web.servlet.setup.*;
-import org.springframework.test.annotation.*;
-import org.springframework.test.context.*;
-import org.springframework.test.context.junit4.*;
-import org.springframework.test.context.web.*;
-import org.springframework.test.web.servlet.*;
-import org.springframework.test.web.servlet.setup.*;
-import org.springframework.web.context.*;
+import cat.udl.eps.softarch.mypadel.MyPadelApiApplication;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import cucumber.api.java.Before;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Then;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootContextLoader;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -31,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ActiveProfiles("Test")
 public class StepDefs {
-
     @Autowired
     protected WebApplicationContext wac;
     protected MockMvc mockMvc;
@@ -60,5 +65,4 @@ public class StepDefs {
         else
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
     }
-
 }
