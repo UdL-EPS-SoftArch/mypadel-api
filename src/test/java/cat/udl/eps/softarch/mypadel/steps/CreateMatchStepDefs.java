@@ -23,7 +23,6 @@ public class CreateMatchStepDefs {
     public void iCreateANewMatch() throws Throwable {
         Match match = new Match();
         match.setStartDate(new Date(2017, 10, 1));
-        match.setCourtType(true);
         match.setDuration(Duration.ofMinutes(30));
         match.setCancelationDeadline(new Date(2017, 9, 30));
         String message = stepDefs.mapper.writeValueAsString(match);

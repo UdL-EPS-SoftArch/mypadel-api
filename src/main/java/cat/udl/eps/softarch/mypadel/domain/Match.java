@@ -2,6 +2,7 @@ package cat.udl.eps.softarch.mypadel.domain;
 
 import org.springframework.data.annotation.Id;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.time.Duration;
@@ -13,12 +14,19 @@ public class Match extends UriEntity<String> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "startDate", nullable = false)
     private Date startDate;
 
+    @Column(name = "duration", nullable = false)
     private Duration duration;
 
-    private boolean courtIsIndoor;
+    private enum courtType{
+        INDOOR,
+        OUTDOOR,
+        UNDEFINED
+    };
 
+    @Column(name = "cancelationDeadLine")
     private Date cancelationDeadline;
 
     @Override
@@ -40,14 +48,6 @@ public class Match extends UriEntity<String> {
 
     public void setDuration(Duration duration) {
         this.duration = duration;
-    }
-
-    public boolean getCourtType() {
-        return courtIsIndoor;
-    }
-
-    public void setCourtType(boolean courtType) {
-        this.courtIsIndoor = courtType;
     }
 
     public Date getCancelationDeadline() {
