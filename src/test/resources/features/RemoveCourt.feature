@@ -12,7 +12,6 @@ Feature: Remove court
 
 	Scenario: Remove a court that does not exist
 		Given I login as "admin" with password "password"
-		And The court does not exist
 		When I remove a court
 		Then The response code is 404
 

@@ -42,11 +42,6 @@ public class RemoveCourtSteps {
 			.andExpect(status().isNotFound());
 	}
 
-	@And("^The court does not exist$")
-	public void theCourtDoesNotExist() throws Throwable {
-
-	}
-
 	@And("^The court has not been removed")
 	public void theCourtHasNotBeenRemoved() throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
