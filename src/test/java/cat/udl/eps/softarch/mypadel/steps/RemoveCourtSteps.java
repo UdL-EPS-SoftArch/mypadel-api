@@ -14,44 +14,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class RemoveCourtSteps {
 
-    @Autowired
-    private StepDefs stepDefs;
-    @Autowired
-    private CourtRepository courtRepository;
+	@Autowired
+	private StepDefs stepDefs;
+	@Autowired
+	private CourtRepository courtRepository;
 
 
-    @And("^There is an existing court$")
-    public void thereIsAnExistingCourt() throws Throwable {
-        Court court = new Court();
-        courtRepository.save(court);
-    }
+	@And("^There is an existing court$")
+	public void thereIsAnExistingCourt() throws Throwable {
+		Court court = new Court();
+		courtRepository.save(court);
+	}
 
-    @When("^I remove a court$")
-    public void iRemoveACourt() throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/courts/1")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()));
-    }
+	@When("^I remove a court$")
+	public void iRemoveACourt() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			delete("/courts/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()));
+	}
 
-    @And("^A court is unavailable")
-    public void aCourtIsUnavaliable() throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/courts/1")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
+	@And("^The court has been removed")
+	public void theCourtHasBeenRemoved() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/courts/1")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+	}
 
-    @And("^The court does not exist$")
-    public void theCourtDoesNotExist() throws Throwable {
+	@And("^The court does not exist$")
+	public void theCourtDoesNotExist() throws Throwable {
 
-    }
+	}
 
-    @And("^The court is available")
-    public void theCourtIsAvaliable() throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/courts/1")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
+	@And("^The court has not been removed")
+	public void theCourtHasNotBeenRemoved() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/courts/1")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk());
+	}
 }
