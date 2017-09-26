@@ -1,17 +1,19 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.Id;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.time.Duration;
 import java.util.GregorianCalendar;
 
-public class Match extends UriEntity<String> {
+@Entity
+public class Match extends UriEntity<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
@@ -33,8 +35,8 @@ public class Match extends UriEntity<String> {
     private GregorianCalendar cancelationDeadline;
 
     @Override
-    public String getId() {
-        return Long.toString(id);
+    public Long getId() {
+        return id;
     }
 
     public GregorianCalendar getStartDate() {

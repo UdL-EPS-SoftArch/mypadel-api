@@ -5,11 +5,10 @@ Feature: Create match
 
   Scenario: A user creates a public match
     Given I login as "user" with password "password"
-    When I create a new match
-    Then The response code is 201
-    And A match has been created
+    When I create a new public match
+    Then A match has been created
 
-  Scenario: Unlogged person tries to create a match
+  Scenario: Unlogged person tries to create a public match
     Given I'm not logged in
-    When I create a new match
+    When I create a new public match
     Then The response code is 401
