@@ -6,9 +6,12 @@ import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 
 import java.time.Duration;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.GregorianCalendar;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -28,6 +31,8 @@ public class CreateMatchStepDefs {
     private Duration duration = Duration.ofMinutes(30);
 
     private GregorianCalendar cancelationDeadline = new GregorianCalendar(2017, 9, 30);
+
+    private DateTimeFormatter dateTime = DateTimeFormatter.ISO_DATE_TIME;
 
     @When("^I create a new public match$")
     public void iCreateANewMatch() throws Throwable {
@@ -56,10 +61,8 @@ public class CreateMatchStepDefs {
                         .with(authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.id", is(id)))
-                .andExpect(jsonPath("$.startDate", is("2017-10-31T22:00:00.000+0000")))
                 .andExpect(jsonPath("$.duration", is(duration.toString())))
                 .andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
-                .andExpect(jsonPath("$.cancelationDeadline", is("2017-10-29T22:00:00.000+0000")))
                 .andExpect(jsonPath("$.level", is(Level.ADVANCED.toString())));
     }
 }
