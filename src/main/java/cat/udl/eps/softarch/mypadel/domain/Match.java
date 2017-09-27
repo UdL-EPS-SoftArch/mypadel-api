@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.util.GregorianCalendar;
 
@@ -16,22 +17,16 @@ public class Match extends UriEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @NotNull
     private GregorianCalendar startDate;
 
-    @Column(nullable = false)
+    @NotNull
     private Duration duration;
 
-    public enum courtType{
-        INDOOR,
-        OUTDOOR,
-        UNDEFINED
-    }
+    @NotNull
+    private CourtType courtType;
 
-    @Column(name = "courtType", nullable = false)
-    private courtType court;
-
-    @Column(name = "cancelationDeadLine", nullable = false)
+    @NotNull
     private GregorianCalendar cancelationDeadline;
 
     @Override
@@ -55,12 +50,12 @@ public class Match extends UriEntity<Long> {
         this.duration = duration;
     }
 
-    public courtType getCourt() {
-        return court;
+    public CourtType getCourtType() {
+        return courtType;
     }
 
-    public void setCourt(courtType court) {
-        this.court = court;
+    public void setCourtType(CourtType court) {
+        this.courtType = court;
     }
 
     public GregorianCalendar getCancelationDeadline() {
