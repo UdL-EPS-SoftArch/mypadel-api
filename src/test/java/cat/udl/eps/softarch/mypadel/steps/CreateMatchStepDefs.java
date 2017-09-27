@@ -50,7 +50,7 @@ public class CreateMatchStepDefs {
                 .andDo(print());
     }
 
-    @Then("^A match has been created$")
+    @And("^A match has been created$")
     public void aMatchHasBeenCreated() throws Throwable {
         int id = 1;
         stepDefs.result = stepDefs.mockMvc.perform(
