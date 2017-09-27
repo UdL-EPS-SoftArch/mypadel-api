@@ -1,10 +1,11 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
+import cat.udl.eps.softarch.mypadel.domain.CourtType;
 import cat.udl.eps.softarch.mypadel.domain.Level;
-import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CreateMatchStepDefs {
 
@@ -28,13 +30,15 @@ public class CreateMatchStepDefs {
 
     private Duration duration = Duration.ofMinutes(30);
 
+    private GregorianCalendar cancelationDeadline = new GregorianCalendar(2017, 9, 30);
+
     @When("^I create a new public match$")
     public void iCreateANewMatch() throws Throwable {
         PublicMatch match = new PublicMatch();
         match.setStartDate(startDate);
         match.setDuration(duration);
-        match.setCancelationDeadline(new GregorianCalendar(2017, 9, 30));
-        match.setCourt(Match.courtType.INDOOR);
+        match.setCancelationDeadline(cancelationDeadline);
+        match.setCourtType(CourtType.INDOOR);
         match.setLevel(Level.ADVANCED);
         String message = stepDefs.mapper.writeValueAsString(match);
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -46,17 +50,19 @@ public class CreateMatchStepDefs {
                 .andDo(print());
     }
 
-    @And("^A match has been created$")
+    @Then("^A match has been created$")
     public void aMatchHasBeenCreated() throws Throwable {
-        long id = 1;
+        int id = 1;
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/publicMatches/{id}", id)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.id", is(id)))
-                .andExpect(jsonPath("$.startDate", is(startDate)))
-                .andExpect(jsonPath("$.courtType", is(Match.courtType.INDOOR)))
-                .andExpect(jsonPath("$.level", is(Level.ADVANCED)));
+                .andExpect(jsonPath("$.startDate", is("2017-10-31T22:00:00.000+0000")))
+                .andExpect(jsonPath("$.duration", is(duration.toString())))
+                .andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
+                .andExpect(jsonPath("$.cancelationDeadline", is("2017-10-29T22:00:00.000+0000")))
+                .andExpect(jsonPath("$.level", is(Level.ADVANCED.toString())));
     }
 }
