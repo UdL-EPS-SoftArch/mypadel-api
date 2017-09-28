@@ -1,14 +1,15 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Id;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
-import java.util.GregorianCalendar;
+import java.time.ZonedDateTime;
 
 @Entity
 public class Match extends UriEntity<Long> {
@@ -17,8 +18,8 @@ public class Match extends UriEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
-    private GregorianCalendar startDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private ZonedDateTime startDate;
 
     @NotNull
     private Duration duration;
@@ -26,19 +27,19 @@ public class Match extends UriEntity<Long> {
     @NotNull
     private CourtType courtType;
 
-    @NotNull
-    private GregorianCalendar cancelationDeadline;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private ZonedDateTime cancelationDeadline;
 
     @Override
     public Long getId() {
         return id;
     }
 
-    public GregorianCalendar getStartDate() {
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(GregorianCalendar startDate) {
+    public void setStartDate(ZonedDateTime startDate) {
         this.startDate = startDate;
     }
 
@@ -58,11 +59,11 @@ public class Match extends UriEntity<Long> {
         this.courtType = court;
     }
 
-    public GregorianCalendar getCancelationDeadline() {
+    public ZonedDateTime getCancelationDeadline() {
         return cancelationDeadline;
     }
 
-    public void setCancelationDeadline(GregorianCalendar cancelationDeadline) {
+    public void setCancelationDeadline(ZonedDateTime cancelationDeadline) {
         this.cancelationDeadline = cancelationDeadline;
     }
 }
