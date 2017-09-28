@@ -60,8 +60,14 @@ public class CreateMatchStepDefs {
                 .andDo(print())
                 .andExpect(jsonPath("$.id", is(id)))
                 .andExpect(jsonPath("$.duration", is(duration.toString())))
-                .andExpect(jsonPath("$.startDate", is(startDate.toString())))
+                .andExpect(jsonPath("$.startDate", is(dataParser(startDate.toString()))))
+                .andExpect(jsonPath("$.cancelationDeadline", is(dataParser(cancelationDeadline.toString()))))
                 .andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
                 .andExpect(jsonPath("$.level", is(Level.ADVANCED.toString())));
+    }
+
+    private String dataParser(String data){
+        String[] parts = data.split(":");
+        return parts[0] + ":00:00" + data.substring(data.length()-1);
     }
 }
