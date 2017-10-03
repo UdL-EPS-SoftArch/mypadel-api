@@ -3,18 +3,8 @@ Feature: Join match
   As a player
   I want to join a match
 
-  Scenario: Join a match without confirm previous match results
-    Given I login as "user" with password "password"
-    When I join to a match with datetime "01/01/2017" "18:00:00"
-    Then The response code is 401
-
-  Scenario: Join a match if you joined to another match in the same datetime
-    Given I login as "user" with password "password"
-    When I join to a match with datetime "01/01/2017" "18:00:00"
-    And I join to a match with datetime "01/01/2017" "18:00:00"
-    Then The response code is 401
 
   Scenario: Succesfully joined a match
-    Given I login as "user" with password "password"
-    When I join to a match with datetime "01/01/2017" "18:00:00"
-    Then I join a match
+    Given I login as "player" with password "password"
+    When I join to a match
+    Then I successfully joined a match
