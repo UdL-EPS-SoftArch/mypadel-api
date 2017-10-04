@@ -1,24 +1,22 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.domain.CourtType;
-import cat.udl.eps.softarch.mypadel.domain.Level;
-import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
-import cucumber.api.PendingException;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.When;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-
-import java.time.Duration;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+import cat.udl.eps.softarch.mypadel.domain.CourtType;
+import cat.udl.eps.softarch.mypadel.domain.Level;
+import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.When;
+import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 
 public class CreateMatchStepDefs {
 
@@ -31,21 +29,18 @@ public class CreateMatchStepDefs {
 
     private ZonedDateTime cancelationDeadline;
 
-	@And("^date (\\d+) - (\\d+) - (\\d+) with a duration of (\\d+) minutes and a cancelation deadline for (\\d+) - (\\d+) - (\\d+)$")
-	public void dateWithADurationOfMinutesAndACancelationDeadlineFor(int day, int month, int year, int duration,
-																	 int cancelationDay, int cancelationMonth, int cancelationYear) throws Throwable {
+	@When("^I create a new public match on (\\d+) - (\\d+) - (\\d+) for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
+	public void iCreateANewMatch(int day, int month, int year, int duration,
+								 int cancelationDay, int cancelationMonth, int cancelationYear) throws Throwable {
 		startDate = ZonedDateTime.of(year, month, day, 0, 0, 0,
-			0, ZoneId.of("+00:00"));
+									0, ZoneId.of("+00:00"));
 		this.duration = Duration.ofMinutes(duration);
-		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay, 0, 0, 0,
-			0, ZoneId.of("+00:00"));
-	}
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+								0, 0, 0,0, ZoneId.of("+00:00"));
 
-    @When("^I create a new public match$")
-    public void iCreateANewMatch() throws Throwable {
-        PublicMatch match = new PublicMatch();
+		PublicMatch match = new PublicMatch();
         match.setStartDate(startDate);
-        match.setDuration(duration);
+        match.setDuration(this.duration);
         match.setCancelationDeadline(cancelationDeadline);
         match.setCourtType(CourtType.INDOOR);
         match.setLevel(Level.ADVANCED);
