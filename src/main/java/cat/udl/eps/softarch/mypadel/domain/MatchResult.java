@@ -1,12 +1,11 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
+@Table(name = "MatchResult")
 public class MatchResult extends UriEntity<Integer> {
 
 	@Id
@@ -18,6 +17,9 @@ public class MatchResult extends UriEntity<Integer> {
 	private List<Player> losingPair;
 
 	private boolean isDraw;
+
+	@NotNull
+	private Match match;
 
     @Override
     public Integer getId() {
@@ -40,4 +42,12 @@ public class MatchResult extends UriEntity<Integer> {
         isDraw = draw;
     }
 
+    @NotNull
+	public Match getMatch() {
+		return match;
+	}
+
+	public void setMatch(@NotNull Match match) {
+		this.match = match;
+	}
 }
