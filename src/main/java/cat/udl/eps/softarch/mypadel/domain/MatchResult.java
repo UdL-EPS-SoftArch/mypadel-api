@@ -2,23 +2,24 @@ package cat.udl.eps.softarch.mypadel.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "MatchResult")
 public class MatchResult extends UriEntity<Integer> {
 
+	//TODO Add Players and NotNull Checkings
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-	private List<Player> winningPair;
+	private ArrayList<Player> winningPair;
 
-	private List<Player> losingPair;
+	private ArrayList<Player> losingPair;
 
 	private boolean isDraw;
 
-	@NotNull
 	private Match match;
 
     @Override
@@ -26,13 +27,13 @@ public class MatchResult extends UriEntity<Integer> {
         return this.id;
     }
 
-    public List<Player> getWinningPair () { return this.winningPair; }
+    public ArrayList<Player> getWinningPair () { return this.winningPair; }
 
-    public void setWinningPair (List<Player> winners) { this.winningPair = winners; }
+    public void setWinningPair (ArrayList<Player> winners) { this.winningPair = winners; }
 
-	public List<Player> getLosingPair () { return this.losingPair; }
+	public ArrayList<Player> getLosingPair () { return this.losingPair; }
 
-	public void setLosingPair (List<Player> losers) { this.winningPair = losers; }
+	public void setLosingPair (ArrayList<Player> losers) { this.winningPair = losers; }
 
     public boolean isDraw() {
         return isDraw;
@@ -42,12 +43,11 @@ public class MatchResult extends UriEntity<Integer> {
         isDraw = draw;
     }
 
-    @NotNull
 	public Match getMatch() {
 		return match;
 	}
 
-	public void setMatch(@NotNull Match match) {
+	public void setMatch(Match match) {
 		this.match = match;
 	}
 }
