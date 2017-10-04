@@ -9,7 +9,7 @@ Feature: Create a MatchResult
 		Then the response code is 201
 		And A new MatchResult is added
 
-	Scenario:
+	Scenario: A player creates a new MatchReult
 		Given I login as "admin" with password "password"
 		When I create a new MatchResult
 		Then the response code is 201

@@ -17,7 +17,7 @@ public class MatchResult extends UriEntity<Integer> {
 
 	public List<Player> loosingPair;
 
-	private boolean isDraw = false;
+	private boolean isDraw;
 
     @Override
     public Integer getId() {
@@ -39,5 +39,5 @@ public class MatchResult extends UriEntity<Integer> {
     public void setDraw(boolean draw) {
         isDraw = draw;
     }
-	
+
 }
