@@ -13,9 +13,9 @@ public class MatchResult extends UriEntity<Integer> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-	public List<Player> winningPair;
+	private List<Player> winningPair;
 
-	public List<Player> loosingPair;
+	private List<Player> losingPair;
 
 	private boolean isDraw;
 
@@ -28,9 +28,9 @@ public class MatchResult extends UriEntity<Integer> {
 
     public void setWinningPair (List<Player> winners) { this.winningPair = winners; }
 
-	public List<Player> getLoosingPair () { return this.loosingPair; }
+	public List<Player> getLosingPair () { return this.losingPair; }
 
-	public void setLoosingPair (List<Player> loosers) { this.winningPair = loosers; }
+	public void setLosingPair (List<Player> losers) { this.winningPair = losers; }
 
     public boolean isDraw() {
         return isDraw;

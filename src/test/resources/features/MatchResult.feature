@@ -3,13 +3,13 @@ Feature: Create a MatchResult
 	As a Player/Admin
 	I want to create a new MatchResult for an existing match that has already finished
 
-	Scenario: An admin creates a new MatchReult
+	Scenario: An admin creates a new MatchResult
 		Given I login as "admin" with password "password"
 		When I create a new MatchResult
 		Then the response code is 201
 		And A new MatchResult is added
 
-	Scenario: A player creates a new MatchReult
+	Scenario: A player creates a new MatchResult
 		Given I login as "admin" with password "password"
 		When I create a new MatchResult
 		Then the response code is 201
@@ -19,4 +19,4 @@ Feature: Create a MatchResult
         Given I'm not logged in as "admin" or "player"
         When I create a new public match
         Then The response code is 401
-        And The new MatchResult is not addded
+        And The new MatchResult is not added
