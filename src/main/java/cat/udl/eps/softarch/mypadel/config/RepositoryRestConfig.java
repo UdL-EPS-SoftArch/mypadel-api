@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.config;
 
 import cat.udl.eps.softarch.mypadel.domain.Admin;
+import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
 import cat.udl.eps.softarch.mypadel.domain.Court;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -17,6 +18,7 @@ public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.exposeIdsFor(Admin.class);
+        config.exposeIdsFor(PublicMatch.class);
         config.exposeIdsFor(Court.class);
     }
 
