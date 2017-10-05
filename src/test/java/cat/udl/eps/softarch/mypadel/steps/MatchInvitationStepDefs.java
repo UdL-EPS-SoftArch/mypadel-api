@@ -5,9 +5,13 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultMatcher;
+
+import java.time.ZonedDateTime;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -22,14 +26,13 @@ public class MatchInvitationStepDefs {
     public void iCreateNewMatchInvitationForANewMatch() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         MatchInvitation matchInv = new MatchInvitation();
-        //matchInv.setId(1);
-        //matchInv.setEventDate(date);
+		matchInv.setMessage("A player has invited you to a match.");
 
-        //String message = stepDefs.mapper.writeValueAsString(matchInv);
+        String message = stepDefs.mapper.writeValueAsString(matchInv);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/matchInvitations")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}")
+                        .content(message)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
                 .andDo(print());
@@ -43,7 +46,8 @@ public class MatchInvitationStepDefs {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/matchInvitations/1")//get("/matchInvitations/{id}, id")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+        		.andExpect((ResultMatcher) jsonPath("$.message", "A player has invited you to a match."));
     }
 
 
@@ -55,6 +59,7 @@ public class MatchInvitationStepDefs {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.matchInvitations", hasSize(0)))    ;
-    }
+                .andExpect(jsonPath("$._embedded.matchInvitations", hasSize(0)))
+			.andExpect((ResultMatcher) jsonPath("$.message",isEmptyOrNullString()));
+	}//check if the meesage has been added using code like above with the path
 }
