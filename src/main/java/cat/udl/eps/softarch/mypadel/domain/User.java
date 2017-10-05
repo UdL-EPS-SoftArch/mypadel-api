@@ -1,12 +1,14 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Table;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@Table(name = "MyPadelUser") //Avoid collision with system table User in Postgres
 public abstract class User extends UriEntity<String> {
 
     @Id
