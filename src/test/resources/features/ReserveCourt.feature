@@ -4,12 +4,14 @@ Feature: Reserve a court
   I want to reserve a court
 
   Scenario: Reserve a court
-    Given I introduce the "date ", "duration" and "courtType"
-    When The courtType is free
-    Then the court is reservered
+    Given I login as "player" with password "password"
+    When I make a reservation with the "date", "duration" and "courtType"
+    Then The response code is 201
+    And The reservation is created and has "date", "duration" and "courtType"
+
 
   Scenario: Reserve a court
-    Given I introduce the "date", "duration" and "courtType"
-    When The courtType isn't free
-    Then the court isn't reservered
-
+    Given I'm not logged in
+    When I make a reservation with the "date ", "duration" and "courtType"
+    Then The response code is 401
+    And The reservation can't be created
