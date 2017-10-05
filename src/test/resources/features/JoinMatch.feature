@@ -4,7 +4,7 @@ Feature: Join match
   I want to join a match
 
 
-  Scenario: Succesfully joined a match
+  Scenario: Successfully joined a match
     Given I login as "player" with password "password"
     When I join to a match
     Then I successfully joined a match

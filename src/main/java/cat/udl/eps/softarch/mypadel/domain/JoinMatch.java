@@ -14,13 +14,13 @@ public class JoinMatch extends UriEntity<Long> {
     private Long id;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private ZonedDateTime eventDate = ZonedDateTime.now(ZoneId.systemDefault());
+    private ZonedDateTime eventDate;
 
     @Override
     public Long getId() { return id; }
 
-    public void setEventDate(ZonedDateTime dateTime){ this.eventDate = ZonedDateTime.now(ZoneId.systemDefault()); }
-
     public ZonedDateTime getDate() { return eventDate; }
+
+    public void setEventDate(ZonedDateTime date) { this.eventDate = date; }
 
 }

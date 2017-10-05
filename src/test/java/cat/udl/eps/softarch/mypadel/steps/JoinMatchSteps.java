@@ -1,7 +1,9 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +21,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class JoinMatchSteps {
 
-    private ZonedDateTime dateTime = ZonedDateTime.now(ZoneId.systemDefault());
-
     @Autowired
     private StepDefs stepDefs;
 
     @When("^I join to a match$")
     public void iJoinToAMatchWithDatetime() throws Throwable {
         JoinMatch joinMatch = new JoinMatch();
-        joinMatch.setEventDate(dateTime);
         String message = stepDefs.mapper.writeValueAsString(joinMatch);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/joinMatches")
@@ -47,4 +46,27 @@ public class JoinMatchSteps {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    /*@And("^I join to a match in the same datetime$")
+    public void iJoinToAMatchInTheSameDatetime() throws Throwable {
+        JoinMatch joinMatch = new JoinMatch();
+        String message = stepDefs.mapper.writeValueAsString(joinMatch);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/joinMatches")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(message)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(authenticate()))
+                .andDo(print());
+    }
+
+    @And("^I couldn't join the second match$")
+    public void iCouldnTJoinTheSecondMatch() throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/joinMatches/2")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(authenticate()))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }*/
 }
