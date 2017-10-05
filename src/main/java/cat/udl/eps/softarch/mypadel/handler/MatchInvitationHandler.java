@@ -4,9 +4,10 @@ import cat.udl.eps.softarch.mypadel.domain.MatchInvitation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
-
 import javax.transaction.Transactional;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
+
 
 public class MatchInvitationHandler {
     final Logger logger = LoggerFactory.getLogger(MatchInvitation.class);
@@ -15,7 +16,7 @@ public class MatchInvitationHandler {
     @Transactional
     public void handleMatchInvitationPreCreate(MatchInvitation match) {
         logger.info("Before creating: {}", match.toString());
-        match.setEventDate(Calendar.getInstance());
+        match.setEventDate(ZonedDateTime.now());
     }
 
  /* @HandleBeforeSave
