@@ -1,12 +1,13 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
-import javax.persistence.Column;
+import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
-import java.util.Calendar;
+import java.time.ZonedDateTime;
+
 
 
 
@@ -16,20 +17,16 @@ public class Reservation extends  UriEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotNull
-    private Calendar startDate;
+
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private ZonedDateTime startDate;
 
     @NotNull
     private Duration duration;
 
-    public enum courtType{
-        INDOOR,
-        OUTDOOR,
-        UNDEFINED
-    }
 
-    @Column(name="courtType", nullable = false)
-    private courtType courtType;
+    @NotNull
+    private CourtType courtType;
 
 
     @Override
@@ -37,13 +34,12 @@ public class Reservation extends  UriEntity<Long> {
         return id;
     }
 
-    public Calendar getStartDate(){
+    public ZonedDateTime getStartDate(){
         return startDate;
     }
 
-    public void setStartDate(Calendar startDate){
+    public void setStartDate(ZonedDateTime startDate){
         this.startDate=startDate;
-
     }
 
     public Duration getDuration(){
@@ -52,13 +48,13 @@ public class Reservation extends  UriEntity<Long> {
 
     public void setDuration(Duration duration){
         this.duration=duration;
-
     }
-    public courtType getCourtType(){
+
+    public CourtType getCourtType(){
         return courtType;
     }
 
-    public void setCourtType(courtType court){
+    public void setCourtType(CourtType court){
         this.courtType=court;
     }
 }
