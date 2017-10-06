@@ -33,7 +33,7 @@ public class MatchResult extends UriEntity<Integer> {
 
 	public ArrayList<Player> getLosingPair () { return this.losingPair; }
 
-	public void setLosingPair (ArrayList<Player> losers) { this.winningPair = losers; }
+	public void setLosingPair (ArrayList<Player> losers) { this.losingPair = losers; }
 
     public boolean isDraw() {
         return isDraw;
