@@ -2,14 +2,24 @@ package cat.udl.eps.softarch.mypadel.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "MyPadelUser") //Avoid collision with system table User in Postgres
-public abstract class User extends UriEntity<String> {
+public abstract class User extends UriEntity<String> implements UserDetails {
+
+	public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Id
     private String username;
@@ -17,7 +27,7 @@ public abstract class User extends UriEntity<String> {
     @Email
     private String email;
 
-    @JsonIgnore
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
 
@@ -47,6 +57,26 @@ public abstract class User extends UriEntity<String> {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+		this.password = passwordEncoder.encode(password);
     }
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }
