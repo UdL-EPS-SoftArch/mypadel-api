@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.mypadel.domain.Player;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,16 @@ public class RegisterPlayerStepDef {
     @When("^I register a new player with username \"([^\"]*)\", email \"([^\"]*)\",password \"([^\"]*)\", score (\\d+) and level \"([^\"]*)\"$")
     public void iRegisterANewPlayerWithUsernameEmailPasswordScoreAndLevel(String username, String email, String password, int score, String level) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        Player player=new Player();
-        player.setUsername(username);
-        player.setEmail(email);
-        player.setPassword(password);
-        player.setScore(score);
-        player.setLevel(Player.Level.valueOf(level));
-        String message = stepDefs.mapper.writeValueAsString(player);
+		JSONObject player = new JSONObject();
+		player.put("username", username);
+		player.put("email", email);
+		player.put("password", password);
+		player.put("score", score);
+		player.put("level", level);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/players")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(message)
+                        .content(player.toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
                 .andDo(print());

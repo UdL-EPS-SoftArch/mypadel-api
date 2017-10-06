@@ -4,21 +4,21 @@ Feature: Create court
 	I want to create a new court
 
 	Scenario: Create a new indoor court as an admin
-		Given I login as "admin" with password "password"
+		Given I login as "testadmin@mypadel.cat" with password "password"
 		When I create a new "indoor" court
 		Then The response code is 201
 		And A new "indoor" court is "available"
 
 	Scenario: Create a new outdoor court as an admin
-		Given I login as "admin" with password "password"
+		Given I login as "testadmin@mypadel.cat" with password "password"
 		When I create a new "outdoor" court
 		Then The response code is 201
 		And A new "outdoor" court is "available"
 
 	Scenario: Create a new court as non admin
-		Given I login as "user" with password "password"
+		Given I login as "testplayer@mypadel.cat" with password "password"
 		When I create a new "indoor" court
-		Then The response code is 401
+		Then The response code is 403
 		And A new court has not been created
 
 	Scenario: Create a new court without being logged
