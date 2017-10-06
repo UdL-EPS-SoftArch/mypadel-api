@@ -5,6 +5,6 @@ Feature: Join match
 
 
   Scenario: Successfully joined a match
-    Given I login as "player" with password "password"
+    Given I login as "testadmin@mypadel.cat" with password "password"
     When I join to a match
     Then I successfully joined a match
