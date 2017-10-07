@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.config;
 
 import cat.udl.eps.softarch.mypadel.domain.Admin;
+import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
 import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
 import cat.udl.eps.softarch.mypadel.domain.Court;
 import cat.udl.eps.softarch.mypadel.domain.Player;
@@ -22,6 +23,7 @@ public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(Player.class);
         config.exposeIdsFor(PublicMatch.class);
         config.exposeIdsFor(Court.class);
+        config.exposeIdsFor(JoinMatch.class);
     }
 
     @PostConstruct
