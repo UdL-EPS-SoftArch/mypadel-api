@@ -1,7 +1,8 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
@@ -10,9 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -29,6 +27,18 @@ public abstract class User extends UriEntity<String> implements UserDetails {
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+	@ManyToOne
+	private MatchInvitation creatorOf;
+
+	public MatchInvitation getCreatorOf() {
+		return creatorOf;
+	}
+
+	public void setCreatorOf(MatchInvitation creatorOf) {
+		this.creatorOf = creatorOf;
+	}
+
 
 
     @Override

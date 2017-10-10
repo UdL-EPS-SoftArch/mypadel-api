@@ -5,6 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import java.util.Collection;
 
@@ -26,6 +28,17 @@ public class Player extends User {
     public void setLevel(Level level) {
         this.level = level;
     }
+
+    @ManyToOne
+	private MatchInvitation invitations;
+
+	public MatchInvitation getInvitations() {
+		return invitations;
+	}
+
+	public void setInvitations(MatchInvitation invitations) {
+		this.invitations = invitations;
+	}
 
 	@Override
 	@Transient

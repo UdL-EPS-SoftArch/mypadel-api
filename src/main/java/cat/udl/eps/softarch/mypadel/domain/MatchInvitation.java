@@ -1,11 +1,9 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity
 public class MatchInvitation {
@@ -14,7 +12,42 @@ public class MatchInvitation {
     private Long id;
     private ZonedDateTime eventDate;
 	private String message;
-    //methods
+
+	@OneToMany
+	private User createdBy;
+
+	@OneToMany
+	private  Player invites;
+
+	@OneToMany
+	private	Match invitesTo;
+
+
+	public User getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Player getInvites() {
+		return invites;
+	}
+
+	public void setInvites(Player invites) {
+		this.invites = invites;
+	}
+
+	public Match getInvitesTo() {
+		return invitesTo;
+	}
+
+	public void setInvitesTo(Match invitesTo) {
+		this.invitesTo = invitesTo;
+	}
+
+	//methods
 	public void setId(Long id) {
 		this.id = id;
 	}
