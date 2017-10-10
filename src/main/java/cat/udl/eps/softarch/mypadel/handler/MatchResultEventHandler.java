@@ -57,4 +57,5 @@ public class MatchResultEventHandler {
 	public void handleMatchResultPostLinkSave(MatchResult matchResult, Object o) {
 		logger.info("After linking: {} to {}", matchResult.toString(), o.toString());
 	}
+
 }
