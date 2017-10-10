@@ -70,8 +70,8 @@ public class ReservationStepDefs {
 			.andDo(print())
 			.andExpect(jsonPath("$.id",is(id)))
 			.andExpect(jsonPath("$.duration", is(this.duration.toString())))
-			.andExpect(jsonPath("$.startdate", is(parseData(startdate.toString()))))
-			.andExpect(jsonPath("$.courtType", is(CourtType.valueOf(courtType))));
+			.andExpect(jsonPath("$.startDate", is(parseData(startdate.toString()))))
+			.andExpect(jsonPath("$.courtType", is(courtType)));
 
 	}
 

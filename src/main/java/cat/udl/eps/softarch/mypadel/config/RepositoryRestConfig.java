@@ -1,9 +1,6 @@
 package cat.udl.eps.softarch.mypadel.config;
 
-import cat.udl.eps.softarch.mypadel.domain.Admin;
-import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
-import cat.udl.eps.softarch.mypadel.domain.Court;
-import cat.udl.eps.softarch.mypadel.domain.Player;
+import cat.udl.eps.softarch.mypadel.domain.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
@@ -22,6 +19,8 @@ public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(Player.class);
         config.exposeIdsFor(PublicMatch.class);
         config.exposeIdsFor(Court.class);
+		config.exposeIdsFor(Reservation.class);
+
     }
 
     @PostConstruct
