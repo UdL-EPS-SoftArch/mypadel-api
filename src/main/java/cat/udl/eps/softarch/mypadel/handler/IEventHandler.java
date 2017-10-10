@@ -5,6 +5,7 @@ import cat.udl.eps.softarch.mypadel.domain.UriEntity;
 import java.io.Serializable;
 
 public interface IEventHandler<T extends UriEntity<? extends Serializable>> {
+
 	void handleBeforeCreate(T beforeCreate);
 
 	void handleBeforeSave(T beforeSave);
@@ -20,5 +21,6 @@ public interface IEventHandler<T extends UriEntity<? extends Serializable>> {
 	void handleAfterDelete(T afterDelete);
 
 	void handleAfterLinkSave(T afterLinkSave, Object object);
+
 }
 

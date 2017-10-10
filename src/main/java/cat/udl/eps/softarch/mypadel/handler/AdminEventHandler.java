@@ -8,53 +8,54 @@ import org.springframework.data.rest.core.annotation.*;
 import javax.transaction.Transactional;
 
 @RepositoryEventHandler(Admin.class)
-public class AdminEventHandler {
+public class AdminEventHandler implements IEventHandler<Admin> {
 
-	final Logger logger = LoggerFactory.getLogger(Admin.class);
+	private final Logger logger = LoggerFactory.getLogger(Admin.class);
 
 	@HandleBeforeCreate
 	@Transactional
-	public void handleAdminPreCreate(Admin admin) {
-		logger.info("Before creating: {}", admin.toString());
+	public void handleBeforeCreate(Admin beforeCreate) {
+		logger.info("Before creating: {}", beforeCreate.toString());
 	}
 
 	@HandleBeforeSave
 	@Transactional
-	public void handleAdminPreSave(Admin admin){
-		logger.info("Before updating: {}", admin.toString());
+	public void handleBeforeSave(Admin beforeSave) {
+		logger.info("Before updating: {}", beforeSave.toString());
 	}
 
 	@HandleBeforeDelete
 	@Transactional
-	public void handleAdminPreDelete(Admin admin){
-		logger.info("Before deleting: {}", admin.toString());
+	public void handleBeforeDelete(Admin beforeDelete) {
+		logger.info("Before deleting: {}", beforeDelete.toString());
 	}
 
 	@HandleBeforeLinkSave
-	public void handleAdminPreLinkSave(Admin admin, Object o) {
-		logger.info("Before linking: {} to {}", admin.toString(), o.toString());
+	public void handleBeforeLinkSave(Admin beforeLinkSave, Object object) {
+		logger.info("Before linking: {} to {}", beforeLinkSave.toString(), object.toString());
 	}
 
 	@HandleAfterCreate
 	@Transactional
-	public void handleAdminPostCreate(Admin admin){
-		logger.info("After creating: {}", admin.toString());
+	public void handleAfterCreate(Admin afterCreate) {
+		logger.info("After creating: {}", afterCreate.toString());
 	}
 
 	@HandleAfterSave
 	@Transactional
-	public void handleAdminPostSave(Admin admin){
-		logger.info("After updating: {}", admin.toString());
+	public void handleAfterSave(Admin afterSave) {
+		logger.info("After updating: {}", afterSave.toString());
 	}
 
 	@HandleAfterDelete
 	@Transactional
-	public void handleAdminPostDelete(Admin admin){
-		logger.info("After deleting: {}", admin.toString());
+	public void handleAfterDelete(Admin afterDelete) {
+		logger.info("After deleting: {}", afterDelete.toString());
 	}
 
 	@HandleAfterLinkSave
-	public void handleAdminPostLinkSave(Admin admin, Object o) {
-		logger.info("After linking: {} to {}", admin.toString(), o.toString());
+	public void handleAfterLinkSave(Admin afterLinkSave, Object object) {
+		logger.info("After linking: {} to {}", afterLinkSave.toString(), object.toString());
 	}
+
 }

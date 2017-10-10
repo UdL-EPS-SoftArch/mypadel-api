@@ -8,54 +8,54 @@ import org.springframework.data.rest.core.annotation.*;
 import javax.transaction.Transactional;
 
 @RepositoryEventHandler(MatchResult.class)
-public class MatchResultEventHandler {
+public class MatchResultEventHandler implements IEventHandler<MatchResult> {
 
-	final Logger logger = LoggerFactory.getLogger(MatchResult.class);
+	private final Logger logger = LoggerFactory.getLogger(MatchResult.class);
 
-	@HandleBeforeCreate(MatchResult.class)
+	@HandleBeforeCreate
 	@Transactional
-	public void handleMatchResultPreCreate(MatchResult matchResult) {
-		logger.info("Before creating: {}", matchResult.toString());
+	public void handleBeforeCreate(MatchResult beforeCreate) {
+		logger.info("Before creating: {}", beforeCreate.toString());
 	}
 
-	@HandleBeforeSave(MatchResult.class)
+	@HandleBeforeSave
 	@Transactional
-	public void handleMatchResultPreSave(MatchResult matchResult) {
-		logger.info("Before updating: {}", matchResult.toString());
+	public void handleBeforeSave(MatchResult beforeSave) {
+		logger.info("Before updating: {}", beforeSave.toString());
 	}
 
-	@HandleBeforeDelete(MatchResult.class)
+	@HandleBeforeDelete
 	@Transactional
-	public void handleMatchResultPreDelete(MatchResult matchResult) {
-		logger.info("Before deleting: {}", matchResult.toString());
+	public void handleBeforeDelete(MatchResult beforeDelete) {
+		logger.info("Before deleting: {}", beforeDelete.toString());
 	}
 
-	@HandleBeforeLinkSave(MatchResult.class)
-	public void handleMatchResultPreLinkSave(MatchResult matchResult, Object o) {
-		logger.info("Before linking: {} to {}", matchResult.toString(), o.toString());
+	@HandleBeforeLinkSave
+	public void handleBeforeLinkSave(MatchResult beforeLinkSave, Object object) {
+		logger.info("Before linking: {} to {}", beforeLinkSave.toString(), object.toString());
 	}
 
-	@HandleAfterCreate(MatchResult.class)
+	@HandleAfterCreate
 	@Transactional
-	public void handleMatchResultPostCreate(MatchResult matchResult) {
-		logger.info("After creating: {}", matchResult.toString());
+	public void handleAfterCreate(MatchResult afterCreate) {
+		logger.info("After creating: {}", afterCreate.toString());
 	}
 
-	@HandleAfterSave(MatchResult.class)
+	@HandleAfterSave
 	@Transactional
-	public void handleMatchResultPostSave(MatchResult matchResult) {
-		logger.info("After updating: {}", matchResult.toString());
+	public void handleAfterSave(MatchResult afterSave) {
+		logger.info("After updating: {}", afterSave.toString());
 	}
 
-	@HandleAfterDelete(MatchResult.class)
+	@HandleAfterDelete
 	@Transactional
-	public void handleMatchResultPostDelete(MatchResult matchResult) {
-		logger.info("After deleting: {}", matchResult.toString());
+	public void handleAfterDelete(MatchResult afterDelete) {
+		logger.info("After deleting: {}", afterDelete.toString());
 	}
 
-	@HandleAfterLinkSave(MatchResult.class)
-	public void handleMatchResultPostLinkSave(MatchResult matchResult, Object o) {
-		logger.info("After linking: {} to {}", matchResult.toString(), o.toString());
+	@HandleAfterLinkSave
+	public void handleAfterLinkSave(MatchResult afterLinkSave, Object object) {
+		logger.info("After linking: {} to {}", afterLinkSave.toString(), object.toString());
 	}
 
 }
