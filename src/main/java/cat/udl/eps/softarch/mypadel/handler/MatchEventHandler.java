@@ -33,7 +33,7 @@ public class MatchEventHandler {
 		if(adminInputsInvalidPlayer(match, auth)){
 			throw new NullPointerException();
 		}
-		match.setMatchCreator((Player) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		match.setMatchCreator((Player) auth.getPrincipal());
 	}
 
 	private boolean adminInputsInvalidPlayer(Match match, Authentication auth) {
