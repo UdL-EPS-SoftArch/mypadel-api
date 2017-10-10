@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.MatchInvitation;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MatchInvitationStepDefs {
     @Autowired
     private StepDefs stepDefs;
-
-    @When("^I create new match invitation for a new match$")
-    public void iCreateNewMatchInvitationForANewMatch() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        MatchInvitation matchInv = new MatchInvitation();
-		matchInv.setMessage("A player has invited you to a match.");
-
-        String message = stepDefs.mapper.writeValueAsString(matchInv);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/matchInvitations")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(message)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andDo(print());
-    }
-
 
 
     @And("^It has been created a new match invitation$")//i need to catch parameter
@@ -62,4 +46,21 @@ public class MatchInvitationStepDefs {
                 .andExpect(jsonPath("$._embedded.matchInvitations", hasSize(0)))
 			.andExpect((ResultMatcher) jsonPath("$.message",isEmptyOrNullString()));
 	}//check if the meesage has been added using code like above with the path
+
+
+	@When("^I create new match invitation for a new match with message \"([^\"]*)\"$")
+	public void iCreateNewMatchInvitationForANewMatchWithMessage(String arg0) throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		MatchInvitation matchInv = new MatchInvitation();
+		matchInv.setMessage(arg0);
+
+		String message = stepDefs.mapper.writeValueAsString(matchInv);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/matchInvitations")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
 }
