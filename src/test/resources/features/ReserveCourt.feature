@@ -4,7 +4,7 @@ Feature: Reserve a court
   I want to reserve a court
 
   Scenario: Reserve a court
-    Given I login as "player" with password "password"
+    Given I login as "testplayer@mypadel.cat" with password "password"
     When I make a reservation on 8 - 10 - 2017 for 60 minutes with CourtType "INDOOR"
     Then The response code is 201
     And The reservation is created on 8 - 10 - 2017 for 60 minutes with CourtType "INDOOR"

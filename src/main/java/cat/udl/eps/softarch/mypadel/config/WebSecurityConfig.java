@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
 
 			    .antMatchers(HttpMethod.GET,"/identity").authenticated()
-				.antMatchers(HttpMethod.POST, "/reservations*/**").hasRole("ADMIN")
+				.antMatchers(HttpMethod.POST, "/reservations*/**").authenticated()
 
                 .anyRequest().permitAll()
                 .and()
