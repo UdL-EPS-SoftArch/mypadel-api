@@ -4,10 +4,11 @@ Feature: Register admin
   I want to register a new admin
 
   Scenario: Register new admin as admin
-    Given I login as "admin" with password "password"
+    Given I login as "testadmin@mypadel.cat" with password "password"
     When I register a new admin with username "newadmin", email "newadmin@udl.cat" and password "password"
     Then The response code is 201
     And It has been created a admin with username "newadmin", email "newadmin@udl.cat" and the password is not returned
+	And I can login as "newadmin@udl.cat" and password "password"
 
   Scenario: Register new admin without authentication
     Given I'm not logged in
