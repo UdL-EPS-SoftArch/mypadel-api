@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 
+@Component
+@RepositoryEventHandler(Match.class)
 public class MatchEventHandler {
 	final Logger logger = LoggerFactory.getLogger(Match.class);
 
