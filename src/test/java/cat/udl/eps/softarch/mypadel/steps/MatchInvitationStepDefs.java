@@ -24,16 +24,6 @@ public class MatchInvitationStepDefs {
     private StepDefs stepDefs;
 
 
-    @And("^It has been created a new match invitation$")//i need to catch parameter
-    public void itHasBeenCreatedANewMatchInvitation() throws Throwable {// u pozivu Long id
-        // Write code here that turns the phrase above into concrete actions
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/matchInvitations/1")//get("/matchInvitations/{id}, id")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-        		.andExpect((ResultMatcher) jsonPath("$.message", "A player has invited you to a match."));
-    }
-
 
     @And("^It has not been created a new match invitation$")//i need to catch parameter
     public void itHasNotBeenCreatedANewMatchInvitation() throws Throwable {// u pozivu Long id
@@ -62,5 +52,15 @@ public class MatchInvitationStepDefs {
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print());
+	}
+
+	@And("^It has been created a new match invitation with message \"([^\"]*)\"$")
+	public void itHasBeenCreatedANewMatchInvitationWithMessage(String arg0) throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchInvitations/1")//get("/matchInvitations/{id}, id")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect((ResultMatcher) jsonPath("$.message", arg0));
 	}
 }
