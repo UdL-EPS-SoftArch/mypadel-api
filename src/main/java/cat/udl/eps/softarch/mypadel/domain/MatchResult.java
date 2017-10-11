@@ -1,5 +1,7 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 
@@ -23,7 +25,13 @@ public class MatchResult extends UriEntity<Integer> {
 
 	private boolean isDraw;
 
+	@OneToOne(mappedBy = "match", fetch=FetchType.LAZY)
+	@JsonIdentityReference(alwaysAsId = true)
 	private Match match;
+
+	@OneToMany()
+	@JsonIdentityReference(alwaysAsId = true)
+	private MatchResultVerification[] verifications;
 
 	@Override
 	public Integer getId() {
