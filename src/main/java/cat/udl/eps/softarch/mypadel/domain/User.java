@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -12,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "MyPadelUser") //Avoid collision with system table User in Postgres
@@ -28,20 +31,31 @@ public abstract class User extends UriEntity<String> implements UserDetails {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-	@ManyToOne
-	private MatchInvitation creatorOf;
 
-	public MatchInvitation getCreatorOf() {
+
+
+
+	@OneToMany       (mappedBy = "createdBy")// when I use One to many(List) for better performance
+	//private MatchInvitation creatorOf;
+	@JsonIdentityReference(alwaysAsId = true)
+	private List<MatchInvitation> creatorOf = new ArrayList<>();
+
+
+
+	public List<MatchInvitation> getCreatorOf() {
 		return creatorOf;
 	}
 
-	public void setCreatorOf(MatchInvitation creatorOf) {
+	public void setCreatorOf(List<MatchInvitation> creatorOf) {
 		this.creatorOf = creatorOf;
 	}
 
 
 
-    @Override
+
+
+
+	@Override
     public String getId() {
         return username;
     }

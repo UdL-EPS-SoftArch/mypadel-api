@@ -1,5 +1,7 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -13,14 +15,25 @@ public class MatchInvitation {
     private ZonedDateTime eventDate;
 	private String message;
 
-	@OneToMany
+
+
+
+	@ManyToOne
+	@JsonIdentityReference(alwaysAsId = true)
 	private User createdBy;
 
-	@OneToMany
+	@ManyToOne
+	@JsonIdentityReference(alwaysAsId = true)
 	private  Player invites;
 
-	@OneToMany
+	@ManyToOne
+	@JsonIdentityReference(alwaysAsId = true)
 	private	Match invitesTo;
+
+
+
+
+
 
 
 	public User getCreatedBy() {
