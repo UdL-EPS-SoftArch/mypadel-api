@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
+import cat.udl.eps.softarch.mypadel.handler.JoinMatchEventHandler;
 import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -24,10 +25,14 @@ public class JoinMatchSteps {
     @Autowired
     private StepDefs stepDefs;
 
+    JoinMatchEventHandler handler = new JoinMatchEventHandler();
+
+
     @When("^I join to a match$")
     public void iJoinToAMatchWithDatetime() throws Throwable {
         JoinMatch joinMatch = new JoinMatch();
-        String message = stepDefs.mapper.writeValueAsString(joinMatch);
+		handler.handleAdminPreCreate(joinMatch);
+		String message = stepDefs.mapper.writeValueAsString(joinMatch);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/joinMatches")
                                 .contentType(MediaType.APPLICATION_JSON)
