@@ -38,7 +38,7 @@ public class CreateMatchStepDefs {
 	@Autowired
 	PlayerRepository playerRepository;
 
-	@When("^I create a new public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
+	@When("^I set a new public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
 	public void iCreateANewPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
 																  int cancelationDay, int cancelationMonth,
 																  int cancelationYear) throws Throwable {
@@ -47,12 +47,20 @@ public class CreateMatchStepDefs {
 		this.duration = Duration.ofMinutes(duration);
 		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
 			hour, 0, 0,0, ZoneId.of("+00:00"));
-
 		match.setStartDate(startDate);
 		match.setDuration(this.duration);
 		match.setCancelationDeadline(cancelationDeadline);
 		match.setCourtType(CourtType.INDOOR);
 		match.setLevel(Level.ADVANCED);
+	}
+
+	@And("^the user creating it is \"([^\"]*)\"$")
+	public void theUserCreatingItIs(String username) throws Throwable {
+		match.setMatchCreator(playerRepository.findOne(username));
+	}
+
+	@And("^I create it$")
+	public void iCreateIt() throws Throwable {
 		String message = stepDefs.mapper.writeValueAsString(match);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/publicMatches")
@@ -63,26 +71,29 @@ public class CreateMatchStepDefs {
 			.andDo(print());
 	}
 
-	@And("^the user creating it is \"([^\"]*)\"$")
-	public void theUserCreatingItIs(String username) throws Throwable {
-		match.setMatchCreator(playerRepository.findOne(username));
-	}
-
     @And("^A match has been created$")
     public void aMatchHasBeenCreated() throws Throwable {
         int id = 1;
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/publicMatches/{id}", id)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.id", is(id)))
-                .andExpect(jsonPath("$.duration", is(duration.toString())))
-                .andExpect(jsonPath("$.startDate", is(parseData(startDate.toString()))))
-                .andExpect(jsonPath("$.cancelationDeadline", is(parseData(cancelationDeadline.toString()))))
-                .andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
-				.andExpect(jsonPath("$.matchCreator", is(playerRepository.findOne("player"))))
-                .andExpect(jsonPath("$.level", is(Level.ADVANCED.toString())));
+			get("/publicMatches/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+				.andDo(print())
+				.andExpect(jsonPath("$.id", is(id)))
+				.andExpect(jsonPath("$.duration", is(duration.toString())))
+				.andExpect(jsonPath("$.startDate", is(parseData(startDate.toString()))))
+				.andExpect(jsonPath("$.cancelationDeadline", is(parseData(cancelationDeadline.toString()))))
+				.andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
+				.andExpect(jsonPath("$.level", is(Level.ADVANCED.toString()))
+		);
+//		stepDefs.result = stepDefs.mockMvc.perform(
+//			get("/players/player")
+//				.accept(MediaType.APPLICATION_JSON)
+//				.with(authenticate()))
+//			.andDo(print())
+//			.andExpect(jsonPath("$.username", is(""))
+//		);
+		//Comprovar la uri de matchcreator
     }
 
 	private String parseData(String data){
