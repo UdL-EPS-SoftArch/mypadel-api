@@ -1,8 +1,6 @@
 package cat.udl.eps.softarch.mypadel.config;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
-import cat.udl.eps.softarch.mypadel.eventlistener.AdminEventListener;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
@@ -27,10 +25,5 @@ public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
     @PostConstruct
     public void init() {
     }
-
-	@Bean
-	public AdminEventListener adminEventListener() {
-		return new AdminEventListener();
-	}
 
 }
