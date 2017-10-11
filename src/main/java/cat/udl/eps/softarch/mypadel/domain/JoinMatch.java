@@ -43,7 +43,7 @@ public class JoinMatch extends UriEntity<Long> {
 	}
 
 	public void setMatch(Match m){
-		this.match = match;
+		this.match = m;
 	}
 
 	public Match getMatch(){
