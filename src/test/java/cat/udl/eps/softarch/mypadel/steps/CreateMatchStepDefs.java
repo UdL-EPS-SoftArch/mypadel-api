@@ -71,20 +71,20 @@ public class CreateMatchStepDefs {
 
     @And("^A match has been created$")
     public void aMatchHasBeenCreated() throws Throwable {
-        int id = 1;
         stepDefs.result = stepDefs.mockMvc.perform(
-			get("/publicMatches/{id}", id)
+			get("/publicMatches/1")
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 				.andDo(print())
-				.andExpect(jsonPath("$.id", is(id)))
+				.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.duration", is(duration.toString())))
 				.andExpect(jsonPath("$.startDate", is(parseData(startDate.toString()))))
 				.andExpect(jsonPath("$.cancelationDeadline", is(parseData(cancelationDeadline.toString()))))
 				.andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
-				.andExpect(jsonPath("$.level", is(Level.ADVANCED.toString()))
+				.andExpect(jsonPath("$.level", is(Level.ADVANCED.toString())))
+				.andExpect(jsonPath("$._links.matchCreator.href",
+					is("http://localhost/publicMatches/1/matchCreator"))
 		);
-		//Comprovar la uri de matchcreator
     }
 
 	private String parseData(String data){
