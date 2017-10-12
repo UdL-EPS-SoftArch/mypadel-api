@@ -7,11 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import cat.udl.eps.softarch.mypadel.domain.CourtType;
-import cat.udl.eps.softarch.mypadel.domain.Level;
-import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
-import cat.udl.eps.softarch.mypadel.domain.User;
+import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.PlayerRepository;
+import cat.udl.eps.softarch.mypadel.repository.UserRepository;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
@@ -36,7 +34,7 @@ public class CreateMatchStepDefs {
 	private PublicMatch match = new PublicMatch();
 
 	@Autowired
-	PlayerRepository playerRepository;
+	private UserRepository userRepository;
 
 	@When("^I set a new public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
 	public void iCreateANewPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
@@ -56,7 +54,7 @@ public class CreateMatchStepDefs {
 
 	@And("^the user creating it is \"([^\"]*)\"$")
 	public void theUserCreatingItIs(String username) throws Throwable {
-		match.setMatchCreator(playerRepository.findOne(username));
+		match.setMatchCreator((Player)userRepository.findByEmail(username));
 	}
 
 	@And("^I create it$")
@@ -86,13 +84,6 @@ public class CreateMatchStepDefs {
 				.andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
 				.andExpect(jsonPath("$.level", is(Level.ADVANCED.toString()))
 		);
-//		stepDefs.result = stepDefs.mockMvc.perform(
-//			get("/players/player")
-//				.accept(MediaType.APPLICATION_JSON)
-//				.with(authenticate()))
-//			.andDo(print())
-//			.andExpect(jsonPath("$.username", is(""))
-//		);
 		//Comprovar la uri de matchcreator
     }
 
