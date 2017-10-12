@@ -1,12 +1,6 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.domain.CourtType;
-import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
-import cat.udl.eps.softarch.mypadel.domain.Level;
-import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
-import cat.udl.eps.softarch.mypadel.handler.JoinMatchEventHandler;
-import cat.udl.eps.softarch.mypadel.repository.PublicMatchRepository;
-import cucumber.api.PendingException;
+import cat.udl.eps.softarch.mypadel.domain.*;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -30,19 +24,19 @@ public class JoinMatchSteps {
     @Autowired
     private StepDefs stepDefs;
 
+
 	JoinMatch joinMatch = new JoinMatch();
 
 	PublicMatch match = new PublicMatch();
 
-	private ZonedDateTime startDate;
+	private ZonedDateTime start;
 
-	private Duration duration1;
+	private Duration duration;
 
-	private ZonedDateTime cancelationDeadline;
+	private ZonedDateTime cancelation;
 
 	@Autowired
 	PlayerRepository playerRepository;
-	PublicMatchRepository publicMatchRepository;
 
 	@When("^I join to a match$")
     public void iJoinToAMatchWithDatetime() throws Throwable {
@@ -75,20 +69,21 @@ public class JoinMatchSteps {
 	@When("^I join to a match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
 	public void iJoinToAMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
 														 int cancelationDay, int cancelationMonth,
-														 int cancelationYear) throws Throwable {
+												 int cancelationYear) throws Throwable {
 
-		startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,0, ZoneId.of("+00:00"));
-		duration1 = Duration.ofMinutes(duration);
-		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+
+		start = ZonedDateTime.of(year, month, day, hour, 0, 0,0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelation = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
 			hour, 0, 0,0, ZoneId.of("+00:00"));
-		match.setStartDate(startDate);
-		match.setDuration(duration1);
-		match.setCancelationDeadline(cancelationDeadline);
-		match.setCourtType(CourtType.INDOOR);
-		match.setLevel(Level.ADVANCED);
+		match.setStartDate(start);
+		match.setDuration(this.duration);
+		match.setCancelationDeadline(cancelation);
+		match.setCourtType(CourtType.OUTDOOR);
+		match.setLevel(Level.INTERMEDIATE);
 		joinMatch.setMatch(match);
-		String message = stepDefs.mapper.writeValueAsString(joinMatch);
 
+		String message = stepDefs.mapper.writeValueAsString(joinMatch);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/joinMatches")
 				.contentType(MediaType.APPLICATION_JSON)
