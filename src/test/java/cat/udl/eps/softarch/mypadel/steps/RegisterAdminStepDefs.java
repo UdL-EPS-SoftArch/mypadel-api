@@ -1,14 +1,17 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.Admin;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.hamcrest.Matchers.*;
@@ -23,15 +26,14 @@ public class RegisterAdminStepDefs {
 
     @When("^I register a new admin with username \"([^\"]*)\", email \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void iRegisterANewAdminWithUsernameEmailAndPassword(String username, String email, String password) throws Throwable {
-        Admin admin = new Admin();
-        admin.setUsername(username);
-        admin.setEmail(email);
-        admin.setPassword(password);
-        String message = stepDefs.mapper.writeValueAsString(admin);
+		JSONObject admin = new JSONObject();
+		admin.put("username", username);
+		admin.put("email", email);
+		admin.put("password", password);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/admins")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(message)
+                        .content(admin.toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
                 .andDo(print());
@@ -56,4 +58,15 @@ public class RegisterAdminStepDefs {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+	@And("^I can login as \"([^\"]*)\" and password \"([^\"]*)\"$")
+	public void iCanLoginAsAndPassword(String email, String password) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/identity")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(httpBasic(email, password)))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
 }

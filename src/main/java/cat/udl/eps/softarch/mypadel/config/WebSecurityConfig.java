@@ -19,17 +19,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+
+				.antMatchers(HttpMethod.POST, "/admins*/**").hasRole("ADMIN")
+				.antMatchers(HttpMethod.POST, "/courts*/**").hasRole("ADMIN")
+			    .antMatchers(HttpMethod.POST, "/players*/**").hasRole("ADMIN")
+			    .antMatchers(HttpMethod.DELETE, "/players*/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
 
-                .antMatchers(HttpMethod.POST, "/admins*/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/courts*/**").hasRole("ADMIN")
+			    .antMatchers(HttpMethod.GET,"/identity").authenticated()
+				.antMatchers(HttpMethod.POST, "/reservations*/**").authenticated()
 
                 .anyRequest().permitAll()
                 .and()
-                .httpBasic().realmName("MyPaddle")
+                .httpBasic().realmName("MyPadel")
                 .and()
                 .addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class)
                 .csrf().disable();

@@ -4,7 +4,7 @@ Feature: Remove Player
   I want to remove a player account
 
   Scenario: Remove a player as admin
-    Given I login as "admin" with password "password"
+    Given I login as "testadmin@mypadel.cat" with password "password"
     And There is an existing player with username "newplayer", email "newplayer@udl.cat",password "password", score 12 and level "NOVICE"
     When I remove a player with username "newplayer"
     Then The response code is 204
@@ -18,13 +18,13 @@ Feature: Remove Player
     And It has not been removed the player with username "newplayer"
 
   Scenario: Remove an unexisting player as admin
-    Given I login as "admin" with password "password"
+    Given I login as "testadmin@mypadel.cat" with password "password"
     When I remove a player with username "newplayer"
     Then The response code is 404
 
   Scenario: Remove a player as User
-    Given I login as "user" with password "password"
+    Given I login as "testplayer@mypadel.cat" with password "password"
     And There is an existing player with username "newplayer", email "newplayer@udl.cat",password "password", score 12 and level "NOVICE"
     When I remove a player with username "newplayer"
-    Then The response code is 401
+    Then The response code is 403
     And It has not been removed the player with username "newplayer"
