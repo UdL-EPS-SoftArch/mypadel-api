@@ -11,29 +11,31 @@ import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 public class CreateMatchStepDefs {
 
-    @Autowired
-    private StepDefs stepDefs;
+	@Autowired
+	private StepDefs stepDefs;
 
-    private ZonedDateTime startDate;
+	private ZonedDateTime startDate;
 
-    private Duration duration;
+	private Duration duration;
 
-    private ZonedDateTime cancelationDeadline;
+	private ZonedDateTime cancelationDeadline;
 
 	private PublicMatch match = new PublicMatch();
 
 	@Autowired
 	private UserRepository userRepository;
 
-	private long id;
+	private int id;
 
 	@When("^I set a new public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
 	public void iCreateANewPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
@@ -43,7 +45,7 @@ public class CreateMatchStepDefs {
 			0, ZoneId.of("+00:00"));
 		this.duration = Duration.ofMinutes(duration);
 		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
-			hour, 0, 0,0, ZoneId.of("+00:00"));
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
 		match.setStartDate(startDate);
 		match.setDuration(this.duration);
 		match.setCancelationDeadline(cancelationDeadline);
@@ -53,7 +55,7 @@ public class CreateMatchStepDefs {
 
 	@And("^the user creating it is \"([^\"]*)\"$")
 	public void theUserCreatingItIs(String username) throws Throwable {
-		match.setMatchCreator((Player)userRepository.findByEmail(username));
+		match.setMatchCreator((Player) userRepository.findByEmail(username));
 	}
 
 	@And("^I create it$")
@@ -81,21 +83,23 @@ public class CreateMatchStepDefs {
 			.andExpect(jsonPath("$.startDate", is(parseData(startDate.toString()))))
 			.andExpect(jsonPath("$.cancelationDeadline", is(parseData(cancelationDeadline.toString()))))
 			.andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
-			.andExpect(jsonPath("$.level", is(Level.ADVANCED.toString())))
-			.andExpect(jsonPath("$._links.matchCreator.href",
-				is("http://localhost/publicMatches/1/matchCreator"))
+			.andExpect(jsonPath("$.level", is(Level.ADVANCED.toString()))
 			);
 	}
 
-	private String parseData(String data){
+	private String parseData(String data) {
 		String[] parts = data.split(":");
-		return parts[0] + ":00:00" + data.substring(data.length()-1);
+		return parts[0] + ":00:00" + data.substring(data.length() - 1);
 	}
 
 	@And("^The match creator is \"([^\"]*)\"$")
 	public void theMatchCreatorIs(String player) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/publicMatches/{id}/matchCreator", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(jsonPath("$.username", is(player))
 		);
 	}
 }
