@@ -38,7 +38,7 @@ public class CreateMatchStepDefs {
 	private int id;
 
 	@When("^I set a new public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
-	public void iCreateANewPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
+	public void iSetANewPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
 																  int cancelationDay, int cancelationMonth,
 																  int cancelationYear) throws Throwable {
 		startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
