@@ -9,7 +9,7 @@ Feature: Create match
 		And I create it
 		Then The response code is 201
 		And A match with the id 1 has been created
-		And The match creator is "player"
+		And The match creator is "testplayer"
 
 	Scenario: An admin creates a public match
 		Given I login as "testadmin@mypadel.cat" with password "password"
@@ -18,7 +18,7 @@ Feature: Create match
 		And I create it
 		Then The response code is 201
 		And A match with the id 1 has been created
-		And The match creator is "player"
+		And The match creator is "testplayer"
 
 	Scenario: Unlogged person tries to create a public match
 		Given I'm not logged in
