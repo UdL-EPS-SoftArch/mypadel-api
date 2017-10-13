@@ -8,7 +8,7 @@ Feature: Create match
 		When I set a new public match on 1 - 10 - 2017 at 1 pm for 30 minutes and deadline 30 - 9 - 2017
 		And I create it
 		Then The response code is 201
-		And A match has been created
+		And A match with the id 1 has been created
 		And The match creator is "player"
 
 	Scenario: An admin creates a public match
@@ -17,7 +17,7 @@ Feature: Create match
 		And the user creating it is "testplayer@mypadel.cat"
 		And I create it
 		Then The response code is 201
-		And A match has been created
+		And A match with the id 1 has been created
 		And The match creator is "player"
 
 	Scenario: Unlogged person tries to create a public match
