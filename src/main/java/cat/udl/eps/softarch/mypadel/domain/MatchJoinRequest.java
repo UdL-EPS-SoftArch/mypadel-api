@@ -4,6 +4,7 @@ package cat.udl.eps.softarch.mypadel.domain;
 
 	import javax.persistence.*;
 
+	@Entity
 	public class MatchJoinRequest extends UriEntity<Long>{
 
 	 	@Id
