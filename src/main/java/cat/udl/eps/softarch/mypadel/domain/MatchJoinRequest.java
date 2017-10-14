@@ -1,21 +1,21 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+	import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
-import javax.persistence.*;
+	import javax.persistence.*;
 
-public class MatchJoinRequest extends UriEntity<Long>{
+	public class MatchJoinRequest extends UriEntity<Long>{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	 	@Id
+ 		@GeneratedValue(strategy = GenerationType.IDENTITY)
+ 		private long id;
 
-	@ManyToOne
-	@JsonIdentityReference(alwaysAsId = true)
-	private CustomMatch customMatch;
+	 	@ManyToOne
+ 		@JsonIdentityReference(alwaysAsId = true)
+ 		private CustomMatch customMatch;
 
-	@Override
-	public Long getId() {
-		return id;
-	}
-}
+	 	@Override
+ 		public Long getId() {
+				return id;
+		}
+ }
