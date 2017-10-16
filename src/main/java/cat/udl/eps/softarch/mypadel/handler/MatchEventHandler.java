@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 
 @Component
-@RepositoryEventHandler(Match.class)
+@RepositoryEventHandler
 public class MatchEventHandler {
 	final Logger logger = LoggerFactory.getLogger(Match.class);
 
