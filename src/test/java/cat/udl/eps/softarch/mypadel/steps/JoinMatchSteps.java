@@ -64,7 +64,7 @@ public class JoinMatchSteps {
                 .andExpect(status().isOk());
     }
 
-	@And("^the user creating it is \"([^\"]*)\"$")
+	@And("^the user joining it is \"([^\"]*)\"$")
 	public void theUserCreatingItIs(String player) throws Throwable {
 		joinMatch.setPlayer(playerRepository.findOne(player));
 	}
