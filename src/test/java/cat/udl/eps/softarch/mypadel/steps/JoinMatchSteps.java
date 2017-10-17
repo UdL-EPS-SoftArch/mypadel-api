@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
+import cat.udl.eps.softarch.mypadel.repository.PublicMatchRepository;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -37,6 +38,9 @@ public class JoinMatchSteps {
 
 	@Autowired
 	PlayerRepository playerRepository;
+
+	@Autowired
+	PublicMatchRepository pub;
 
 	@When("^I join to a match$")
     public void iJoinToAMatchWithDatetime() throws Throwable {
@@ -82,6 +86,8 @@ public class JoinMatchSteps {
 		match.setCourtType(CourtType.OUTDOOR);
 		match.setLevel(Level.INTERMEDIATE);
 		joinMatch.setMatch(match);
+		ZonedDateTime date = ZonedDateTime.now(ZoneId.systemDefault());
+		joinMatch.setEventDate(date);
 
 		String message = stepDefs.mapper.writeValueAsString(joinMatch);
 		stepDefs.result = stepDefs.mockMvc.perform(

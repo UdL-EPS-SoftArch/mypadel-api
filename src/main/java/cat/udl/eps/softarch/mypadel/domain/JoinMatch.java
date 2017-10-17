@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+
 @Entity
 public class JoinMatch extends UriEntity<Long> {
 
@@ -15,7 +16,7 @@ public class JoinMatch extends UriEntity<Long> {
     private Long id;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private ZonedDateTime eventDate;
+    private ZonedDateTime date;
 
 	@ManyToOne
 	@JsonIdentityReference(alwaysAsId = true)
@@ -23,15 +24,15 @@ public class JoinMatch extends UriEntity<Long> {
 
 	@ManyToOne
 	@JsonIdentityReference(alwaysAsId = true)
-    private PublicMatch match;
+    private PublicMatch publicMatch;
 
     @Override
     public Long getId() { return id; }
 
-    public ZonedDateTime getDate() { return eventDate; }
+    public ZonedDateTime getDate() { return date; }
 
     public void setEventDate(ZonedDateTime date) {
-    	this.eventDate = date;
+    	this.date = date;
     }
 
     public void setPlayer(Player p){
@@ -42,10 +43,10 @@ public class JoinMatch extends UriEntity<Long> {
     	return this.player;
 	}
 
-	public void setMatch(PublicMatch m){ this.match = m; }
+	public void setMatch(PublicMatch m){ this.publicMatch = m; }
 
 	public Match getPublicMatch(){
-		return this.match;
+		return this.publicMatch;
 	}
 
 }
