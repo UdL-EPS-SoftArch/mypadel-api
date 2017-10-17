@@ -13,7 +13,7 @@ Feature: Assign an available court to a Reservation when it is created
   # Not sure what to do in this situation, we have to ask
 
 	Scenario: There is an available court but not at the desired date-time
-		Given There is a reserved court at <day> - <month> - <year> for <minutes> minutes with CourtType <type>
+		Given There is an "undefined" reserved court at 15 - 12 - 2017 for 60 minutes
 		When I make a reservation on 15 - 12 - 2017 for 60 minutes with CourtType "undefined"
   # Then The response code is		Specify response code
 
