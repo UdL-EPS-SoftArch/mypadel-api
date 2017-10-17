@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Court extends UriEntity<String> {
+public class Court extends UriEntity<Integer> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,8 @@ public class Court extends UriEntity<String> {
 
 
 	@Override
-	public String getId() {
-		return String.valueOf(id);
+	public Integer getId() {
+		return id;
 	}
 
 	public boolean isAvailable() {
