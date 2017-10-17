@@ -7,7 +7,7 @@ Feature: Assign an available court to a Reservation when it is created
 		Given There is an existing court
 		When A user creates a new Reservation
 		Then An available court has been assigned to the reservation
-		And The response code is 204
+		And The response code is 201
 
 	Scenario: There are no courts available
   # Not sure what to do in this situation, we have to ask
