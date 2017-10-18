@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import java.time.ZonedDateTime;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -25,17 +26,16 @@ public class MatchInvitationStepDefs {
 
 
 
-    @And("^It has not been created a new match invitation$")//i need to catch parameter
-    public void itHasNotBeenCreatedANewMatchInvitation() throws Throwable {// u pozivu Long id
+    @And("^It has not been created a new match invitation$")
+    public void itHasNotBeenCreatedANewMatchInvitation() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/matchInvitations")//get("/matchInvitations/{id}, id")
+                get("/matchInvitations")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.matchInvitations", hasSize(0)))
-			.andExpect((ResultMatcher) jsonPath("$.message",isEmptyOrNullString()));
-	}//check if the meesage has been added using code like above with the path
+                .andExpect(jsonPath("$._embedded.matchInvitations", hasSize(0)));
+	}
 
 
 	@When("^I create new match invitation for a new match with message \"([^\"]*)\"$")
@@ -61,6 +61,6 @@ public class MatchInvitationStepDefs {
 			get("/matchInvitations/1")//get("/matchInvitations/{id}, id")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect((ResultMatcher) jsonPath("$.message", arg0));
+			.andExpect((ResultMatcher) jsonPath("$.message", equalTo(arg0) ));
 	}
 }

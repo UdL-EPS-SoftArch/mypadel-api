@@ -4,7 +4,7 @@ Feature: Invite player to match
   I want to invite other players to match
 
   Scenario: Invite a player to match
-    Given I login as "player" with password "password"
+    Given I login as "testadmin@mypadel.cat" with password "password"
     When I create new match invitation for a new match with message "A player has invited you to a match."
     Then The response code is 201
     And It has been created a new match invitation with message "A player has invited you to a match."
