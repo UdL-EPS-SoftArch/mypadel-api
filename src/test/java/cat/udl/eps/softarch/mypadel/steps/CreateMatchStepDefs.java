@@ -75,6 +75,7 @@ public class CreateMatchStepDefs {
 			.andExpect(jsonPath("$.duration", is(duration.toString())))
 			.andExpect(jsonPath("$.startDate", is(parseData(startDate.toString()))))
 			.andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
+			.andExpect(jsonPath("$.cancelationDeadline", is(parseData(startDate.minusDays(1).toString()))))
 			.andExpect(jsonPath("$.level", is(Level.ADVANCED.toString()))
 			);
 	}
