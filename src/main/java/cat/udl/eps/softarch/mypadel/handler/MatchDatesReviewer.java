@@ -14,8 +14,7 @@ class MatchDatesReviewer {
 	}
 
 	private boolean durationIncorrect(Duration matchDuration) {
-		String duration = matchDuration.toString().split("T")[1].split("M")[0];
-		int durationMinutes = Integer.parseInt(duration);
+		long durationMinutes = matchDuration.toMinutes();
 
 		return durationMinutes > 90 || durationMinutes < 30;
 	}
