@@ -10,11 +10,12 @@ Feature: Assign an available court to a Reservation when it is created
 		Then An available court has been assigned to the reservation
 		And The response code is 201
 
-#	Scenario: There are no courts available
-#		Given There is an "unavailable" court
-#		When A user creates a new Reservation
-#		Then The response code is 500
-#
+	Scenario: There are no courts available
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		And There is an "unavailable" court
+		When I make a reservation on 15 - 12 - 2017 for 60 minutes with CourtType "UNDEFINED"
+		Then The response code is 500
+
 #	Scenario: There is an available court but not at the desired date-time
 #		Given There is a reserved court at 15 - 12 - 2017 for 60 minutes
 #		When I make a reservation on 15 - 12 - 2017 for 60 minutes with CourtType "undefined"
