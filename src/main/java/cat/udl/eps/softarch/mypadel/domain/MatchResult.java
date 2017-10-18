@@ -13,9 +13,6 @@ import java.util.Set;
 @Table(name = "MatchResult")
 public class MatchResult extends UriEntity<Integer> {
 
-	//TODO Add Players and NotNull Checkings
-	//TODO Talk about if having Lists as winning or losing its the best way (also the isDraw property)
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -36,6 +33,10 @@ public class MatchResult extends UriEntity<Integer> {
 	@JsonIdentityReference(alwaysAsId = true)
 	public Set<MatchResultVerification> getVerifications () {
 		return verifications;
+	}
+
+	public void setVerifications(Set<MatchResultVerification> verifications) {
+		this.verifications = verifications;
 	}
 
 	@Override
@@ -65,9 +66,5 @@ public class MatchResult extends UriEntity<Integer> {
 
 	public void setMatch(Match match) {
 		this.match = match;
-	}
-
-	public void setVerifications(Set<MatchResultVerification> verifications) {
-		this.verifications = verifications;
 	}
 }
