@@ -39,6 +39,7 @@ public class MatchEventHandler {
 		}
 		MatchDatesReviewer mdr = new MatchDatesReviewer();
 		mdr.checkTimers(match);
+		match.setCancelationDeadline(mdr.getCancelDeadline(match.getStartDate()));
 	}
 
 	private boolean adminInputsInvalidPlayer(Match match, Authentication auth) {
