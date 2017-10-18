@@ -5,9 +5,9 @@ import cat.udl.eps.softarch.mypadel.domain.Match;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
-public class MatchDatesReviewer {
+class MatchDatesReviewer {
 
-	public void checkTimers(Match match){
+	void checkTimers(Match match){
 		if(cancelationDateIncorrect(match.getStartDate(), match.getCancelationDeadline())
 			|| durationIncorrect(match.getDuration())){
 			throw new IllegalArgumentException();
@@ -43,7 +43,7 @@ public class MatchDatesReviewer {
 			&& startDay[1].equals(cancelDay[1]);
 	}
 
-	private int lastDayOfMonth(int month) {
+	int lastDayOfMonth(int month) {
 		if(month == 2){
 			return 28;
 		}
