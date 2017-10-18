@@ -52,7 +52,7 @@ public class MatchEventHandler {
 	}
 
 	private boolean durationIncorrect(Duration matchDuration) {
-		String duration = matchDuration.toString();
+		String duration = matchDuration.toString().split("T")[1].split("M")[0];
 		int durationMinutes = Integer.parseInt(duration);
 
 		return durationMinutes > 90 || durationMinutes < 30;
