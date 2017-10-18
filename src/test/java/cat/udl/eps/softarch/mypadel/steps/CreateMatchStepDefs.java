@@ -28,8 +28,6 @@ public class CreateMatchStepDefs {
 
 	private Duration duration;
 
-	private ZonedDateTime cancelationDeadline;
-
 	private PublicMatch match = new PublicMatch();
 
 	@Autowired
@@ -37,18 +35,13 @@ public class CreateMatchStepDefs {
 
 	private int id;
 
-	@When("^I set a new public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
-	public void iSetANewPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
-																  int cancelationDay, int cancelationMonth,
-																  int cancelationYear) throws Throwable {
+	@When("^I set a new public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes$")
+	public void iSetANewPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration) throws Throwable {
 		startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
 			0, ZoneId.of("+00:00"));
 		this.duration = Duration.ofMinutes(duration);
-		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
-			hour, 0, 0, 0, ZoneId.of("+00:00"));
 		match.setStartDate(startDate);
 		match.setDuration(this.duration);
-		match.setCancelationDeadline(cancelationDeadline);
 		match.setCourtType(CourtType.INDOOR);
 		match.setLevel(Level.ADVANCED);
 	}
@@ -81,7 +74,6 @@ public class CreateMatchStepDefs {
 			.andExpect(jsonPath("$.id", is(this.id)))
 			.andExpect(jsonPath("$.duration", is(duration.toString())))
 			.andExpect(jsonPath("$.startDate", is(parseData(startDate.toString()))))
-			.andExpect(jsonPath("$.cancelationDeadline", is(parseData(cancelationDeadline.toString()))))
 			.andExpect(jsonPath("$.courtType", is(CourtType.INDOOR.toString())))
 			.andExpect(jsonPath("$.level", is(Level.ADVANCED.toString()))
 			);
