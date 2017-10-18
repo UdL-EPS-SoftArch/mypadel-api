@@ -28,13 +28,33 @@ public class MatchEventHandler {
 
 	@HandleBeforeCreate
 	@Transactional
-	public void handleMatchPreCreate(Match match){
+	public void handleMatchCreatorPreCreate(Match match){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(adminInputsInvalidPlayer(match, auth)){
 			throw new NullPointerException();
 		}else if(auth.getPrincipal() instanceof Player){
 			match.setMatchCreator((Player) auth.getPrincipal());
 		}
+	}
+
+	@HandleBeforeCreate
+	@Transactional
+	public void handleMatchPropertiesPreCreate(Match match){
+		if(cancelationDateOrDurationIncorrects(match)){
+			throw new IllegalArgumentException();
+		}
+	}
+
+	private boolean cancelationDateOrDurationIncorrects(Match match) {
+		String startDate = match.getStartDate().toString();
+		String cancelationDate = match.getCancelationDeadline().toString();
+		String duration = match.getDuration().toString();
+
+		if(Integer.parseInt(duration) > 90){
+
+		}
+
+		return false;
 	}
 
 	private boolean adminInputsInvalidPlayer(Match match, Authentication auth) {
