@@ -4,9 +4,12 @@ import cat.udl.eps.softarch.mypadel.domain.Admin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.*;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 
+@Component
+@RepositoryEventHandler
 public class AdminEventHandler {
     final Logger logger = LoggerFactory.getLogger(Admin.class);
 

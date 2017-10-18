@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,14 +31,6 @@ public class Match extends UriEntity<Long> {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime cancelationDeadline;
 
-    //@ManyToOne
-	//private MatchInvitation invitations;
-
-
-
-
-
-
 	@OneToMany (mappedBy = "invitesTo")
 	@JsonIdentityReference(alwaysAsId = true)
 	private List<MatchInvitation> invitations	= new ArrayList<>();
@@ -50,14 +43,11 @@ public class Match extends UriEntity<Long> {
 		this.invitations = invitations;
 	}
 
+	@ManyToOne
+	@JsonIdentityReference(alwaysAsId = true)
+    private Player matchCreator;
 
-
-
-
-
-
-
-	@Override
+    @Override
     public Long getId() {
         return id;
     }
@@ -93,4 +83,12 @@ public class Match extends UriEntity<Long> {
     public void setCancelationDeadline(ZonedDateTime cancelationDeadline) {
         this.cancelationDeadline = cancelationDeadline;
     }
+
+	public Player getMatchCreator() {
+		return matchCreator;
+	}
+
+	public void setMatchCreator(Player matchCreator) {
+		this.matchCreator = matchCreator;
+	}
 }
