@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
+import java.time.ZonedDateTime;
 
 @Component
 @RepositoryEventHandler
@@ -40,21 +42,25 @@ public class MatchEventHandler {
 	@HandleBeforeCreate
 	@Transactional
 	public void handleMatchPropertiesPreCreate(Match match){
-		if(cancelationDateOrDurationIncorrects(match)){
+		if(cancelationDateIncorrect(match.getStartDate(), match.getCancelationDeadline())
+																			|| durationIncorrect(match.getDuration())){
 			throw new IllegalArgumentException();
 		}
 	}
 
-	private boolean cancelationDateOrDurationIncorrects(Match match) {
-		String startDate = match.getStartDate().toString();
-		String cancelationDate = match.getCancelationDeadline().toString();
-		String duration = match.getDuration().toString();
-
-		if(Integer.parseInt(duration) > 90){
-
-		}
+	private boolean cancelationDateIncorrect(ZonedDateTime matchStartDate, ZonedDateTime matchCancelDate) {
+		String startDate = matchStartDate.toString();
+		String cancelationDate = matchCancelDate.toString();
 
 		return false;
+
+	}
+
+	private boolean durationIncorrect(Duration matchDuration) {
+		String duration = matchDuration.toString();
+		int durationMinutes = Integer.parseInt(duration);
+
+		return durationMinutes > 90 || durationMinutes < 30;
 	}
 
 	private boolean adminInputsInvalidPlayer(Match match, Authentication auth) {
