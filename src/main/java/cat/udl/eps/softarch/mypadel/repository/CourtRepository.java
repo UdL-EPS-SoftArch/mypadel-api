@@ -7,6 +7,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface CourtRepository extends PagingAndSortingRepository<Court, Integer> {
-	Court findByAvailableTrue();
+	Court findFirstByAvailableTrue();
 }
 

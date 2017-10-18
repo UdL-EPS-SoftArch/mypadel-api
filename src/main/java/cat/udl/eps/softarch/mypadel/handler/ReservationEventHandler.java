@@ -19,7 +19,7 @@ public class ReservationEventHandler {
 	@HandleBeforeCreate
 	@Transactional
 	public void handleReservationPreCreate(Reservation reservation){
-		Court court = courtRepository.findByAvailableTrue();
+		Court court = courtRepository.findFirstByAvailableTrue();
 		reservation.setCourt(court);
 	}
 }
