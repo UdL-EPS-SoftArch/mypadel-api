@@ -36,10 +36,13 @@ class MatchDatesReviewer {
 		String[] startDay = parsedStartDate[2].split("T");
 		String[] cancelDay = parsedCancelDate[2].split("T");
 
+
 		return parsedStartDate[0].equals(parsedCancelDate[0]) && (parsedStartDate[1].equals(parsedCancelDate[1])
 			|| Integer.parseInt(parsedCancelDate[1]) == Integer.parseInt(parsedStartDate[1])-1)
 			&& (Integer.parseInt(startDay[0])-1 == Integer.parseInt(cancelDay[0])
 			|| lastDayOfMonth(Integer.parseInt(parsedStartDate[1])-1) == Integer.parseInt(cancelDay[0]))
+			&& (!parsedStartDate[1].equals(parsedCancelDate[1])
+			|| Integer.parseInt(startDay[0]) >= Integer.parseInt(cancelDay[0]))
 			&& startDay[1].equals(cancelDay[1]);
 	}
 
