@@ -3,6 +3,7 @@ package cat.udl.eps.softarch.mypadel.steps;
 import cat.udl.eps.softarch.mypadel.domain.Court;
 import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,17 +15,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class RemoveCourtSteps {
 
+	public static final String AVAILABLE = "available";
 	@Autowired
 	private StepDefs stepDefs;
 	@Autowired
 	private CourtRepository courtRepository;
-
-
-	@And("^There is an existing court$")
-	public void thereIsAnExistingCourt() throws Throwable {
-		Court court = new Court();
-		courtRepository.save(court);
-	}
 
 	@When("^I remove a court$")
 	public void iRemoveACourt() throws Throwable {
@@ -48,5 +43,13 @@ public class RemoveCourtSteps {
 			get("/courts/1")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
+	}
+
+	@Given("^There is an \"([^\"]*)\" court$")
+	public void thereIsAnCourt(String availability) throws Throwable {
+		boolean isAvailable = availability.equalsIgnoreCase(AVAILABLE);
+		Court court = new Court();
+		court.setAvailable(isAvailable);
+		courtRepository.save(court);
 	}
 }
