@@ -4,8 +4,9 @@ Feature: Assign an available court to a Reservation when it is created
 	I will automatically assign an available court to the reservation
 
 	Scenario: Assign an available court to a new Reservation
-		Given There is an "available" court
-		When A user creates a new Reservation
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		And There is an "available" court
+		When I make a reservation on 15 - 12 - 2017 for 60 minutes with CourtType "UNDEFINED"
 		Then An available court has been assigned to the reservation
 		And The response code is 201
 

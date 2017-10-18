@@ -25,19 +25,6 @@ public class AssignCourtToReservationStepdefs {
 	@Autowired
 	private ReservationRepository reservationRepository;
 
-	@When("^A user creates a new Reservation$")
-	public void aUserCreatesANewReservation() throws Throwable {
-		Reservation reservation = new Reservation();
-		String message = stepDefs.mapper.writeValueAsString(reservation);
-		stepDefs.result = stepDefs.mockMvc.perform(
-			post("/reservations")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(message)
-				.accept(MediaType.APPLICATION_JSON)
-				.with(authenticate()))
-			.andDo(print());
-	}
-
 	@Then("^An available court has been assigned to the reservation$")
 	public void anAvailableCourtHasBeenAssignedToTheReservation() throws Throwable {
 		Reservation reservation = reservationRepository.findOne(1L);
