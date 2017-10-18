@@ -15,6 +15,20 @@ public class MatchResultVerification {
 	@JsonIdentityReference(alwaysAsId = true)
 	private MatchResult matchToAgree;
 
-	public void verify () {
+	public boolean isAgrees() {
+		return agrees;
 	}
+
+	public void setAgrees(boolean agrees) {
+		this.agrees = agrees;
+	}
+
+	public MatchResult getMatchToAgree() {
+		return matchToAgree;
+	}
+
+	public void setMatchToAgree(MatchResult matchToAgree) {
+		this.matchToAgree = matchToAgree;
+	}
+
 }

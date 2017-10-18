@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Represents the result of a match
@@ -23,15 +24,19 @@ public class MatchResult extends UriEntity<Integer> {
 
 	private ArrayList<Player> losingPair;
 
+	private Set<MatchResultVerification> verifications;
+
 	private boolean isDraw;
 
 	@OneToOne(mappedBy = "match", fetch=FetchType.LAZY)
 	@JsonIdentityReference(alwaysAsId = true)
 	private Match match;
 
-	@OneToMany()
+	@OneToMany(mappedBy = "matchResultVerification", fetch=FetchType.LAZY)
 	@JsonIdentityReference(alwaysAsId = true)
-	private MatchResultVerification[] verifications;
+	public Set<MatchResultVerification> getVerifications () {
+		return verifications;
+	}
 
 	@Override
 	public Integer getId() {
@@ -62,4 +67,7 @@ public class MatchResult extends UriEntity<Integer> {
 		this.match = match;
 	}
 
+	public void setVerifications(Set<MatchResultVerification> verifications) {
+		this.verifications = verifications;
+	}
 }
