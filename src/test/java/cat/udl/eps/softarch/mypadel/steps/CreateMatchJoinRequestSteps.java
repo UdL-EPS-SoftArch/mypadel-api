@@ -1,7 +1,9 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
+import cat.udl.eps.softarch.mypadel.repository.CustomMatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.PlayerRepository;
+import cat.udl.eps.softarch.mypadel.repository.UserRepository;
 import cucumber.api.PendingException;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -20,6 +22,8 @@ import org.springframework.http.MediaType;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CreateMatchJoinRequestSteps {
@@ -32,8 +36,11 @@ public class CreateMatchJoinRequestSteps {
 
 	private ZonedDateTime cancelationDeadline;
 	private CustomMatch match;
+	List<CustomMatch> matches=new ArrayList<>();
 	@Autowired
-	PlayerRepository repo;
+	UserRepository userRepository;
+	@Autowired
+	CustomMatchRepository customMatchRepository;
 
 	private Player player;
 
@@ -59,6 +66,9 @@ public class CreateMatchJoinRequestSteps {
 					.accept(MediaType.APPLICATION_JSON)
 					.with(authenticate()))
 				.andDo(print());
+
+
+
 		}
 
 
@@ -69,13 +79,10 @@ public class CreateMatchJoinRequestSteps {
 			0, ZoneId.of("+00:00"));
 
 		MatchJoinRequest request = new MatchJoinRequest();
+		long id=1;
+		match=customMatchRepository.findOne(id);
 		request.setCustomMatch(match);
 		request.setMessage(message);
-
-
-		player = repo.findOne(username);
-		request.setPlayer(player);
-
 		String m = stepDefs.mapper.writeValueAsString(request);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/matchJoinRequests")
@@ -100,12 +107,27 @@ public class CreateMatchJoinRequestSteps {
 *
 	}**/
 
-	@And("^A matchJoinRequest has been created$")
-	public void aMatchJoinRequestHasBeenCreated() throws Throwable {
+
+
+	@And("^A matchJoinRequest has been created by player \"([^\"]*)\" for the required match$")
+	public void aMatchJoinRequestHasBeenCreatedByPlayerForTheRequiredMatch(String username) throws Throwable {
 		// Write code here that turns the phrase above into concrete actions
 		int id = 1;
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/matchJoinRequests/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchJoinRequests/{id}/customMatch", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchJoinRequests/{id}/player", id)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
