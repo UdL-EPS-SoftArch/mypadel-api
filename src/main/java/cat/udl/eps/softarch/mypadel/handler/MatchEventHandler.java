@@ -23,6 +23,7 @@ public class MatchEventHandler {
 		handleMatchCreator(match);
 		MatchDatesReviewer mdr = new MatchDatesReviewer();
 		mdr.checkTimers(match);
+		mdr.checkCreatorDisp(match);
 		match.setCancelationDeadline(mdr.getCancelDeadline(match.getStartDate()));
 	}
 
