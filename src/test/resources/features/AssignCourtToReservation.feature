@@ -15,12 +15,12 @@ Feature: Assign an available court to a Reservation when it is created
 		And There is an "unavailable" court
 		When I make a reservation on 15 - 12 - 2017 for 60 minutes with CourtType "UNDEFINED"
 		Then The response code is 500
-#
-#	Scenario: There is an available court but not at the desired date-time
-#		Given I login as "testplayer@mypadel.cat" with password "password"
-#		And There is a reserved court at 15 - 12 - 2017 for 60 minutes
-#		When I make a reservation on 15 - 12 - 2017 for 60 minutes with CourtType "UNDEFINED"
-#		Then The response code is 500
+
+	Scenario: There is an available court but not at the desired date-time
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		And There is a reserved court at 15 - 12 - 2017 for 60 minutes
+		When I make a reservation on 15 - 12 - 2017 for 60 minutes with CourtType "UNDEFINED"
+		Then The response code is 500
 
 #	Scenario: A users tries to manually assign a court
 #		Given I login as "testadmin@mypadel.cat" with password "password"
