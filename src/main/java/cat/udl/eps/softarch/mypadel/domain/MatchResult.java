@@ -3,7 +3,7 @@ package cat.udl.eps.softarch.mypadel.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -17,9 +17,9 @@ public class MatchResult extends UriEntity<Integer> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	private ArrayList<Player> winningPair;
+	private Set<Player> winningPair;
 
-	private ArrayList<Player> losingPair;
+	private Set<Player> losingPair;
 
 	private Set<MatchResultVerification> verifications;
 
@@ -39,18 +39,27 @@ public class MatchResult extends UriEntity<Integer> {
 		this.verifications = verifications;
 	}
 
+	@NotNull
 	@Override
 	public Integer getId() {
 		return this.id;
 	}
 
-	public ArrayList<Player> getWinningPair () { return this.winningPair; }
+	public Set<Player> getWinningPair() {
+		return this.winningPair;
+	}
 
-	public void setWinningPair (ArrayList<Player> winners) { this.winningPair = winners; }
+	public void setWinningPair(Set<Player> winners) {
+		this.winningPair = winners;
+	}
 
-	public ArrayList<Player> getLosingPair () { return this.losingPair; }
+	public Set<Player> getLosingPair() {
+		return this.losingPair;
+	}
 
-	public void setLosingPair (ArrayList<Player> losers) { this.losingPair = losers; }
+	public void setLosingPair(Set<Player> losers) {
+		this.losingPair = losers;
+	}
 
 	public boolean isDraw() {
 		return isDraw;
