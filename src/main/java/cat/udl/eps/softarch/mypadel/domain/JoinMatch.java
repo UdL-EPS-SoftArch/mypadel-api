@@ -43,7 +43,7 @@ public class JoinMatch extends UriEntity<Long> {
     	return this.player;
 	}
 
-	public void setMatch(PublicMatch m){ this.publicMatch = m; }
+	public void setMatch(PublicMatch publicMatch){ this.publicMatch = publicMatch; }
 
 	public Match getPublicMatch(){
 		return this.publicMatch;

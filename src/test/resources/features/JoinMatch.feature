@@ -11,6 +11,7 @@ Feature: Join match
 
   Scenario: A admin joins a match
 	  Given I login as "testplayer@mypadel.cat" with password "password"
-	  And the user joining it is "player"
-	  When I join to a match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10 - 10 - 2017
-	  Then I successfully joined a match
+	  And the user joining it is "testplayer@mypadel.cat"
+	  And There is public match on 1 - 10 - 2017 at 1 pm for 30 minutes and deadline 30 - 9 - 2017
+	  When I join to a created match
+	  Then A player has successfully joined a match
