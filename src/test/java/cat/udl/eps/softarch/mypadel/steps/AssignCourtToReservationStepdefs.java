@@ -26,6 +26,8 @@ public class AssignCourtToReservationStepdefs {
 
 	@Autowired
 	private CourtRepository courtRepository;
+	private ZonedDateTime startdate;
+	private Duration durationInMinutes;
 
 	@Then("^An available court has been assigned to the reservation$")
 	public void anAvailableCourtHasBeenAssignedToTheReservation() throws Throwable {
@@ -36,16 +38,25 @@ public class AssignCourtToReservationStepdefs {
 
 	@And("^There is a reserved court at (\\d+) - (\\d+) - (\\d+) for (\\d+) minutes$")
 	public void thereIsAReservedCourtAtForMinutes(int day, int month, int year, int duration) throws Throwable {
-		ZonedDateTime startdate = ZonedDateTime.of(year, month, day, 0, 0, 0,
-			0, ZoneId.of("+00:00"));
-		Duration durationInMinutes = Duration.ofMinutes(duration);
-		Reservation reservation = new Reservation();
-		reservation.setStartDate(startdate);
-		reservation.setDuration(durationInMinutes);
-		reservation.setCourtType(CourtType.UNDEFINED);
+		setDateAndDuration(day, month, year, duration);
+		Reservation reservation = setUpReservation();
 		Court court = new Court();
 		reservation.setCourt(court);
 		courtRepository.save(court);
 		reservationRepository.save(reservation);
+	}
+
+	private void setDateAndDuration(int day, int month, int year, int duration) {
+		startdate = ZonedDateTime.of(year, month, day, 0, 0, 0,
+			0, ZoneId.of("+00:00"));
+		durationInMinutes = Duration.ofMinutes(duration);
+	}
+
+	private Reservation setUpReservation() {
+		Reservation reservation = new Reservation();
+		reservation.setStartDate(startdate);
+		reservation.setDuration(durationInMinutes);
+		reservation.setCourtType(CourtType.UNDEFINED);
+		return reservation;
 	}
 }
