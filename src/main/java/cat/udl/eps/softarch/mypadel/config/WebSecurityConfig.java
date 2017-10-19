@@ -21,7 +21,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
 				.antMatchers(HttpMethod.POST, "/admins*/**").hasRole("ADMIN")
+
 				.antMatchers(HttpMethod.POST, "/courts*/**").hasRole("ADMIN")
+				.antMatchers(HttpMethod.GET, "/courts*/**").authenticated()
+				.antMatchers(HttpMethod.PUT, "/courts*/**").hasRole("ADMIN")
+				.antMatchers(HttpMethod.DELETE, "/courts*/**").hasRole("ADMIN")
+
 			    .antMatchers(HttpMethod.POST, "/players*/**").hasRole("ADMIN")
 			    .antMatchers(HttpMethod.DELETE, "/players*/**").hasRole("ADMIN")
 
@@ -33,6 +38,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			    .antMatchers(HttpMethod.GET,"/identity").authenticated()
 				.antMatchers(HttpMethod.POST, "/reservations*/**").authenticated()
 
+
+			    .antMatchers(HttpMethod.GET,"/identity").authenticated()
+
+				.antMatchers(HttpMethod.POST, "/reservations*/**").authenticated()
+
+				.antMatchers(HttpMethod.PUT, "/**/*").authenticated()
+				.antMatchers(HttpMethod.POST, "/**/*").authenticated()
+				.antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
+				.antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic().realmName("MyPadel")

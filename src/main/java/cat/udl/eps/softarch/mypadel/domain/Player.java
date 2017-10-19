@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import java.util.ArrayList;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,6 +37,26 @@ public class Player extends User {
 	@OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
 	@JsonIdentityReference(alwaysAsId = true)
 	private List<MatchJoinRequest> matchJoinRequests = new ArrayList<>();
+
+
+
+
+    @OneToMany (mappedBy = "invites")
+	@JsonIdentityReference(alwaysAsId = true)
+	private List<MatchInvitation> invitations = new ArrayList<>();
+
+	public List<MatchInvitation> getInvitations() {
+		return invitations;
+	}
+
+	public void setInvitations(List<MatchInvitation> invitations) {
+		this.invitations = invitations;
+	}
+
+
+
+
+
 
 	@Override
 	@Transient
