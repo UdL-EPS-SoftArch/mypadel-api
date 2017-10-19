@@ -1,13 +1,18 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.Court;
+import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+import org.hamcrest.MatcherAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -21,6 +26,9 @@ public class CreateCourtSteps {
 
 	@Autowired
 	private StepDefs stepDefs;
+
+	@Autowired
+	private CourtRepository courtRepository;
 
 	@When("^I create a new \"([^\"]*)\" court$")
 	public void iCreateANewCourt(String indoorOrOutdoor) throws Throwable {
@@ -43,10 +51,8 @@ public class CreateCourtSteps {
 
 	@And("^A new court has not been created$")
 	public void aNewCourtHasNotBeenCreated() throws Throwable {
-		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/courts/1")
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound());
+		Court court = courtRepository.findOne(1);
+		assertThat(court, is(nullValue()));
 	}
 
 	@And("^A new \"([^\"]*)\" court is \"([^\"]*)\"$")
