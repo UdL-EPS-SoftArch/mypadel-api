@@ -3,6 +3,7 @@ package cat.udl.eps.softarch.mypadel.handler;
 import cat.udl.eps.softarch.mypadel.domain.Admin;
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Player;
+import cat.udl.eps.softarch.mypadel.handler.exception.createMatchException;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +25,10 @@ public class MatchEventHandler {
 
 	@HandleBeforeCreate
 	@Transactional
-	public void handleMatchCreatorPreCreate(Match match){
+	public void handleMatchCreatorPreCreate(Match match) throws createMatchException {
 		handleMatchCreator(match);
 		mdr.checkTimers(match);
-		mdr.checkCreatorDisp(match);
+		mdr.checkCreatorDisponibility(match);
 		match.setCancelationDeadline(mdr.getCancelDeadline(match.getStartDate()));
 	}
 
