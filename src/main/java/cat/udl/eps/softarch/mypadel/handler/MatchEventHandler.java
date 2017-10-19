@@ -20,13 +20,12 @@ public class MatchEventHandler {
 	final Logger logger = LoggerFactory.getLogger(Match.class);
 
 	@Autowired
-	private MatchRepository matchRepository;
+	private MatchDatesReviewer mdr;
 
 	@HandleBeforeCreate
 	@Transactional
 	public void handleMatchCreatorPreCreate(Match match){
 		handleMatchCreator(match);
-		MatchDatesReviewer mdr = new MatchDatesReviewer(matchRepository);
 		mdr.checkTimers(match);
 		mdr.checkCreatorDisp(match);
 		match.setCancelationDeadline(mdr.getCancelDeadline(match.getStartDate()));

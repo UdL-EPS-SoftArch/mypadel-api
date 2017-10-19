@@ -3,18 +3,18 @@ package cat.udl.eps.softarch.mypadel.handler;
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+@Service
 class MatchDatesReviewer {
 
+	@Autowired
 	private MatchRepository matchRepository;
-
-	MatchDatesReviewer(MatchRepository matchRepository){
-		this.matchRepository = matchRepository;
-	}
 
 	void checkTimers(Match match){
 		if(durationIncorrect(match.getDuration())){
