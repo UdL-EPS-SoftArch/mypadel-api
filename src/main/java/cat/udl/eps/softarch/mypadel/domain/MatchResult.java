@@ -16,7 +16,7 @@ public class MatchResult extends UriEntity<Integer> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@NotNull
-	private int id;
+	private Integer id;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JsonIdentityReference(alwaysAsId = true)

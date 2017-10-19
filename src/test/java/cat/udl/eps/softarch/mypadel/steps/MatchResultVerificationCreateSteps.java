@@ -5,7 +5,7 @@ import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class CreateMatchResultVerificationSteps {
+public class MatchResultVerificationCreateSteps {
 
 	@Autowired
 	private StepDefs stepDefs;
