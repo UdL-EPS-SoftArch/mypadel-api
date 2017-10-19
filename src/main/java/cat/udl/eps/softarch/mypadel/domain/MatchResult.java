@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,15 +18,15 @@ public class MatchResult extends UriEntity<Integer> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	private Set<Player> winningPair;
+	private HashSet<Player> winningPair;
 
-	private Set<Player> losingPair;
+	private HashSet<Player> losingPair;
 
-	private Set<MatchResultVerification> verifications;
+	private HashSet<MatchResultVerification> verifications;
 
 	private boolean isDraw;
 
-	@OneToOne(mappedBy = "match", fetch=FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JsonIdentityReference(alwaysAsId = true)
 	private Match match;
 
@@ -35,7 +36,7 @@ public class MatchResult extends UriEntity<Integer> {
 		return verifications;
 	}
 
-	public void setVerifications(Set<MatchResultVerification> verifications) {
+	public void setVerifications(HashSet<MatchResultVerification> verifications) {
 		this.verifications = verifications;
 	}
 
@@ -49,7 +50,7 @@ public class MatchResult extends UriEntity<Integer> {
 		return this.winningPair;
 	}
 
-	public void setWinningPair(Set<Player> winners) {
+	public void setWinningPair(HashSet<Player> winners) {
 		this.winningPair = winners;
 	}
 
@@ -57,7 +58,7 @@ public class MatchResult extends UriEntity<Integer> {
 		return this.losingPair;
 	}
 
-	public void setLosingPair(Set<Player> losers) {
+	public void setLosingPair(HashSet<Player> losers) {
 		this.losingPair = losers;
 	}
 

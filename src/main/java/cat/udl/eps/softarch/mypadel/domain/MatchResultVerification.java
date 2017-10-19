@@ -70,7 +70,7 @@ public class MatchResultVerification extends UriEntity<Integer> {
 	}
 
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(/* TODO Nullable */Object object) {
 		if (this == object) return true;
 		if (!(object instanceof MatchResultVerification)) return false;
 		final MatchResultVerification that = (MatchResultVerification) object;
