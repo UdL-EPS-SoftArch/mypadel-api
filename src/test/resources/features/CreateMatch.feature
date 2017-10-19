@@ -30,11 +30,11 @@ Feature: Create match
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		When I set a new public match on 1 - 10 - 2017 at 1 pm for 120 minutes
 		And I create it
-		Then The response code is 500
+		Then The response code is 403
 
 	Scenario: Player wants to create a match when he has one created
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		When I set a new public match on 1 - 10 - 2017 at 1 pm for 70 minutes
 		And I create it
 		And I create a match with a similar hour, 2 pm
-		Then The response code is 500
+		Then The response code is 403
