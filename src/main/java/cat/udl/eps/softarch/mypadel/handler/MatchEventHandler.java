@@ -3,8 +3,10 @@ package cat.udl.eps.softarch.mypadel.handler;
 import cat.udl.eps.softarch.mypadel.domain.Admin;
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Player;
+import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,11 +19,14 @@ import javax.transaction.Transactional;
 public class MatchEventHandler {
 	final Logger logger = LoggerFactory.getLogger(Match.class);
 
+	@Autowired
+	private MatchRepository matchRepository;
+
 	@HandleBeforeCreate
 	@Transactional
 	public void handleMatchCreatorPreCreate(Match match){
 		handleMatchCreator(match);
-		MatchDatesReviewer mdr = new MatchDatesReviewer();
+		MatchDatesReviewer mdr = new MatchDatesReviewer(matchRepository);
 		mdr.checkTimers(match);
 		mdr.checkCreatorDisp(match);
 		match.setCancelationDeadline(mdr.getCancelDeadline(match.getStartDate()));
