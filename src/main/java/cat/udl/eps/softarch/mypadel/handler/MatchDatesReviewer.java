@@ -2,7 +2,7 @@ package cat.udl.eps.softarch.mypadel.handler;
 
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Player;
-import cat.udl.eps.softarch.mypadel.handler.exception.createMatchException;
+import cat.udl.eps.softarch.mypadel.handler.exception.CreateMatchException;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ class MatchDatesReviewer {
 	@Autowired
 	private MatchRepository matchRepository;
 
-	void checkTimers(Match match) throws createMatchException {
+	void checkTimers(Match match) throws CreateMatchException {
 		if(durationIncorrect(match.getDuration())){
-			throw new createMatchException("The duration must be between 30 to 90 minutes");
+			throw new CreateMatchException("The duration must be between 30 to 90 minutes");
 		}
 	}
 
@@ -33,10 +33,10 @@ class MatchDatesReviewer {
 		return startDate.minusDays(1);
 	}
 
-	void checkCreatorDisponibility(Match match) throws createMatchException {
+	void checkCreatorDisponibility(Match match) throws CreateMatchException {
 		Player player = match.getMatchCreator();
 		if(hasAnotherMatchOnThatTime(player, match)){
-			throw new createMatchException("The player has a match created on that time");
+			throw new CreateMatchException("The player has a match created on that time");
 		}
 	}
 
