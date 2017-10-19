@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 
@@ -94,5 +95,18 @@ public class CreateMatchStepDefs {
 			.andDo(print())
 			.andExpect(jsonPath("$.username", is(player))
 		);
+	}
+
+	@And("^I create a match with a similar hour, (\\d+) pm$")
+	public void iCreateAMatchWithASimilarHourPm(int matchHour) throws Throwable {
+		match.setStartDate(match.getStartDate().withHour(matchHour));
+		String message = stepDefs.mapper.writeValueAsString(match);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
 	}
 }
