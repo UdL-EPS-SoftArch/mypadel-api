@@ -3,8 +3,6 @@ package cat.udl.eps.softarch.mypadel.handler;
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
