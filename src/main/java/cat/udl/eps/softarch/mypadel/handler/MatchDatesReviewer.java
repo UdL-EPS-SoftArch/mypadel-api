@@ -44,6 +44,16 @@ class MatchDatesReviewer {
 		Duration matchDuration = match.getDuration();
 		List<Match> possibleMatches = matchRepository.findByStartDateBetween(startDate,
 			startDate.plusMinutes(matchDuration.toMinutes()));
-		return !possibleMatches.isEmpty();
+		return !possibleMatches.isEmpty() && playerHasMatchCreated(possibleMatches, player);
+	}
+
+	private boolean playerHasMatchCreated(List<Match> possibleMatches, Player player) {
+		for(Match match : possibleMatches){
+			Player matchCreator = match.getMatchCreator();
+			if(matchCreator.equals(player)){
+				return true;
+			}
+		}
+		return false;
 	}
 }
