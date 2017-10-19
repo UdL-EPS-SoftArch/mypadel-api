@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -137,5 +138,23 @@ public class JoinMatchSteps {
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isOk());
+	}
+
+	@When("^I leave a match with id (\\d+)$")
+	public void iLeaveAMatchWithId(int id) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			delete("/joinMatches/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+		;
+	}
+
+
+	@Then("^I successfully leave the match with id (\\d+)$")
+	public void iSuccessfullyLeaveTheMatchWithId(int id) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/joinMatches/{id}", id)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
 	}
 }

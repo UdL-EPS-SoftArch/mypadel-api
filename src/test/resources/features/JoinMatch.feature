@@ -21,3 +21,10 @@ Feature: Join match
 		And There is public match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10 - 10 - 2017
 		When I join to a match
 		Then The response code is 401
+
+
+	Scenario: Leaving a match
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		When I leave a match with id 1
+		Then I successfully leave the match with id 1
+
