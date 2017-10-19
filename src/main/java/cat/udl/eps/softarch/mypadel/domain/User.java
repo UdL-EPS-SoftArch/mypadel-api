@@ -79,4 +79,13 @@ public abstract class User extends UriEntity<String> implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) return false;
+		if (other == this) return true;
+		if (!(other instanceof User))return false;
+    	User user = (User) other;
+		return user.getId().equals(this.username);
+	}
 }
