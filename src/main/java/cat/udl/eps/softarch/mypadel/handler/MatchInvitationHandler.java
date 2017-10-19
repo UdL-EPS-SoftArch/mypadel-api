@@ -1,25 +1,31 @@
 package cat.udl.eps.softarch.mypadel.handler;
 
-import cat.udl.eps.softarch.mypadel.domain.Admin;
+import cat.udl.eps.softarch.mypadel.domain.MatchInvitation;
+import cat.udl.eps.softarch.mypadel.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.rest.core.annotation.*;
-import org.springframework.stereotype.Component;
+import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.transaction.Transactional;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
 
-@Component
-@RepositoryEventHandler
-public class AdminEventHandler {
-    final Logger logger = LoggerFactory.getLogger(Admin.class);
+
+public class MatchInvitationHandler {
+    final Logger logger = LoggerFactory.getLogger(MatchInvitation.class);
 
     @HandleBeforeCreate
     @Transactional
-    public void handleAdminPreCreate(Admin admin) {
-        logger.info("Before creating: {}", admin.toString());
-    }
+    public void handleMatchInvitationPreCreate(MatchInvitation match) {
+        logger.info("Before creating: {}", match.toString());
+        match.setEventDate(ZonedDateTime.now());
 
-    @HandleBeforeSave
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		match.setCreatedBy(user);
+	}
+
+ /* @HandleBeforeSave
     @Transactional
     public void handleAdminPreSave(Admin admin){
         logger.info("Before updating: {}", admin.toString());
@@ -57,5 +63,5 @@ public class AdminEventHandler {
     @HandleAfterLinkSave
     public void handleAdminPostLinkSave(Admin admin, Object o) {
         logger.info("After linking: {} to {}", admin.toString(), o.toString());
-    }
+    }*/
 }

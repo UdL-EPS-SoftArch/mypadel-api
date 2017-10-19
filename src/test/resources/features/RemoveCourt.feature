@@ -15,12 +15,12 @@ Feature: Remove court
 		When I remove a court
 		Then The response code is 404
 
-#	Scenario: Remove a court as non admin
-#		Given I login as "testplayer@mypadel.cat" with password "password"
-#		And There is an existing court
-#		When I remove a court
-#		Then The response code is 401
-#		And The court has not been removed
+	Scenario: Remove a court as non admin
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		And There is an existing court
+		When I remove a court
+		Then The response code is 403
+		And The court has not been removed
 
 	Scenario: Remove a court without being logged
 		Given I'm not logged in
