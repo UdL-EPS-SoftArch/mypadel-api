@@ -5,10 +5,12 @@ import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
+import org.hamcrest.core.Is;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,16 +35,15 @@ public class RemoveCourtSteps {
 	public void theCourtHasBeenRemoved() throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/courts/1")
-				.accept(MediaType.APPLICATION_JSON))
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
 			.andExpect(status().isNotFound());
 	}
 
 	@And("^The court has not been removed")
 	public void theCourtHasNotBeenRemoved() throws Throwable {
-		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/courts/1")
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk());
+		Court court = courtRepository.findOne(1);
+		assertThat(court.getId(), Is.is(1));
 	}
 
 	@Given("^There is an \"([^\"]*)\" court$")
