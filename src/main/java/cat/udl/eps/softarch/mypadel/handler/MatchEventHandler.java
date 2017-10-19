@@ -31,15 +31,19 @@ public class MatchEventHandler {
 	@HandleBeforeCreate
 	@Transactional
 	public void handleMatchCreatorPreCreate(Match match){
+		handleMatchCreator(match);
+		MatchDatesReviewer mdr = new MatchDatesReviewer();
+		mdr.checkTimers(match);
+		match.setCancelationDeadline(mdr.getCancelDeadline(match.getStartDate()));
+	}
+
+	private void handleMatchCreator(Match match) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(adminInputsInvalidPlayer(match, auth)){
 			throw new NullPointerException();
 		}else if(auth.getPrincipal() instanceof Player){
 			match.setMatchCreator((Player) auth.getPrincipal());
 		}
-		MatchDatesReviewer mdr = new MatchDatesReviewer();
-		mdr.checkTimers(match);
-		match.setCancelationDeadline(mdr.getCancelDeadline(match.getStartDate()));
 	}
 
 	private boolean adminInputsInvalidPlayer(Match match, Authentication auth) {
