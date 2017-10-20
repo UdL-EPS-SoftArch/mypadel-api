@@ -23,10 +23,10 @@ public class CourtFilter {
 		if (court.getReservations().isEmpty())
 			return true;
 		else
-			return ! isOverlapingReservation();
+			return ! isOverlappingReservation();
 	}
 
-	private boolean isOverlapingReservation() {
+	private boolean isOverlappingReservation() {
 		return true;
 	}
 
