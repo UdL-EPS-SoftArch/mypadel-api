@@ -6,7 +6,7 @@ import cat.udl.eps.softarch.mypadel.domain.Reservation;
 
 public class CourtTypeMatcher {
 
-	protected static boolean matchCourtType(Reservation reservation, Court court) {
+	protected static boolean matchCourtType(Court court, Reservation reservation) {
 		CourtType courtType = court.isIndoor() ? CourtType.INDOOR : reservation.getCourtType();
 		return courtType.equals(reservation.getCourtType());
 	}

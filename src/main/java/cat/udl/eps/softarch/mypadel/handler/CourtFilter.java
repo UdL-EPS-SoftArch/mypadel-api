@@ -14,9 +14,20 @@ public class CourtFilter {
 
 	protected List<Court> filterCompatibleCourtsWithReservation(Reservation reservation, List<Court> availableCourts) {
 		return availableCourts.parallelStream()
-			.filter(court -> court.getReservations().isEmpty())
-			.filter(court -> matchCourtType(reservation, court))
+			.filter(court -> matchCourtType(court, reservation))
+			.filter(court -> courtCanBeReserved(court, reservation))
 			.collect(Collectors.toList());
+	}
+
+	private boolean courtCanBeReserved(Court court, Reservation reservation) {
+		if (court.getReservations().isEmpty())
+			return true;
+		else
+			return ! isOverlapingReservation();
+	}
+
+	private boolean isOverlapingReservation() {
+		return true;
 	}
 
 }
