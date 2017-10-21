@@ -91,6 +91,28 @@ public class JoinMatchSteps {
 
 	}
 
+	private void createPublicMatch(){
+		publicMatch.setStartDate(startDate);
+		publicMatch.setDuration(this.duration);
+		publicMatch.setCancelationDeadline(cancelationDeadline);
+		publicMatch.setCourtType(CourtType.INDOOR);
+		publicMatch.setLevel(Level.ADVANCED);
+	}
+
+	private void createPrivateMatch(){
+		privateMatch.setStartDate(startDate);
+		privateMatch.setDuration(this.duration);
+		privateMatch.setCancelationDeadline(cancelationDeadline);
+		privateMatch.setCourtType(CourtType.INDOOR);
+	}
+
+	private void createCustomMatch(){
+		customMatch.setStartDate(startDate);
+		customMatch.setDuration(this.duration);
+		customMatch.setCancelationDeadline(cancelationDeadline);
+		customMatch.setCourtType(CourtType.INDOOR);
+	}
+
 	@And("^There is a \"([^\"]*)\" match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
 	public void thereIsPublicMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
 															  int cancelationDay, int cancelationMonth,
@@ -102,12 +124,7 @@ public class JoinMatchSteps {
 			hour, 0, 0, 0, ZoneId.of("+00:00"));
 
 		if (Objects.equals(matchType, "public")){
-			publicMatch.setStartDate(startDate);
-			publicMatch.setDuration(this.duration);
-			publicMatch.setCancelationDeadline(cancelationDeadline);
-			publicMatch.setCourtType(CourtType.INDOOR);
-			publicMatch.setLevel(Level.ADVANCED);
-
+			createPublicMatch();
 			String message = stepDefs.mapper.writeValueAsString(publicMatch);
 			stepDefs.result = stepDefs.mockMvc.perform(
 				post("/publicMatches")
@@ -117,11 +134,7 @@ public class JoinMatchSteps {
 					.with(authenticate()))
 				.andDo(print());
 		}else if (Objects.equals(matchType, "private")){
-			privateMatch.setStartDate(startDate);
-			privateMatch.setDuration(this.duration);
-			privateMatch.setCancelationDeadline(cancelationDeadline);
-			privateMatch.setCourtType(CourtType.INDOOR);
-
+			createPrivateMatch();
 			String message = stepDefs.mapper.writeValueAsString(privateMatch);
 			stepDefs.result = stepDefs.mockMvc.perform(
 				post("/privateMatches")
@@ -131,11 +144,7 @@ public class JoinMatchSteps {
 					.with(authenticate()))
 				.andDo(print());
 		}else{
-			customMatch.setStartDate(startDate);
-			customMatch.setDuration(this.duration);
-			customMatch.setCancelationDeadline(cancelationDeadline);
-			customMatch.setCourtType(CourtType.INDOOR);
-
+			createCustomMatch();
 			String message = stepDefs.mapper.writeValueAsString(customMatch);
 			stepDefs.result = stepDefs.mockMvc.perform(
 				post("/customMatches")
