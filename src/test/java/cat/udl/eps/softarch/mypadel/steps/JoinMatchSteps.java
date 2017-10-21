@@ -1,27 +1,22 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
-import cat.udl.eps.softarch.mypadel.repository.PublicMatchRepository;
+import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import cat.udl.eps.softarch.mypadel.repository.PlayerRepository;
 
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -32,9 +27,11 @@ public class JoinMatchSteps {
     private StepDefs stepDefs;
 
 
-	JoinMatch joinMatch = new JoinMatch();
+	private JoinMatch joinMatch = new JoinMatch();
 
-	PublicMatch match = new PublicMatch();
+	private PublicMatch publicMatch = new PublicMatch();
+	private PrivateMatch privateMatch = new PrivateMatch();
+	private CustomMatch customMatch = new CustomMatch();
 
 	private ZonedDateTime startDate;
 
@@ -46,10 +43,10 @@ public class JoinMatchSteps {
 	UserRepository playerRepository;
 
 	@Autowired
-	PublicMatchRepository pub;
+	MatchRepository matchRepository;
 
-	private int id;
-	private static long i = 1;
+	private int resourcesId;
+	private long repositoryId;
 
 	@When("^I join to a match$")
     public void iJoinToAMatch() throws Throwable {
@@ -79,9 +76,10 @@ public class JoinMatchSteps {
 	}
 
 
-	@When("^I join to a created match$")
-	public void iJoinToACreatedMatch() throws Throwable {
-		joinMatch.setMatch(pub.findOne(i));
+	@When("^I join to a created match (\\d+)$")
+	public void iJoinToACreatedMatch(long repositoryId) throws Throwable {
+		this.repositoryId = repositoryId;
+		joinMatch.setMatch(matchRepository.findOne(this.repositoryId));
 		String message = stepDefs.mapper.writeValueAsString(joinMatch);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/joinMatches")
@@ -93,8 +91,8 @@ public class JoinMatchSteps {
 
 	}
 
-	@And("^There is public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
-	public void thereIsPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
+	@And("^There is a \"([^\"]*)\" match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
+	public void thereIsPublicMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
 															  int cancelationDay, int cancelationMonth,
 															  int cancelationYear) throws Throwable {
 		startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
@@ -102,38 +100,71 @@ public class JoinMatchSteps {
 		this.duration = Duration.ofMinutes(duration);
 		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
 			hour, 0, 0, 0, ZoneId.of("+00:00"));
-		match.setStartDate(startDate);
-		match.setDuration(this.duration);
-		match.setCancelationDeadline(cancelationDeadline);
-		match.setCourtType(CourtType.INDOOR);
-		match.setLevel(Level.ADVANCED);
 
-		String message = stepDefs.mapper.writeValueAsString(match);
-		stepDefs.result = stepDefs.mockMvc.perform(
-			post("/publicMatches")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(message)
-				.accept(MediaType.APPLICATION_JSON)
-				.with(authenticate()))
-			.andDo(print());
+		if (Objects.equals(matchType, "public")){
+			publicMatch.setStartDate(startDate);
+			publicMatch.setDuration(this.duration);
+			publicMatch.setCancelationDeadline(cancelationDeadline);
+			publicMatch.setCourtType(CourtType.INDOOR);
+			publicMatch.setLevel(Level.ADVANCED);
+
+			String message = stepDefs.mapper.writeValueAsString(publicMatch);
+			stepDefs.result = stepDefs.mockMvc.perform(
+				post("/publicMatches")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(message)
+					.accept(MediaType.APPLICATION_JSON)
+					.with(authenticate()))
+				.andDo(print());
+		}else if (Objects.equals(matchType, "private")){
+			privateMatch.setStartDate(startDate);
+			privateMatch.setDuration(this.duration);
+			privateMatch.setCancelationDeadline(cancelationDeadline);
+			privateMatch.setCourtType(CourtType.INDOOR);
+
+			String message = stepDefs.mapper.writeValueAsString(privateMatch);
+			stepDefs.result = stepDefs.mockMvc.perform(
+				post("/privateMatches")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(message)
+					.accept(MediaType.APPLICATION_JSON)
+					.with(authenticate()))
+				.andDo(print());
+		}else{
+			customMatch.setStartDate(startDate);
+			customMatch.setDuration(this.duration);
+			customMatch.setCancelationDeadline(cancelationDeadline);
+			customMatch.setCourtType(CourtType.INDOOR);
+
+			String message = stepDefs.mapper.writeValueAsString(customMatch);
+			stepDefs.result = stepDefs.mockMvc.perform(
+				post("/customMatches")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(message)
+					.accept(MediaType.APPLICATION_JSON)
+					.with(authenticate()))
+				.andDo(print());
+		}
+
 	}
 
-	@Then("^A player has successfully joined a match$")
-	public void aPlayerHasSuccessfullyJoinedAMatch() throws Throwable {
+	@Then("^A player has successfully joined a match (\\d+)$")
+	public void aPlayerHasSuccessfullyJoinedAMatch(int resourcesIdd) throws Throwable {
+		this.resourcesId = resourcesIdd;
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatches/1")
+			get("/joinMatches/{id}", this.resourcesId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isOk());
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatches/1/player")
+			get("/joinMatches/{id}/player", this.resourcesId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isOk());
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatches/1/publicMatch")
+			get("/joinMatches/{id}/match", this.resourcesId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())

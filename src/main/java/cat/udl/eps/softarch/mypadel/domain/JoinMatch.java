@@ -24,7 +24,7 @@ public class JoinMatch extends UriEntity<Long> {
 
 	@ManyToOne
 	@JsonIdentityReference(alwaysAsId = true)
-    private PublicMatch publicMatch;
+    private Match match;
 
     @Override
     public Long getId() { return id; }
@@ -43,10 +43,10 @@ public class JoinMatch extends UriEntity<Long> {
     	return this.player;
 	}
 
-	public void setMatch(PublicMatch publicMatch){ this.publicMatch = publicMatch; }
+	public void setMatch(Match match){ this.match = match; }
 
-	public Match getPublicMatch(){
-		return this.publicMatch;
+	public Match getMatch(){
+		return this.match;
 	}
 
 }
