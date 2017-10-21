@@ -64,6 +64,19 @@ public class CreateMatchStepDefs {
 			.andDo(print());
 	}
 
+	@And("^I create a match with a similar hour, (\\d+) pm$")
+	public void iCreateAMatchWithASimilarHourPm(int matchHour) throws Throwable {
+		match.setStartDate(match.getStartDate().withHour(matchHour));
+		String message = stepDefs.mapper.writeValueAsString(match);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
 	@And("^A match with the id (\\d+) has been created$")
 	public void aMatchWithTheIdHasBeenCreated(int id) throws Throwable {
 		this.id = id;
@@ -97,16 +110,21 @@ public class CreateMatchStepDefs {
 		);
 	}
 
-	@And("^I create a match with a similar hour, (\\d+) pm$")
-	public void iCreateAMatchWithASimilarHourPm(int matchHour) throws Throwable {
-		match.setStartDate(match.getStartDate().withHour(matchHour));
-		String message = stepDefs.mapper.writeValueAsString(match);
+	@And("^A join match with the id (\\d+) has been created, having the match (\\d+) and the player \"([^\"]*)\"$")
+	public void aJoinMatchHasBeenCreatedHavingTheMatchAndThePlayer(int joinId, int matchId, String playerUsername) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
-			post("/publicMatches")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(message)
+			get("/joinMatch/{id}/player", joinId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
-			.andDo(print());
+			.andDo(print())
+			.andExpect(jsonPath("$.username", is(playerUsername))
+		);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/joinMatch/{id}/match", joinId)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(jsonPath("$.id", is(matchId))
+		);
 	}
 }

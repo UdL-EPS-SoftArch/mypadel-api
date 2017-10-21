@@ -10,6 +10,7 @@ Feature: Create match
 		Then The response code is 201
 		And A match with the id 1 has been created
 		And The match creator is "testplayer"
+		And A join match with the id 1 has been created, having the match 1 and the player "testplayer"
 
 	Scenario: An admin creates a public match
 		Given I login as "testadmin@mypadel.cat" with password "password"
