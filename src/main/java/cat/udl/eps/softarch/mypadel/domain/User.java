@@ -1,7 +1,9 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
@@ -10,10 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "MyPadelUser") //Avoid collision with system table User in Postgres
@@ -31,7 +32,30 @@ public abstract class User extends UriEntity<String> implements UserDetails {
     private String password;
 
 
-    @Override
+
+
+
+	@OneToMany       (mappedBy = "createdBy")// when I use One to many(List) for better performance
+	//private MatchInvitation creatorOf;
+	@JsonIdentityReference(alwaysAsId = true)
+	private List<MatchInvitation> creatorOf = new ArrayList<>();
+
+
+
+	public List<MatchInvitation> getCreatorOf() {
+		return creatorOf;
+	}
+
+	public void setCreatorOf(List<MatchInvitation> creatorOf) {
+		this.creatorOf = creatorOf;
+	}
+
+
+
+
+
+
+	@Override
     public String getId() {
         return username;
     }
@@ -78,5 +102,14 @@ public abstract class User extends UriEntity<String> implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) return false;
+		if (other == this) return true;
+		if (!(other instanceof User))return false;
+    	User user = (User) other;
+		return user.getId().equals(this.username);
 	}
 }
