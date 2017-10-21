@@ -3,6 +3,7 @@ package cat.udl.eps.softarch.mypadel.steps;
 import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -171,7 +172,7 @@ public class JoinMatchSteps {
 			.andExpect(status().isOk());
 	}
 
-	@When("^I leave a match with id (\\d+)$")
+	@And("^I leave a match with id (\\d+)$")
 	public void iLeaveAMatchWithId(int id) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
 			delete("/joinMatches/{id}", id)
@@ -187,5 +188,26 @@ public class JoinMatchSteps {
 			get("/joinMatches/{id}", id)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
+	}
+
+
+	@When("^I already joined a match with id (\\d+)$")
+	public void iAlreadyJoinedAMatchWithId(int id) throws Throwable {
+		String matchType = "public";
+		String player = "testplayer@mypadel.cat";
+		int day = 11;
+		int month = 10;
+		int year = 2017;
+		int hour = 1;
+		int duration = 30;
+		int cancelationDay = 30;
+		int cancelationMonth = 10;
+		int cancelationYear = 2017;
+
+		thereIsPublicMatchOnAtPmForMinutesAndDeadline(matchType, day, month, year, hour, duration, cancelationDay, cancelationMonth, cancelationYear);
+		theUserCreatingItIs(player);
+		iJoinToACreatedMatch(id);
+		aPlayerHasSuccessfullyJoinedAMatch(id);
+
 	}
 }
