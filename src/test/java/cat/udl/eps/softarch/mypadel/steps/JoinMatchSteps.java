@@ -181,7 +181,7 @@ public class JoinMatchSteps {
 			.andExpect(status().isOk());
 	}
 
-	@And("^I leave a match with id (\\d+)$")
+	@When("^I leave a match with id (\\d+)$")
 	public void iLeaveAMatchWithId(int id) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
 			delete("/joinMatches/{id}", id)
@@ -200,7 +200,7 @@ public class JoinMatchSteps {
 	}
 
 
-	@When("^I already joined a match with id (\\d+)$")
+	@And("^I already joined a match with id (\\d+)$")
 	public void iAlreadyJoinedAMatchWithId(int id) throws Throwable {
 		String matchType = "public";
 		String player = "testplayer@mypadel.cat";

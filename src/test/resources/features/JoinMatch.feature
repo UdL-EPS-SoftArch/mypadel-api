@@ -38,7 +38,7 @@ Feature: Join match
 
 	Scenario: Leaving a match
 		Given I login as "testplayer@mypadel.cat" with password "password"
-		When I already joined a match with id 1
-		And I leave a match with id 1
+		And I already joined a match with id 1
+		When I leave a match with id 1
 		Then I successfully leave the match with id 1
 
