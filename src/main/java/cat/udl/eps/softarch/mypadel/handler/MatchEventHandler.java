@@ -40,9 +40,9 @@ public class MatchEventHandler {
 
 	private void handleMatchCreator(Match match) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if(adminInputsInvalidPlayer(match, auth)){
+		if (adminInputsInvalidPlayer(match, auth)) {
 			throw new NullPointerException();
-		}else if(auth.getPrincipal() instanceof Player){
+		} else if (auth.getPrincipal() instanceof Player) {
 			match.setMatchCreator((Player) auth.getPrincipal());
 		}
 	}
@@ -53,7 +53,7 @@ public class MatchEventHandler {
 
 	@HandleAfterCreate
 	@Transactional
-	public void handleMatchPostCreate(Match match){
+	public void handleMatchPostCreate(Match match) {
 		JoinMatch joinMatch = new JoinMatch();
 		joinMatch.setPlayer(match.getMatchCreator());
 		joinMatch.setMatch(match);
