@@ -34,7 +34,7 @@ class MatchChecker {
 	}
 
 	void checkTimers(Match match) throws CreateMatchException {
-		if(durationIncorrect(match.getDuration())){
+		if (durationIncorrect(match.getDuration())) {
 			throw new CreateMatchException("The duration must be between 30 to 90 minutes");
 		}
 	}
@@ -47,7 +47,7 @@ class MatchChecker {
 
 	void checkCreatorDisponibility(Match match) throws CreateMatchException {
 		Player player = match.getMatchCreator();
-		if(hasAnotherMatchOnThatTime(player, match)){
+		if (hasAnotherMatchOnThatTime(player, match)) {
 			throw new CreateMatchException("The player has a match created on that time");
 		}
 	}
@@ -62,9 +62,9 @@ class MatchChecker {
 	}
 
 	private boolean playerHasMatchCreated(List<Match> possibleMatches, Player player) {
-		for(Match match : possibleMatches){
+		for (Match match : possibleMatches) {
 			Player matchCreator = match.getMatchCreator();
-			if(matchCreator.equals(player)){
+			if (matchCreator.equals(player)) {
 				return true;
 			}
 		}
