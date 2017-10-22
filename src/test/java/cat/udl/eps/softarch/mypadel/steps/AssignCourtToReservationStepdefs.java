@@ -7,16 +7,25 @@ import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cat.udl.eps.softarch.mypadel.repository.ReservationRepository;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.RestMediaTypes;
 
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 public class AssignCourtToReservationStepdefs {
+
+	@Autowired
+	private StepDefs stepDefs;
 
 	@Autowired
 	private ReservationRepository reservationRepository;
@@ -58,4 +67,14 @@ public class AssignCourtToReservationStepdefs {
 		return reservation;
 	}
 
+	@When("^I assign a court manually$")
+	public void iAssignACourtManually() throws Throwable {
+		String message = "courts/1";
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/reservations/1/court")
+				.contentType(RestMediaTypes.TEXT_URI_LIST)
+				.content(message)
+				.with(authenticate()))
+			.andDo(print());
+	}
 }

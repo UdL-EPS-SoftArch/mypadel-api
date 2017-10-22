@@ -32,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 			    .antMatchers(HttpMethod.GET,"/identity").authenticated()
 
+				.antMatchers(HttpMethod.POST, "/reservations/*/court").denyAll()
 				.antMatchers(HttpMethod.POST, "/reservations*/**").authenticated()
 
 				.antMatchers(HttpMethod.PUT, "/**/*").authenticated()

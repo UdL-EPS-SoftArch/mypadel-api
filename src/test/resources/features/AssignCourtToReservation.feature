@@ -22,9 +22,9 @@ Feature: Assign an available court to a Reservation when it is created
 		When I make a reservation on 15/12/2017-18:00 for 60 minutes with CourtType "UNDEFINED"
 		Then The response code is 500
 
-#	Scenario: A users tries to manually assign a court
-#		Given I login as "testadmin@mypadel.cat" with password "password"
-#		And I make a reservation on 11 - 11 - 2017 for 60 minutes with CourtType "indoor"
-#		When I assign a court manually
-#		Then The response code is 405
-#		And The court has not been assigned
+	Scenario: A users tries to manually assign a court
+		Given I login as "testadmin@mypadel.cat" with password "password"
+		And There is an "available" court
+		And I make a reservation on 15/12/2017-18:00 for 60 minutes with CourtType "UNDEFINED"
+		When I assign a court manually
+		Then The response code is 403
