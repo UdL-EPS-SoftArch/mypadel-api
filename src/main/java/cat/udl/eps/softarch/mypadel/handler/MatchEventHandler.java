@@ -55,7 +55,6 @@ public class MatchEventHandler {
 	@Transactional
 	public void handleMatchPostCreate(Match match){
 		JoinMatch joinMatch = new JoinMatch();
-		joinMatch.setEventDate(match.getStartDate());
 		joinMatch.setPlayer(match.getMatchCreator());
 		joinMatch.setMatch(match);
 		joinMatchRepository.save(joinMatch);
