@@ -113,14 +113,14 @@ public class CreateMatchStepDefs {
 	@And("^A join match with the id (\\d+) has been created, having the match (\\d+) and the player \"([^\"]*)\"$")
 	public void aJoinMatchHasBeenCreatedHavingTheMatchAndThePlayer(int joinId, int matchId, String playerUsername) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatch/{id}/player", joinId)
+			get("/joinMatches/{id}/player", joinId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(jsonPath("$.username", is(playerUsername))
 		);
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatch/{id}/match", joinId)
+			get("/joinMatches/{id}/match", joinId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
