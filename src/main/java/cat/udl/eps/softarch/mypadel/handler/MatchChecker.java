@@ -1,10 +1,13 @@
 package cat.udl.eps.softarch.mypadel.handler;
 
+import cat.udl.eps.softarch.mypadel.domain.Admin;
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.handler.exception.CreateMatchException;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -12,10 +15,23 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
-class MatchDatesReviewer {
+class MatchChecker {
 
 	@Autowired
 	private MatchRepository matchRepository;
+
+	void handleMatchCreator(Match match) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (adminInputsInvalidPlayer(match, auth)) {
+			throw new NullPointerException();
+		} else if (auth.getPrincipal() instanceof Player) {
+			match.setMatchCreator((Player) auth.getPrincipal());
+		}
+	}
+
+	private boolean adminInputsInvalidPlayer(Match match, Authentication auth) {
+		return auth.getPrincipal() instanceof Admin && match.getMatchCreator() == null;
+	}
 
 	void checkTimers(Match match) throws CreateMatchException {
 		if(durationIncorrect(match.getDuration())){
@@ -27,10 +43,6 @@ class MatchDatesReviewer {
 		long durationMinutes = matchDuration.toMinutes();
 
 		return durationMinutes > 90 || durationMinutes < 30;
-	}
-
-	ZonedDateTime getCancelDeadline(ZonedDateTime startDate) {
-		return startDate.minusDays(1);
 	}
 
 	void checkCreatorDisponibility(Match match) throws CreateMatchException {

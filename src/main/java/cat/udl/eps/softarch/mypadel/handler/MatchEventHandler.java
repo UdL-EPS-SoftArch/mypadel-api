@@ -24,7 +24,7 @@ public class MatchEventHandler {
 	final Logger logger = LoggerFactory.getLogger(Match.class);
 
 	@Autowired
-	private MatchDatesReviewer mdr;
+	private MatchChecker matchChecker;
 
 	@Autowired
 	private JoinMatchRepository joinMatchRepository;
@@ -32,28 +32,15 @@ public class MatchEventHandler {
 	@HandleBeforeCreate
 	@Transactional
 	public void handleMatchPreCreate(Match match) throws CreateMatchException {
-		handleMatchCreator(match);
-		mdr.checkTimers(match);
-		mdr.checkCreatorDisponibility(match);
-		match.setCancelationDeadline(mdr.getCancelDeadline(match.getStartDate()));
-	}
-
-	private void handleMatchCreator(Match match) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (adminInputsInvalidPlayer(match, auth)) {
-			throw new NullPointerException();
-		} else if (auth.getPrincipal() instanceof Player) {
-			match.setMatchCreator((Player) auth.getPrincipal());
-		}
-	}
-
-	private boolean adminInputsInvalidPlayer(Match match, Authentication auth) {
-		return auth.getPrincipal() instanceof Admin && match.getMatchCreator() == null;
+		matchChecker.handleMatchCreator(match);
+		matchChecker.checkTimers(match);
+		matchChecker.checkCreatorDisponibility(match);
+		match.setCancelationDeadline(match.getStartDate().minusDays(1));
 	}
 
 	@HandleAfterCreate
 	@Transactional
-	public void handleMatchPostCreate(Match match) {
+	public void createJoinMatch(Match match) {
 		JoinMatch joinMatch = new JoinMatch();
 		joinMatch.setPlayer(match.getMatchCreator());
 		joinMatch.setMatch(match);
