@@ -8,7 +8,7 @@ Feature: Reserve a court
 		And There is an "available" court
 		When I make a reservation on 8/10/2017-18:30 for 60 minutes with CourtType "INDOOR"
 		Then The response code is 201
-		And The reservation is created on 8 - 10 - 2017 for 60 minutes with CourtType "INDOOR"
+		And The reservation is created on on 8/10/2017-18:30 for 60 minutes with CourtType "INDOOR"
 
 	Scenario: Reserve a court
 		Given I'm not logged in

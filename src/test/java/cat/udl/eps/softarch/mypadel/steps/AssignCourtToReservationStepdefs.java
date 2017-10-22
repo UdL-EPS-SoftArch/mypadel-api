@@ -5,7 +5,6 @@ import cat.udl.eps.softarch.mypadel.domain.CourtType;
 import cat.udl.eps.softarch.mypadel.domain.Reservation;
 import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cat.udl.eps.softarch.mypadel.repository.ReservationRepository;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class AssignCourtToReservationStepdefs {
-
-	@Autowired
-	private StepDefs stepDefs;
 
 	@Autowired
 	private ReservationRepository reservationRepository;
@@ -38,7 +34,8 @@ public class AssignCourtToReservationStepdefs {
 	}
 
 	@And("^There is a reserved court at (\\d+)/(\\d+)/(\\d+)-(\\d+):(\\d+) for (\\d+) minutes$")
-	public void thereIsAReservedCourtAtForMinutes(int day, int month, int year, int hour, int minutes, int duration) throws Throwable {
+	public void thereIsAReservedCourtAtForMinutes(int day, int month, int year, int hour, int minutes, int duration)
+		throws Throwable {
 		setDateAndDuration(day, month, year, hour, minutes, duration);
 		Reservation reservation = setUpReservation();
 		Court court = new Court();
