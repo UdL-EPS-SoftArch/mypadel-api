@@ -5,6 +5,7 @@ import cat.udl.eps.softarch.mypadel.domain.CourtType;
 import cat.udl.eps.softarch.mypadel.domain.Reservation;
 import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cat.udl.eps.softarch.mypadel.repository.ReservationRepository;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,9 @@ public class AssignCourtToReservationStepdefs {
 		assertThat(reservedCourt.getId(), is(1));
 	}
 
-	@And("^There is a reserved court at (\\d+) - (\\d+) - (\\d+) for (\\d+) minutes$")
-	public void thereIsAReservedCourtAtForMinutes(int day, int month, int year, int duration) throws Throwable {
-		setDateAndDuration(day, month, year, duration);
+	@And("^There is a reserved court at (\\d+)/(\\d+)/(\\d+)-(\\d+):(\\d+) for (\\d+) minutes$")
+	public void thereIsAReservedCourtAtForMinutes(int day, int month, int year, int hour, int minutes, int duration) throws Throwable {
+		setDateAndDuration(day, month, year, hour, minutes, duration);
 		Reservation reservation = setUpReservation();
 		Court court = new Court();
 		reservation.setCourt(court);
@@ -46,8 +47,8 @@ public class AssignCourtToReservationStepdefs {
 		reservationRepository.save(reservation);
 	}
 
-	private void setDateAndDuration(int day, int month, int year, int duration) {
-		startdate = ZonedDateTime.of(year, month, day, 0, 0, 0,
+	private void setDateAndDuration(int day, int month, int year, int hour, int minutes, int duration) {
+		startdate = ZonedDateTime.of(year, month, day, hour, minutes, 0,
 			0, ZoneId.of("+00:00"));
 		durationInMinutes = Duration.ofMinutes(duration);
 	}
@@ -59,4 +60,5 @@ public class AssignCourtToReservationStepdefs {
 		reservation.setCourtType(CourtType.UNDEFINED);
 		return reservation;
 	}
+
 }
