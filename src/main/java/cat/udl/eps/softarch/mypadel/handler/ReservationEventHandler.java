@@ -4,7 +4,7 @@ import cat.udl.eps.softarch.mypadel.domain.Court;
 import cat.udl.eps.softarch.mypadel.domain.Reservation;
 import cat.udl.eps.softarch.mypadel.handler.exception.CompatibleCourtNotFoundException;
 import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
-import cat.udl.eps.softarch.mypadel.utlis.CourtFilter;
+import cat.udl.eps.softarch.mypadel.utils.CourtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;

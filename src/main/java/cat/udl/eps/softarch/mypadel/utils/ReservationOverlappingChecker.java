@@ -1,4 +1,4 @@
-package cat.udl.eps.softarch.mypadel.utlis;
+package cat.udl.eps.softarch.mypadel.utils;
 
 import cat.udl.eps.softarch.mypadel.domain.Reservation;
 
