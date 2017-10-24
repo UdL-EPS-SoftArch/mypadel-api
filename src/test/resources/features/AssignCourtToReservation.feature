@@ -27,4 +27,4 @@ Feature: Assign an available court to a Reservation when it is created
 		And There is an "available" court
 		And I make a reservation on 15/12/2017-18:00 for 60 minutes with CourtType "UNDEFINED"
 		When I assign a court manually
-		Then The response code is 403
+		Then The response code is 405
