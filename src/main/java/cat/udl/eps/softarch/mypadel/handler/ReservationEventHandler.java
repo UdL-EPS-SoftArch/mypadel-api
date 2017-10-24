@@ -20,7 +20,8 @@ public class ReservationEventHandler {
 	@Autowired
 	private CourtRepository courtRepository;
 
-	private final CourtFilter courtFilter = new CourtFilter();
+	@Autowired
+	private CourtFilter courtFilter;
 
 	@HandleBeforeCreate
 	@Transactional
