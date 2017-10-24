@@ -5,6 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import java.util.ArrayList;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +33,10 @@ public class Player extends User {
     public void setLevel(Level level) {
         this.level = level;
     }
+
+	@OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+	@JsonIdentityReference(alwaysAsId = true)
+	private List<MatchJoinRequest> matchJoinRequests = new ArrayList<>();
 
 
 
