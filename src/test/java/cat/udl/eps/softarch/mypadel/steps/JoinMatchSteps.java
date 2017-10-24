@@ -132,7 +132,7 @@ public class JoinMatchSteps {
 			.andDo(print())
 			.andExpect(status().isOk());
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatches/1/publicMatch")
+			get("/joinMatches/1/match")
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())

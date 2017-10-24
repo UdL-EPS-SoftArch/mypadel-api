@@ -14,25 +14,25 @@ import java.util.List;
 @Entity
 public class Match extends UriEntity<Long> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private ZonedDateTime startDate;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private ZonedDateTime startDate;
 
-    @NotNull
-    private Duration duration;
+	@NotNull
+	private Duration duration;
 
-    @NotNull
-    private CourtType courtType;
+	@NotNull
+	private CourtType courtType;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private ZonedDateTime cancelationDeadline;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private ZonedDateTime cancelationDeadline;
 
-	@OneToMany (mappedBy = "invitesTo")
+	@OneToMany(mappedBy = "invitesTo")
 	@JsonIdentityReference(alwaysAsId = true)
-	private List<MatchInvitation> invitations	= new ArrayList<>();
+	private List<MatchInvitation> invitations = new ArrayList<>();
 
 	public List<MatchInvitation> getInvitations() {
 		return invitations;
@@ -44,44 +44,44 @@ public class Match extends UriEntity<Long> {
 
 	@ManyToOne
 	@JsonIdentityReference(alwaysAsId = true)
-    private Player matchCreator;
+	private Player matchCreator;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public ZonedDateTime getStartDate() {
-        return startDate;
-    }
+	public ZonedDateTime getStartDate() {
+		return startDate;
+	}
 
-    public void setStartDate(ZonedDateTime startDate) {
-        this.startDate = startDate;
-    }
+	public void setStartDate(ZonedDateTime startDate) {
+		this.startDate = startDate;
+	}
 
-    public Duration getDuration() {
-        return duration;
-    }
+	public Duration getDuration() {
+		return duration;
+	}
 
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
+	public void setDuration(Duration duration) {
+		this.duration = duration;
+	}
 
-    public CourtType getCourtType() {
-        return courtType;
-    }
+	public CourtType getCourtType() {
+		return courtType;
+	}
 
-    public void setCourtType(CourtType court) {
-        this.courtType = court;
-    }
+	public void setCourtType(CourtType court) {
+		this.courtType = court;
+	}
 
-    public ZonedDateTime getCancelationDeadline() {
-        return cancelationDeadline;
-    }
+	public ZonedDateTime getCancelationDeadline() {
+		return cancelationDeadline;
+	}
 
-    public void setCancelationDeadline(ZonedDateTime cancelationDeadline) {
-        this.cancelationDeadline = cancelationDeadline;
-    }
+	public void setCancelationDeadline(ZonedDateTime cancelationDeadline) {
+		this.cancelationDeadline = cancelationDeadline;
+	}
 
 	public Player getMatchCreator() {
 		return matchCreator;
