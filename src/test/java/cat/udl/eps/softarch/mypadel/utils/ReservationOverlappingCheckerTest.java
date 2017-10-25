@@ -18,7 +18,6 @@ public class ReservationOverlappingCheckerTest {
 
 	@Test
 	public void test_courtHasNoReservations_pendingReservationDoesNotOverlap() {
-
 		Reservation pendingReservation = createReservationFor60MinutesThisMonth(11, 17, 30);
 		Court court = createCourtWithoutReservations();
 
@@ -46,16 +45,15 @@ public class ReservationOverlappingCheckerTest {
 
 	@Test
 	public void test_courtWithTwoReservations_pendingReservationOverlapsWithOne() {
-
 		Reservation pendingReservation = createReservationFor60MinutesThisMonth(11, 17, 30);
-		Court court = createCourtWithConfirmedReservations();
+		Court court = createCourtWithTwoReservations();
 
 		boolean overlapping = isOverlappingReservation(court, pendingReservation);
 
 		assertThat(overlapping, is(true));
 	}
 
-	private Court createCourtWithConfirmedReservations() {
+	private Court createCourtWithTwoReservations() {
 		Reservation confirmedReservation = createReservationFor60MinutesThisMonth(11, 17, 30);
 		Reservation confirmedReservation2 = createReservationFor60MinutesThisMonth(15, 17, 30);
 
@@ -63,4 +61,25 @@ public class ReservationOverlappingCheckerTest {
 		court.setReservations(Arrays.asList(confirmedReservation, confirmedReservation2));
 		return court;
 	}
+
+	@Test
+	public void test_courtWithThreeReservations_theSecondReservationOverlaps() {
+		Reservation pendingReservation = createReservationFor60MinutesThisMonth(11, 18, 00);
+		Court court = createCourtWithThreeReservations();
+
+		boolean overlapping = isOverlappingReservation(court, pendingReservation);
+
+		assertThat(overlapping, is(true));
+
+	}
+
+	private Court createCourtWithThreeReservations() {
+		Reservation reservationA = createReservationFor60MinutesThisMonth(31, 15, 00);
+		Reservation overlappingReservation = createReservationFor60MinutesThisMonth(11, 17, 30);
+		Reservation reservationB = createReservationFor60MinutesThisMonth(11, 10, 00);
+		Court court = new Court();
+		court.setReservations(Arrays.asList(reservationA, overlappingReservation, reservationB));
+		return court;
+	}
+
 }
