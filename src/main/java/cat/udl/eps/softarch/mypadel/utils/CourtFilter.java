@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static cat.udl.eps.softarch.mypadel.utils.CourtTypeMatcher.matchCourtType;
-import static cat.udl.eps.softarch.mypadel.utils.ReservationOverlappingChecker.checkDateCollision;
+
+import static cat.udl.eps.softarch.mypadel.utils.ReservationOverlappingChecker.isOverlappingReservation;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -28,13 +29,5 @@ public class CourtFilter {
 			return !isOverlappingReservation(court, pendingReservation);
 	}
 
-	private boolean isOverlappingReservation(Court court, Reservation pendingReservation) {
-		List<Reservation> assignedReservations = court.getReservations();
-		boolean overlapping = false;
-		for (Reservation other : assignedReservations) {
-			overlapping = checkDateCollision(pendingReservation, other);
-		}
-		return overlapping;
-	}
 
 }
