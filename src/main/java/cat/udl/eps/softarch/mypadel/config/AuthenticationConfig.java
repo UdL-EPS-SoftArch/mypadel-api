@@ -40,7 +40,7 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
 			admin.setPassword("password");
 			adminRepository.save(admin);
 		}
-		if (!adminRepository.exists("player")) {
+		if (!playerRepository.exists("player")) {
 			Player player = new Player();
 			player.setEmail("player@mypadel.cat");
 			player.setUsername("player");
