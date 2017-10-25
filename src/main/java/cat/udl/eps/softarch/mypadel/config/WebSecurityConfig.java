@@ -30,8 +30,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			    .antMatchers(HttpMethod.POST, "/players*/**").hasRole("ADMIN")
 			    .antMatchers(HttpMethod.DELETE, "/players*/**").hasRole("ADMIN")
 
+                .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
+                .antMatchers(HttpMethod.POST, "/**/*").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
+
+			    .antMatchers(HttpMethod.GET,"/identity").authenticated()
+				.antMatchers(HttpMethod.POST, "/reservations*/**").authenticated()
+
+
 			    .antMatchers(HttpMethod.GET,"/identity").authenticated()
 
+				.antMatchers(HttpMethod.POST, "/reservations/*/court").denyAll()
 				.antMatchers(HttpMethod.POST, "/reservations*/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/privateMatches*/**").authenticated()
 
