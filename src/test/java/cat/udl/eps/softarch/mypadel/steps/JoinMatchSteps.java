@@ -9,6 +9,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -16,8 +17,10 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -33,12 +36,16 @@ public class JoinMatchSteps {
 	private PublicMatch publicMatch = new PublicMatch();
 	private PrivateMatch privateMatch = new PrivateMatch();
 	private CustomMatch customMatch = new CustomMatch();
+	private MatchInvitation matchInv = new MatchInvitation();
+
 
 	private ZonedDateTime startDate;
 
 	private Duration duration;
 
 	private ZonedDateTime cancelationDeadline;
+
+	private String player;
 
 	@Autowired
 	UserRepository playerRepository;
@@ -73,7 +80,8 @@ public class JoinMatchSteps {
 
 	@And("^the user joining it is \"([^\"]*)\"$")
 	public void theUserCreatingItIs(String player) throws Throwable {
-		joinMatch.setPlayer((Player) playerRepository.findByEmail(player));
+		this.player = player;
+		joinMatch.setPlayer((Player) playerRepository.findByEmail(this.player));
 	}
 
 
@@ -107,13 +115,6 @@ public class JoinMatchSteps {
 		privateMatch.setCourtType(CourtType.INDOOR);
 	}
 
-	private void createCustomMatch(){
-		customMatch.setStartDate(startDate);
-		customMatch.setDuration(this.duration);
-		customMatch.setCancelationDeadline(cancelationDeadline);
-		customMatch.setCourtType(CourtType.INDOOR);
-	}
-
 	@And("^There is a \"([^\"]*)\" match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
 	public void thereIsPublicMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
 															  int cancelationDay, int cancelationMonth,
@@ -134,21 +135,11 @@ public class JoinMatchSteps {
 					.accept(MediaType.APPLICATION_JSON)
 					.with(authenticate()))
 				.andDo(print());
-		}else if (Objects.equals(matchType, "private")){
+		}else {
 			createPrivateMatch();
 			String message = stepDefs.mapper.writeValueAsString(privateMatch);
 			stepDefs.result = stepDefs.mockMvc.perform(
 				post("/privateMatches")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(message)
-					.accept(MediaType.APPLICATION_JSON)
-					.with(authenticate()))
-				.andDo(print());
-		}else{
-			createCustomMatch();
-			String message = stepDefs.mapper.writeValueAsString(customMatch);
-			stepDefs.result = stepDefs.mockMvc.perform(
-				post("/customMatches")
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(message)
 					.accept(MediaType.APPLICATION_JSON)
@@ -167,12 +158,14 @@ public class JoinMatchSteps {
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isOk());
+
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/joinMatches/{id}/player", this.resourcesId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isOk());
+
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/joinMatches/{id}/match", this.resourcesId)
 				.accept(MediaType.APPLICATION_JSON)
@@ -218,5 +211,67 @@ public class JoinMatchSteps {
 		iJoinToACreatedMatch(id);
 		aPlayerHasSuccessfullyJoinedAMatch(id);
 
+	}
+
+	@And("^I have been invited to a private match (\\d+) with the message \"([^\"]*)\"$")
+	public void iHaveBeenInvitedToAPrivateMatchWithTheMessage(long id, String inviteMessage) throws Throwable {
+		this.matchInv.setMessage(inviteMessage);
+		this.matchInv.setInvites((Player) playerRepository.findByEmail(this.player));
+		this.matchInv.setInvitesTo(matchRepository.findOne(id));
+
+		String message = stepDefs.mapper.writeValueAsString(matchInv);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/matchInvitations")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@When("^I join to a created private match (\\d+)$")
+	public void iJoinToACreatedPrivateMatch(long id) throws Throwable {
+		joinMatch.setMatch(matchRepository.findOne(id));
+		if(this.matchInv.getInvitesTo() != null || this.matchInv.getInvites() != null) {
+			if (Objects.equals(joinMatch.getMatch().getId(), this.matchInv.getInvitesTo().getId()) && Objects.equals(joinMatch.getPlayer().getId(), this.matchInv.getInvites().getId())) {
+				String message = stepDefs.mapper.writeValueAsString(joinMatch);
+				stepDefs.result = stepDefs.mockMvc.perform(
+					post("/joinMatches")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(message)
+						.accept(MediaType.APPLICATION_JSON)
+						.with(authenticate()))
+					.andDo(print());
+			}
+		}
+	}
+
+
+	@And("^And It has been created a new match invitation (\\d+)$")
+	public void andItHasBeenCreatedANewMatchInvitation(int id) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchInvitations/{id}", id)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchInvitations/{id}/invites", id)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchInvitations/{id}/invitesTo", id)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk());
+	}
+
+	@Then("^I couldn't join to the private match (\\d+)$")
+	public void iCouldnTJoinToThePrivateMatch(int id) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/joinMatches/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isNotFound());
 	}
 }

@@ -3,11 +3,10 @@ Feature: Join match
   As a player
   I want to join a match
 
-
-  Scenario: Successfully joined a match
-    Given I login as "testplayer@mypadel.cat" with password "password"
-    When I join to a match
-    Then I successfully joined a match
+	Scenario: Successfully joined a match
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		When I join to a match
+		Then I successfully joined a match
 
 	Scenario: A player joins a public match
 		Given I login as "testplayer@mypadel.cat" with password "password"
@@ -20,15 +19,17 @@ Feature: Join match
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		And the user joining it is "testplayer@mypadel.cat"
 		And There is a "private" match on 1 - 10 - 2017 at 1 pm for 30 minutes and deadline 30 - 9 - 2017
-		When I join to a created match 1
+		And I have been invited to a private match 1 with the message "You have been invited to a match"
+		And And It has been created a new match invitation 1
+		When I join to a created private match 1
 		Then A player has successfully joined a match 1
 
-	Scenario: A player joins a custom match
+	Scenario: A player joins a private match without invitation
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		And the user joining it is "testplayer@mypadel.cat"
-		And There is a "custom" match on 1 - 10 - 2017 at 1 pm for 30 minutes and deadline 30 - 9 - 2017
-		When I join to a created match 1
-		Then A player has successfully joined a match 1
+		And There is a "private" match on 1 - 10 - 2017 at 1 pm for 30 minutes and deadline 30 - 9 - 2017
+		When I join to a created private match 1
+		Then I couldn't join to the private match 1
 
 	Scenario: Unsuccessfully joined a match
 		Given I'm not logged in
