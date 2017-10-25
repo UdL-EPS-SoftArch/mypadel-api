@@ -8,7 +8,9 @@ import org.junit.Test;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 
+import static cat.udl.eps.softarch.mypadel.utils.ReservationOverlappingChecker.isOverlappingReservation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -17,20 +19,48 @@ public class ReservationOverlappingCheckerTest {
 	@Test
 	public void test_courtHasNoReservations_pendingReservationDoesNotOverlap() {
 
-		ZonedDateTime startdate = ZonedDateTime.of(2017, 10, 11, 17, 30, 0,
-			0, ZoneId.of("+00:00"));
+		Reservation pendingReservation = createReservationFor60MinutesThisMonth(11, 17, 30);
+		Court court = createCourtWithoutReservations();
 
-		Reservation pendingReservation = new Reservation();
-		pendingReservation.setStartDate(startdate);
-		pendingReservation.setDuration(Duration.ofMinutes(60));
-
-		Court court = new Court();
-		court.setReservations(Lists.emptyList());
-
-		boolean overlapping = ReservationOverlappingChecker.isOverlappingReservation(court, pendingReservation);
+		boolean overlapping = isOverlappingReservation(court, pendingReservation);
 
 		assertThat(overlapping, is(false));
 
 	}
 
+	private Court createCourtWithoutReservations() {
+		Court court = new Court();
+		court.setReservations(Lists.emptyList());
+		return court;
+	}
+
+	private Reservation createReservationFor60MinutesThisMonth(int dayOfMonth, int startHour, int startMinutes) {
+		ZonedDateTime startdate = ZonedDateTime.of(2017, 10, dayOfMonth, startHour, startMinutes, 0,
+			0, ZoneId.of("+00:00"));
+
+		Reservation reservation = new Reservation();
+		reservation.setStartDate(startdate);
+		reservation.setDuration(Duration.ofMinutes(60));
+		return reservation;
+	}
+
+	@Test
+	public void test_courtWithTwoReservations_pendingReservationOverlapsWithOne() {
+
+		Reservation pendingReservation = createReservationFor60MinutesThisMonth(11, 17, 30);
+		Court court = createCourtWithConfirmedReservations();
+
+		boolean overlapping = isOverlappingReservation(court, pendingReservation);
+
+		assertThat(overlapping, is(true));
+	}
+
+	private Court createCourtWithConfirmedReservations() {
+		Reservation confirmedReservation = createReservationFor60MinutesThisMonth(11, 17, 30);
+		Reservation confirmedReservation2 = createReservationFor60MinutesThisMonth(15, 17, 30);
+
+		Court court = new Court();
+		court.setReservations(Arrays.asList(confirmedReservation, confirmedReservation2));
+		return court;
+	}
 }

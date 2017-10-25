@@ -13,6 +13,8 @@ public class ReservationOverlappingChecker {
 		boolean overlapping = false;
 		for (Reservation other : assignedReservations) {
 			overlapping = checkDateCollision(pendingReservation, other);
+			if (overlapping)
+				break;
 		}
 		return overlapping;
 	}
