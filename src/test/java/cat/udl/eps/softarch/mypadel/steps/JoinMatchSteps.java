@@ -34,9 +34,8 @@ public class JoinMatchSteps {
 	private JoinMatch joinMatch = new JoinMatch();
 
 	private PublicMatch publicMatch = new PublicMatch();
-	private PrivateMatch privateMatch = new PrivateMatch();
-	private CustomMatch customMatch = new CustomMatch();
-	private MatchInvitation matchInv = new MatchInvitation();
+	private PrivateMatch privateMatch;
+	private MatchInvitation matchInv;
 
 
 	private ZonedDateTime startDate;
@@ -53,8 +52,6 @@ public class JoinMatchSteps {
 	@Autowired
 	MatchRepository matchRepository;
 
-	private int resourcesId;
-	private long repositoryId;
 
 	@When("^I join to a match$")
     public void iJoinToAMatch() throws Throwable {
@@ -87,8 +84,7 @@ public class JoinMatchSteps {
 
 	@When("^I join to a created match (\\d+)$")
 	public void iJoinToACreatedMatch(long repositoryId) throws Throwable {
-		this.repositoryId = repositoryId;
-		joinMatch.setMatch(matchRepository.findOne(this.repositoryId));
+		joinMatch.setMatch(matchRepository.findOne(repositoryId));
 		String message = stepDefs.mapper.writeValueAsString(joinMatch);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/joinMatches")
@@ -119,6 +115,8 @@ public class JoinMatchSteps {
 	public void thereIsPublicMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
 															  int cancelationDay, int cancelationMonth,
 															  int cancelationYear) throws Throwable {
+		publicMatch = new PublicMatch();
+		privateMatch = new PrivateMatch();
 		startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
 			0, ZoneId.of("+00:00"));
 		this.duration = Duration.ofMinutes(duration);
@@ -150,24 +148,23 @@ public class JoinMatchSteps {
 	}
 
 	@Then("^A player has successfully joined a match (\\d+)$")
-	public void aPlayerHasSuccessfullyJoinedAMatch(int resourcesIdd) throws Throwable {
-		this.resourcesId = resourcesIdd;
+	public void aPlayerHasSuccessfullyJoinedAMatch(int resourcesId) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatches/{id}", this.resourcesId)
+			get("/joinMatches/{id}", resourcesId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isOk());
 
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatches/{id}/player", this.resourcesId)
+			get("/joinMatches/{id}/player", resourcesId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isOk());
 
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatches/{id}/match", this.resourcesId)
+			get("/joinMatches/{id}/match", resourcesId)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
@@ -215,6 +212,7 @@ public class JoinMatchSteps {
 
 	@And("^I have been invited to a private match (\\d+) with the message \"([^\"]*)\"$")
 	public void iHaveBeenInvitedToAPrivateMatchWithTheMessage(long id, String inviteMessage) throws Throwable {
+		this.matchInv = new MatchInvitation();
 		this.matchInv.setMessage(inviteMessage);
 		this.matchInv.setInvites((Player) playerRepository.findByEmail(this.player));
 		this.matchInv.setInvitesTo(matchRepository.findOne(id));
@@ -231,8 +229,8 @@ public class JoinMatchSteps {
 
 	@When("^I join to a created private match (\\d+)$")
 	public void iJoinToACreatedPrivateMatch(long id) throws Throwable {
-		joinMatch.setMatch(matchRepository.findOne(id));
-		if(this.matchInv.getInvitesTo() != null || this.matchInv.getInvites() != null) {
+		if(this.matchInv != null) {
+			joinMatch.setMatch(matchRepository.findOne(id));
 			if (Objects.equals(joinMatch.getMatch().getId(), this.matchInv.getInvitesTo().getId()) && Objects.equals(joinMatch.getPlayer().getId(), this.matchInv.getInvites().getId())) {
 				String message = stepDefs.mapper.writeValueAsString(joinMatch);
 				stepDefs.result = stepDefs.mockMvc.perform(
@@ -243,6 +241,11 @@ public class JoinMatchSteps {
 						.with(authenticate()))
 					.andDo(print());
 			}
+		}else{
+			stepDefs.result = stepDefs.mockMvc.perform(
+				delete("/joinMatches/{id}", id)
+					.accept(MediaType.APPLICATION_JSON)
+					.with(authenticate()));
 		}
 	}
 
