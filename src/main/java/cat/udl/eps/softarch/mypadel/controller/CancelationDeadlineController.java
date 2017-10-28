@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CancelationDeadlineController {
 
-	//This method will be called 5 seconds after the last completion of this method.
-	@Scheduled(fixedDelay=5000)
+	//This method will be called every 30 minutes after the last completion of this method.
+	@Scheduled(fixedDelay=1800000)
 	public void searchReachedDeadlines(){}
 }
