@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -33,14 +32,6 @@ public class Match extends UriEntity<Long> {
 	@OneToMany(mappedBy = "invitesTo")
 	@JsonIdentityReference(alwaysAsId = true)
 	private List<MatchInvitation> invitations = new ArrayList<>();
-
-	public List<MatchInvitation> getInvitations() {
-		return invitations;
-	}
-
-	public void setInvitations(List<MatchInvitation> invitations) {
-		this.invitations = invitations;
-	}
 
 	@ManyToOne
 	@JsonIdentityReference(alwaysAsId = true)
@@ -81,6 +72,14 @@ public class Match extends UriEntity<Long> {
 
 	public void setCancelationDeadline(ZonedDateTime cancelationDeadline) {
 		this.cancelationDeadline = cancelationDeadline;
+	}
+
+	public List<MatchInvitation> getInvitations() {
+		return invitations;
+	}
+
+	public void setInvitations(List<MatchInvitation> invitations) {
+		this.invitations = invitations;
 	}
 
 	public Player getMatchCreator() {
