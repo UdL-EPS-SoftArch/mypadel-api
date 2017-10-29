@@ -29,6 +29,8 @@ public class Match extends UriEntity<Long> {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private ZonedDateTime cancelationDeadline;
 
+	private boolean isCancelled = false;
+
 	@OneToMany(mappedBy = "invitesTo")
 	@JsonIdentityReference(alwaysAsId = true)
 	private List<MatchInvitation> invitations = new ArrayList<>();
@@ -72,6 +74,14 @@ public class Match extends UriEntity<Long> {
 
 	public void setCancelationDeadline(ZonedDateTime cancelationDeadline) {
 		this.cancelationDeadline = cancelationDeadline;
+	}
+
+	public boolean isCancelled() {
+		return isCancelled;
+	}
+
+	public void setCancelled(boolean cancelled) {
+		isCancelled = cancelled;
 	}
 
 	public List<MatchInvitation> getInvitations() {
