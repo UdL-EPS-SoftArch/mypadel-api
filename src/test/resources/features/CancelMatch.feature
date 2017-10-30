@@ -7,5 +7,4 @@ Feature: Cancel match
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		When I create a new public match on tomorrow at same time
 		Then The response code is 201
-		And A match with the id 1 has been created
 		And It has been cancelled

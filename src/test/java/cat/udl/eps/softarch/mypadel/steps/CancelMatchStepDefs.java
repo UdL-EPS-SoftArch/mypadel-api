@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
+import cat.udl.eps.softarch.mypadel.controller.CancelationDeadlineController;
 import cat.udl.eps.softarch.mypadel.domain.CourtType;
 import cat.udl.eps.softarch.mypadel.domain.Level;
 import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
@@ -24,10 +25,13 @@ public class CancelMatchStepDefs {
 	@Autowired
 	private StepDefs stepDefs;
 
+	@Autowired
+	private CancelationDeadlineController cancelationDeadlineController;
+
 	@When("^I create a new public match on tomorrow at same time$")
 	public void createMatchAtTomorrowSameTime() throws Throwable {
 		PublicMatch match = new PublicMatch();
-		ZonedDateTime startDate = ZonedDateTime.now().plusMinutes(1430);//23 hours and 50 minutes
+		ZonedDateTime startDate = ZonedDateTime.now().plusHours(23).plusMinutes(35);
 		Duration duration = Duration.ofMinutes(40);
 		match.setStartDate(startDate);
 		match.setDuration(duration);
@@ -45,6 +49,7 @@ public class CancelMatchStepDefs {
 
 	@And("^It has been cancelled$")
 	public void itHasBeenCancelled() throws Throwable {
+		cancelationDeadlineController.searchReachedDeadlines();
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/publicMatches/{id}", 1)
 				.accept(MediaType.APPLICATION_JSON)
