@@ -13,8 +13,11 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class CancelMatchStepDefs {
 
@@ -42,6 +45,12 @@ public class CancelMatchStepDefs {
 
 	@And("^It has been cancelled$")
 	public void itHasBeenCancelled() throws Throwable {
-
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/publicMatches/{id}", 1)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(jsonPath("$.cancelled", is(true))
+			);
 	}
 }
