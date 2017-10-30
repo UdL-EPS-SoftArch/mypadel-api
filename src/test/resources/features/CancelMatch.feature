@@ -9,4 +9,4 @@ Feature: Cancel match
 		And I create it
 		Then The response code is 201
 		And A match with the id 1 has been created
-		And it has been cancelled
+		And It has been cancelled
