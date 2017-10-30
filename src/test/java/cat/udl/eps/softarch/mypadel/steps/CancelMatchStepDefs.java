@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.time.Duration;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -31,7 +32,7 @@ public class CancelMatchStepDefs {
 	@When("^I create a new public match on tomorrow at same time$")
 	public void createMatchAtTomorrowSameTime() throws Throwable {
 		PublicMatch match = new PublicMatch();
-		ZonedDateTime startDate = ZonedDateTime.now().plusHours(23).plusMinutes(35);
+		ZonedDateTime startDate = ZonedDateTime.now(ZoneId.of("+00:00")).plusHours(23).plusMinutes(35);
 		Duration duration = Duration.ofMinutes(40);
 		match.setStartDate(startDate);
 		match.setDuration(duration);

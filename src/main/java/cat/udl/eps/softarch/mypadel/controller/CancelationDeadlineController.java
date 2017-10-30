@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -34,8 +35,9 @@ public class CancelationDeadlineController {
 	}
 
 	private List<Match> getPossibleCancelledMatches() {
+		ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("+00:00")).minusMinutes(REVIEW_TIME);
 		return matchRepository.findByCancelationDeadlineBetween(
-			ZonedDateTime.now().minusMinutes(REVIEW_TIME), ZonedDateTime.now());
+			ZonedDateTime.now(ZoneId.of("+00:00")).minusMinutes(REVIEW_TIME), ZonedDateTime.now(ZoneId.of("+00:00")));
 	}
 
 	private void reviewMatches(List<Match> matchesToReview) {
