@@ -93,4 +93,31 @@ public class MatchResult extends UriEntity<Integer> {
 		isVerified = verified;
 	}
 
+	@Override
+	public boolean equals(/* TODO Nullable */ Object object) {
+		if (this == object) return true;
+		if (!(object instanceof MatchResult)) return false;
+
+		final MatchResult that = (MatchResult) object;
+
+		return isDraw == that.isDraw
+			&& isVerified == that.isVerified
+			&& (id != null ? id.equals(that.id) : that.id == null)
+			&& (match != null ? match.equals(that.match) : that.match == null)
+			&& (winningPair != null ? winningPair.equals(that.winningPair) : that.winningPair == null)
+			&& (losingPair != null ? losingPair.equals(that.losingPair) : that.losingPair == null)
+			&& (verifications != null ? verifications.equals(that.verifications) : that.verifications == null);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (match != null ? match.hashCode() : 0);
+		result = 31 * result + (winningPair != null ? winningPair.hashCode() : 0);
+		result = 31 * result + (losingPair != null ? losingPair.hashCode() : 0);
+		result = 31 * result + (verifications != null ? verifications.hashCode() : 0);
+		result = 31 * result + (isDraw ? 1 : 0);
+		result = 31 * result + (isVerified ? 1 : 0);
+		return result;
+	}
 }
