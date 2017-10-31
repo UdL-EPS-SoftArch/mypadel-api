@@ -31,11 +31,3 @@ notifications:
     on_pull_requests: true
     rooms:
           - secure: kut1YmBV4IkttKS7ybDjioLT21LwWgaUv3conq1FEBk86iN4vcqJy34ATJfRbK0XxfhEP0FgNlTRe3ZeyorZeTzbY59zorkf1G6cdJvMWSbZOHdUy9rqiz/aoct/rvAOuW2D2EiG/TtnRrvH81cS3o64Pfw5ZBKx7qEStTkfAvvz4GqQ8zkSqJKMZZqzZ/HYa4jfA4r9SswsPfHxsYWeQ+PlBVdTSWJU4cAmxASha5QvPhcB+3xglYSj3fXxQ6A1/jezCP8P8rvrvx0W58DGf7NdDMLg/Fi67PmVn19h6EwWo0cfOlyBUy6T3jN5EFGFuFBNx7Byf+cmnnNfG7zQa7nt3FUnItGN3DFs4kiEWGJauZEW5BoIgu18ScL7LRnxzM6SDwtSFhZl4brjyWXCJWQ/1jryiWlBYHiENirEYe8oYLBZiD+xto4Yu28kxF4T6lTh4u1jyZvum3CHzoXWkjMSGVyNVEi1zKte8KcaufjNbHoWCqjkElVWnf1mmM2Czjs79DeALGGKrlpWAc8TgTuYYGizPA8yp+1V/rEZ1Xyi7ICm7AjEu7vbAW1kRUBKnH5vmmtP1Y1KnJhJhNtuh0WQ1CoLVO4fAsgystR3gH2eElt6YdDlzTw8YX6IfjV2VOZdA9xRTK5vSEFZn2L9lI25GAPIpqySLDn+vAf+48w=
-
-spring.mail.host: smtp.gmail.com
-spring.mail.port: 587
-spring.mail.username: technogado@gmail.com
-spring.mail.password: admin123456789
-spring.mail.properties.mail.smtp.auth: true
-spring.mail.properties.mail.smtp.starttls.enable: true
-spring.mail.properties.mail.smtp.starttls.required: true
