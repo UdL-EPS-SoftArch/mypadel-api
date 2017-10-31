@@ -51,6 +51,7 @@ public class CancelationDeadlineController {
 
 	private void cancelMatch(Match reviewedMatch) {
 		reviewedMatch.setCancelled(true);
+		matchRepository.save(reviewedMatch);
 		//more
 	}
 
