@@ -17,8 +17,10 @@ public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
 		config.exposeIdsFor(MatchResultVerification.class);
 		config.exposeIdsFor(Player.class);
         config.exposeIdsFor(PublicMatch.class);
+		config.exposeIdsFor(CustomMatch.class);
         config.exposeIdsFor(Court.class);
 		config.exposeIdsFor(Reservation.class);
+		config.exposeIdsFor(MatchJoinRequest.class);
         config.exposeIdsFor(JoinMatch.class);
     }
 
