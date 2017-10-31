@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.mypadel.handler;
 
 import cat.udl.eps.softarch.mypadel.domain.Admin;
-import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.MatchJoinRequest;
 import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.repository.AdminRepository;

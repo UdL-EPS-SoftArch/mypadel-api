@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.List;
 
 @Entity
 public class MatchInvitation {
