@@ -2,16 +2,16 @@ package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.controller.CancelationDeadlineController;
 import cat.udl.eps.softarch.mypadel.domain.CourtType;
+import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
 import cat.udl.eps.softarch.mypadel.domain.Level;
-import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
-import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
-import cat.udl.eps.softarch.mypadel.repository.PublicMatchRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -31,7 +31,7 @@ public class CancelMatchStepDefs {
 	private StepDefs stepDefs;
 
 	@Autowired
-	private CancelationDeadlineController cancelationDeadlineController;
+	private CancelationDeadlineControllerDouble cancelationDeadlineController;
 
 
 	@When("^I create a new public match on tomorrow at same time$")
@@ -59,7 +59,7 @@ public class CancelMatchStepDefs {
 
 	@And("^It has been cancelled$")
 	public void itHasBeenCancelled() throws Throwable {
-		cancelationDeadlineController.searchReachedDeadlines();
+		this.cancelationDeadlineController.searchReachedDeadlines();
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/publicMatches/{id}", 1)
 				.accept(MediaType.APPLICATION_JSON)
@@ -67,5 +67,15 @@ public class CancelMatchStepDefs {
 			.andDo(print())
 			.andExpect(jsonPath("$.cancelled", is(true))
 			);
+		assertThat(cancelationDeadlineController.mailSend, is(true));
+	}
+}
+
+@Component
+class CancelationDeadlineControllerDouble extends CancelationDeadlineController{
+	boolean mailSend = false;
+	@Override
+	protected void sendMailToPlayers(List<JoinMatch> joinMatches) {
+		mailSend=true;
 	}
 }

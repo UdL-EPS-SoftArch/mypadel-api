@@ -55,7 +55,7 @@ public class CancelationDeadlineController {
 		//more
 	}
 
-	private void sendMailToPlayers(List<JoinMatch> joinMatches) {
+	protected void sendMailToPlayers(List<JoinMatch> joinMatches) {
 		for(JoinMatch joinMatch : joinMatches){
 			Player player = joinMatch.getPlayer();
 			Match match = joinMatch.getMatch();
@@ -68,7 +68,7 @@ public class CancelationDeadlineController {
 	private SimpleMailMessage getMessage(Player player, String matchDate) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(player.getEmail());
-		message.setSubject("Padle match cancelled");
+		message.setSubject("Paddle match cancelled");
 		message.setText("The match on "+ matchDate +" has been cancelled. Less than four players joined.");
 		return message;
 	}
