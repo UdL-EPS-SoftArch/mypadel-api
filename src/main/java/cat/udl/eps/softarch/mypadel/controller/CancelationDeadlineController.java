@@ -35,9 +35,8 @@ public class CancelationDeadlineController {
 	}
 
 	private List<Match> getPossibleCancelledMatches() {
-		ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("+00:00")).minusMinutes(REVIEW_TIME);
 		return matchRepository.findByCancelationDeadlineBetween(
-			ZonedDateTime.now(ZoneId.of("+00:00")).minusMinutes(REVIEW_TIME), ZonedDateTime.now(ZoneId.of("+00:00")));
+			ZonedDateTime.now(ZoneId.of("UTC")).minusMinutes(REVIEW_TIME), ZonedDateTime.now(ZoneId.of("UTC")));
 	}
 
 	private void reviewMatches(List<Match> matchesToReview) {
