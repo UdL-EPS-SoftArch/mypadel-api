@@ -13,6 +13,8 @@ public class RandomGenerator {
 	public MatchResultVerification generateMatchResultVerification() {
 		MatchResultVerification matchResultVerification = new MatchResultVerification();
 		matchResultVerification.setMatchToAgree(generateMatchResult());
+		matchResultVerification.setAgrees(true);
+		matchResultVerification.setPlayer(new Player());
 		return matchResultVerification;
 	}
 
