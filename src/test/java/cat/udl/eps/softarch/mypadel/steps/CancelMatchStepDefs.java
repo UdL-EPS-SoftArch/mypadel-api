@@ -33,8 +33,6 @@ public class CancelMatchStepDefs {
 	@Autowired
 	private CancelationDeadlineController cancelationDeadlineController;
 
-	@Autowired
-	private MatchRepository matchRepository;
 
 	@When("^I create a new public match on tomorrow at same time$")
 	public void createMatchAtTomorrowSameTime() throws Throwable {
