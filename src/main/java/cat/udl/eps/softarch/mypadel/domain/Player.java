@@ -53,11 +53,6 @@ public class Player extends User {
 		this.invitations = invitations;
 	}
 
-
-
-
-
-
 	@Override
 	@Transient
 	public Collection<? extends GrantedAuthority> getAuthorities() {
