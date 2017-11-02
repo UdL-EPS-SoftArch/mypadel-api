@@ -109,6 +109,18 @@ public class AcceptMatchJoinRequestSteps {
 			.andDo(print())
 			.andExpect(jsonPath("$.status", is(MatchJoinRequest.Status.ACCEPTED.toString())))
 			.andExpect(status().isOk());
+		id=2;
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/joinMatches/{id}/player", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(jsonPath("$.username", is(player.getUsername())))
+			.andExpect(status().isOk());
+
+
+
+
 
 
 	}
