@@ -4,7 +4,9 @@ import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
 import cat.udl.eps.softarch.mypadel.domain.MatchJoinRequest;
 import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.repository.*;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -102,21 +104,8 @@ public class AcceptMatchJoinRequestSteps {
 			.content(message)
 			.with(authenticate()))
 			.andDo(print());
-		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/matchJoinRequests/{id}", id)
-				.accept(MediaType.APPLICATION_JSON)
-				.with(authenticate()))
-			.andDo(print())
-			.andExpect(jsonPath("$.status", is(MatchJoinRequest.Status.ACCEPTED.toString())))
-			.andExpect(status().isOk());
-		id=2;
-		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/joinMatches/{id}/player", id)
-				.accept(MediaType.APPLICATION_JSON)
-				.with(authenticate()))
-			.andDo(print())
-			.andExpect(jsonPath("$.username", is(player.getUsername())))
-			.andExpect(status().isOk());
+
+
 
 
 
@@ -139,6 +128,40 @@ public class AcceptMatchJoinRequestSteps {
 				.content(message)
 				.with(authenticate()))
 			.andDo(print());
+
+
+	}
+
+	@Then("^a joinMatch is created$")
+	public void aJoinMatchIsCreated() throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		long id=2;
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/joinMatches/{id}/player", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(jsonPath("$.username", is(player.getUsername())))
+			.andExpect(status().isOk());
+	}
+
+	@Then("^The status of MatchJoinRequest is ACCEPTED$")
+	public void theStatusOfMatchJoinRequestIsACCEPTED() throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		long id=1;
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchJoinRequests/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(jsonPath("$.status", is(MatchJoinRequest.Status.ACCEPTED.toString())))
+			.andExpect(status().isOk());
+	}
+
+	@Then("^The status of MatchJoinRequest is REJECTED$")
+	public void theStatusOfMatchJoinRequestIsREJECTED() throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		long id=1;
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/matchJoinRequests/{id}", id)
 				.accept(MediaType.APPLICATION_JSON)
@@ -146,6 +169,17 @@ public class AcceptMatchJoinRequestSteps {
 			.andDo(print())
 			.andExpect(jsonPath("$.status", is(MatchJoinRequest.Status.REJECTED.toString())))
 			.andExpect(status().isOk());
+	}
 
+	@And("^a joinMatch is not created$")
+	public void aJoinMatchIsNotCreated() throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		long id=2;
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/joinMatches/{id}/", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isNotFound());
 	}
 }
