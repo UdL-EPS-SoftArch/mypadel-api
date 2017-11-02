@@ -3,13 +3,9 @@ package cat.udl.eps.softarch.mypadel.steps;
 import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
 import cat.udl.eps.softarch.mypadel.domain.MatchJoinRequest;
 import cat.udl.eps.softarch.mypadel.domain.Player;
-import cat.udl.eps.softarch.mypadel.domain.Status;
 import cat.udl.eps.softarch.mypadel.repository.*;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import gherkin.lexer.Pl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
@@ -68,7 +64,7 @@ public class AcceptMatchJoinRequestSteps {
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
-			.andExpect(jsonPath("$.status", is(Status.PENDING.toString())))
+			.andExpect(jsonPath("$.status", is(MatchJoinRequest.Status.PENDING.toString())))
 			.andExpect(status().isOk());
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/matchJoinRequests/{id}/player", id)
@@ -98,7 +94,7 @@ public class AcceptMatchJoinRequestSteps {
 	public void iAcceptTheMatchJoinRequest() throws Throwable {
 		// Write code here that turns the phrase above into concrete actions
 		long id=1;
-		matchJoinRequest.setStatus(Status.ACCEPTED);
+		matchJoinRequest.setStatus(MatchJoinRequest.Status.ACCEPTED);
 		String message = stepDefs.mapper.writeValueAsString(matchJoinRequest);
 		stepDefs.result = stepDefs.mockMvc.perform(
 		put("/matchJoinRequests/{id}", id)
@@ -111,7 +107,7 @@ public class AcceptMatchJoinRequestSteps {
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
-			.andExpect(jsonPath("$.status", is(Status.ACCEPTED.toString())))
+			.andExpect(jsonPath("$.status", is(MatchJoinRequest.Status.ACCEPTED.toString())))
 			.andExpect(status().isOk());
 
 
@@ -123,7 +119,7 @@ public class AcceptMatchJoinRequestSteps {
 	public void iRejectTheMatchJoinRequest() throws Throwable {
 		// Write code here that turns the phrase above into concrete actions
 		long id=1;
-		matchJoinRequest.setStatus(Status.REJECTED);
+		matchJoinRequest.setStatus(MatchJoinRequest.Status.REJECTED);
 		String message = stepDefs.mapper.writeValueAsString(matchJoinRequest);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			put("/matchJoinRequests/{id}", id)
@@ -136,7 +132,7 @@ public class AcceptMatchJoinRequestSteps {
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
-			.andExpect(jsonPath("$.status", is(Status.REJECTED.toString())))
+			.andExpect(jsonPath("$.status", is(MatchJoinRequest.Status.REJECTED.toString())))
 			.andExpect(status().isOk());
 
 	}

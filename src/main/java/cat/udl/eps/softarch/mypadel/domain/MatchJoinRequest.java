@@ -8,6 +8,9 @@ package cat.udl.eps.softarch.mypadel.domain;
 
 @Entity
 	public class MatchJoinRequest extends UriEntity<Long>{
+		public  static  enum Status {
+		PENDING, ACCEPTED ,REJECTED
+		}
 		private Status status=Status.PENDING;
 	 	@Id
  		@GeneratedValue(strategy = GenerationType.IDENTITY)
