@@ -18,6 +18,7 @@ public class CheckAvailableCourtsStepdefs {
 
 	@Autowired
 	private StepDefs stepDefs;
+
 	@Autowired
 	private MockMailSender mailSender;
 
@@ -27,8 +28,8 @@ public class CheckAvailableCourtsStepdefs {
 			get("/publicMatches/1")
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
-			.andExpect(jsonPath("$.isCancelled", is(true))
-			).andDo(print());
+			.andDo(print())
+			.andExpect(jsonPath("$.cancelled", is(true)));
 
 	}
 

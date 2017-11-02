@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 public class ConflictiveMatchWithReservationFilter {
+
 	@Autowired
 	private MatchRepository matchRepository;
-
 
 	public List<Match> findConflictiveMatchesWithReservation(Reservation reservation) {
 		ZonedDateTime starDateTime = reservation.getStartDate();
