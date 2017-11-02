@@ -12,4 +12,5 @@ import java.util.List;
 public interface MatchRepository extends PagingAndSortingRepository<Match, Long> {
 	List<Match> findByStartDateBetween(ZonedDateTime startDateOpen, ZonedDateTime startDateClose);
 	List<Match> findByCancelationDeadlineBetween(ZonedDateTime from, ZonedDateTime to);
+	Match save(Match persisted);
 }

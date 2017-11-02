@@ -29,7 +29,7 @@ public class Match extends UriEntity<Long> {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private ZonedDateTime cancelationDeadline;
 
-	private boolean isCancelled = false;
+	private boolean isCancelled = true;
 
 	@OneToMany(mappedBy = "invitesTo")
 	@JsonIdentityReference(alwaysAsId = true)

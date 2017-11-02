@@ -1,11 +1,14 @@
 package cat.udl.eps.softarch.mypadel.handler;
 
 import cat.udl.eps.softarch.mypadel.domain.Court;
+import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Reservation;
 import cat.udl.eps.softarch.mypadel.handler.exception.CompatibleCourtNotFoundException;
 import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
+import cat.udl.eps.softarch.mypadel.utils.ConflictiveMatchWithReservationFilter;
 import cat.udl.eps.softarch.mypadel.utils.CourtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
@@ -21,6 +24,9 @@ public class ReservationEventHandler {
 	private CourtRepository courtRepository;
 
 	@Autowired
+	private ConflictiveMatchWithReservationFilter conflictiveMatchWithReservationFilter;
+
+	@Autowired
 	private CourtFilter courtFilter;
 
 	@HandleBeforeCreate
@@ -34,6 +40,16 @@ public class ReservationEventHandler {
 			Court court = compatibleCourts.get(0);
 			reservation.setCourt(court);
 		}
+	}
+
+	@HandleAfterCreate
+	@Transactional
+	public void handleReservationPostCreate(Reservation reservation) {
+		List<Match> matches = conflictiveMatchWithReservationFilter.findConflictiveMatchesWithReservation(reservation);
+		if (matches != null || !matches.isEmpty()) {
+			matches.parallelStream().forEach(match -> match.setCancelled(true));
+		}
+
 	}
 
 }
