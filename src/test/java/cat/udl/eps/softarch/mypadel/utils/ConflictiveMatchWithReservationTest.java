@@ -1,10 +1,14 @@
 package cat.udl.eps.softarch.mypadel.utils;
 
+import cat.udl.eps.softarch.mypadel.domain.Court;
 import cat.udl.eps.softarch.mypadel.domain.CourtType;
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Reservation;
+import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.ReservationRepository;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +21,11 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
 public class ConflictiveMatchWithReservationTest {
 	@Autowired
 	private ConflictiveMatchWithReservationFilter conflictiveMatchWithReservationFilter;
@@ -31,6 +35,9 @@ public class ConflictiveMatchWithReservationTest {
 
 	@Autowired
 	private ReservationRepository reservationRepository;
+
+	@Autowired
+	private CourtRepository courtRepository;
 
 	@Test
 	public void test_reservationHasConflictiveMatches_matchesWillBeCanceled() {
@@ -48,7 +55,7 @@ public class ConflictiveMatchWithReservationTest {
 		Match match = new Match();
 		match.setStartDate(startdate);
 		match.setDuration(duration);
-		match.setCourtType(CourtType.INDOOR);
+		match.setCourtType(CourtType.UNDEFINED);
 		matchRepository.save(match);
 		return match;
 	}
@@ -61,7 +68,7 @@ public class ConflictiveMatchWithReservationTest {
 		Reservation reservation = new Reservation();
 		reservation.setStartDate(startdate);
 		reservation.setDuration(Duration.ofMinutes(durationInMinutes));
-		reservation.setCourtType(CourtType.INDOOR);
+		reservation.setCourtType(CourtType.UNDEFINED);
 		reservationRepository.save(reservation);
 		return reservation;
 	}
@@ -72,5 +79,17 @@ public class ConflictiveMatchWithReservationTest {
 		Reservation reservation = createReservationForXMinutesThisMonth(11, 18, 30, 60);
 		List<Match> matches = conflictiveMatchWithReservationFilter.findConflictiveMatchesWithReservation(reservation);
 		assertThat(matches.isEmpty(), is(true));
+	}
+
+	@Test
+	public void test_conflictiveMatchAndNoAvailableCourt_matchIsNotCancelled() {
+		Court court = new Court();
+		courtRepository.save(court);
+		Match match = createMatch(11, 11, 30, 60);
+		Reservation reservation = createReservationForXMinutesThisMonth(11, 18, 30, 60);
+
+		List<Match> matches = conflictiveMatchWithReservationFilter.findConflictiveMatchesWithReservation(reservation);
+
+		assertThat(matches, is(empty()));
 	}
 }
