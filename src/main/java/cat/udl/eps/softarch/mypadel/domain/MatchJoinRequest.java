@@ -8,7 +8,10 @@ package cat.udl.eps.softarch.mypadel.domain;
 
 @Entity
 	public class MatchJoinRequest extends UriEntity<Long>{
-
+		public  static  enum Status {
+		PENDING, ACCEPTED ,REJECTED
+		}
+		private Status status=Status.PENDING;
 	 	@Id
  		@GeneratedValue(strategy = GenerationType.IDENTITY)
  		private long id;
@@ -34,8 +37,15 @@ package cat.udl.eps.softarch.mypadel.domain;
 		public ZonedDateTime getEventDate() {
 			return eventDate;
 		}
+		public void setStatus(Status status){
+	 		this.status=status;
+		}
 
-		public String getMessage() { return message;}
+		public Status getStatus() {
+			return status;
+		}
+
+	public String getMessage() { return message;}
 
 		public void setMessage(String message){this.message=message;}
 
