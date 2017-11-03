@@ -81,13 +81,17 @@ public class ConflictiveMatchWithReservationTest {
 
 	@Test
 	public void test_conflictiveMatchAndNoAvailableCourt_matchIsNotCancelled() {
-		Court court = new Court();
-		courtRepository.save(court);
+		createCourt();
 		Match match = createMatch(11, 11, 30, 60);
 		Reservation reservation = createReservationForXMinutesThisMonth(11, 18, 30, 60);
 
 		List<Match> matches = conflictiveMatchWithReservationFilter.findConflictiveMatchesWithReservation(reservation);
 
 		assertThat(matches, is(empty()));
+	}
+
+	private void createCourt() {
+		Court court = new Court();
+		courtRepository.save(court);
 	}
 }
