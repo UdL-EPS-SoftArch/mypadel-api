@@ -5,12 +5,15 @@ import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Reservation;
 import cat.udl.eps.softarch.mypadel.handler.exception.CompatibleCourtNotFoundException;
 import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
+import cat.udl.eps.softarch.mypadel.utils.CancellationMailSender;
 import cat.udl.eps.softarch.mypadel.utils.ConflictiveMatchWithReservationFilter;
 import cat.udl.eps.softarch.mypadel.utils.CourtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -29,6 +32,9 @@ public class ReservationEventHandler {
 	@Autowired
 	private CourtFilter courtFilter;
 
+	@Autowired
+	private CancellationMailSender mailer;
+
 	@HandleBeforeCreate
 	@Transactional
 	public void handleReservationPreCreate(Reservation reservation) {
@@ -46,10 +52,12 @@ public class ReservationEventHandler {
 	@Transactional
 	public void handleReservationPostCreate(Reservation reservation) {
 		List<Match> matches = conflictiveMatchWithReservationFilter.findConflictiveMatchesWithReservation(reservation);
-		if (matches != null || !matches.isEmpty()) {
-			matches.parallelStream().forEach(match -> match.setCancelled(true));
+		if (!matches.isEmpty()) {
+			for (Match m : matches) {
+				m.setCancelled(true);
+				mailer.sendCancellationMailsToPlayers(m);
+			}
 		}
-
 	}
 
 }

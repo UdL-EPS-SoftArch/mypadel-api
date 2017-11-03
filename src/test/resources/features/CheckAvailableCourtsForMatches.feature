@@ -8,6 +8,8 @@ Feature: Check available courts for open matches
 		And There is an "available" court
 		And I set a new public match on 21 - 10 - 2017 at 7 pm for 60 minutes
 		And I create it
+		And I add the player "testplayer" to the match
 		When I make a reservation on 21/10/2017-17:00 for 90 minutes with CourtType "UNDEFINED"
 		Then The match has been canceled
 		And The reservation is created on on 21/10/2017-17:00 for 90 minutes with CourtType "UNDEFINED"
+		And A cancellation mail has been sent to the players
