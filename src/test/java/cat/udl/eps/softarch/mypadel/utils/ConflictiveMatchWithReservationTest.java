@@ -36,7 +36,8 @@ public class ConflictiveMatchWithReservationTest {
 	public void test_reservationHasConflictiveMatches_matchesWillBeCanceled() {
 		Match match = createMatch(11, 18, 30, 60);
 		Reservation reservation = createReservationForXMinutesThisMonth(11, 18, 30, 60);
-		List<Match> conflictiveMatches = conflictiveMatchWithReservationFilter.findConflictiveMatchesWithReservation(reservation);
+		List<Match> conflictiveMatches = conflictiveMatchWithReservationFilter.findConflictiveMatchesWithReservation
+			(reservation);
 		assertThat(conflictiveMatches.isEmpty(), is(false));
 	}
 
@@ -60,7 +61,8 @@ public class ConflictiveMatchWithReservationTest {
 		return match;
 	}
 
-	private Reservation createReservationForXMinutesThisMonth(int dayOfMonth, int startHour, int startMinutes, int durationInMinutes) {
+	private Reservation createReservationForXMinutesThisMonth(int dayOfMonth, int startHour, int startMinutes, int
+		durationInMinutes) {
 		ZonedDateTime startdate = ZonedDateTime.of(2017, 10, dayOfMonth, startHour, startMinutes, 0,
 			0, ZoneId.of("+00:00"));
 
