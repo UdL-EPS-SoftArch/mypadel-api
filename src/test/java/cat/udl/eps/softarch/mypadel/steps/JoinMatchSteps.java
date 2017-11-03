@@ -55,11 +55,11 @@ public class JoinMatchSteps {
 
 	@When("^I join to a match$")
     public void iJoinToAMatch() throws Throwable {
-		String message = stepDefs.mapper.writeValueAsString(joinMatch);
+		//String message = stepDefs.mapper.writeValueAsString(joinMatch);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/joinMatches")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(message)
+                                .content("{}")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(authenticate()))
                 .andDo(print());
@@ -229,24 +229,16 @@ public class JoinMatchSteps {
 
 	@When("^I join to a created private match (\\d+)$")
 	public void iJoinToACreatedPrivateMatch(long id) throws Throwable {
-		if(this.matchInv != null) {
 			joinMatch.setMatch(matchRepository.findOne(id));
-			if (Objects.equals(joinMatch.getMatch().getId(), this.matchInv.getInvitesTo().getId()) && Objects.equals(joinMatch.getPlayer().getId(), this.matchInv.getInvites().getId())) {
-				String message = stepDefs.mapper.writeValueAsString(joinMatch);
-				stepDefs.result = stepDefs.mockMvc.perform(
-					post("/joinMatches")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(message)
-						.accept(MediaType.APPLICATION_JSON)
-						.with(authenticate()))
-					.andDo(print());
-			}
-		}else{
+
+			String message = stepDefs.mapper.writeValueAsString(joinMatch);
 			stepDefs.result = stepDefs.mockMvc.perform(
-				delete("/joinMatches/{id}", id)
+				post("/joinMatches")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(message)
 					.accept(MediaType.APPLICATION_JSON)
-					.with(authenticate()));
-		}
+					.with(authenticate()))
+				.andDo(print());
 	}
 
 
