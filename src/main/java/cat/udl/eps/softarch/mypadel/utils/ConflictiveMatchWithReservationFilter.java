@@ -29,16 +29,6 @@ public class ConflictiveMatchWithReservationFilter {
 	private boolean indoorCourtAvailable;
 	private boolean outdoorCourtAvailable;
 
-	private void initAvailableCourtTypes() {
-		availableCourts = courtRepository.findByAvailableTrue();
-		for (Court c : availableCourts) {
-			if (c.isIndoor())
-				indoorCourtAvailable = true;
-			else
-				outdoorCourtAvailable = true;
-		}
-	}
-
 	public List<Match> findConflictiveMatchesWithReservation(Reservation reservation) {
 		initAvailableCourtTypes();
 		ZonedDateTime starDateTime = reservation.getStartDate();
@@ -49,6 +39,16 @@ public class ConflictiveMatchWithReservationFilter {
 			.filter(m -> !hasAvailableCourt(m))
 			.collect(toList());
 		return matches;
+	}
+
+	private void initAvailableCourtTypes() {
+		availableCourts = courtRepository.findByAvailableTrue();
+		for (Court c : availableCourts) {
+			if (c.isIndoor())
+				indoorCourtAvailable = true;
+			else
+				outdoorCourtAvailable = true;
+		}
 	}
 
 	private boolean isReserved(Match match) {

@@ -50,11 +50,9 @@ public class ReservationEventHandler {
 	@Transactional
 	public void handleReservationPostCreate(Reservation reservation) {
 		List<Match> matches = conflictiveMatchWithReservationFilter.findConflictiveMatchesWithReservation(reservation);
-		if (!matches.isEmpty()) {
-			for (Match m : matches) {
-				m.setCancelled(true);
-				mailer.sendCancellationMailsToPlayers(m);
-			}
+		for (Match m : matches) {
+			m.setCancelled(true);
+			mailer.sendCancellationMailsToPlayers(m);
 		}
 	}
 

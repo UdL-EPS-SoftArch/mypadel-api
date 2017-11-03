@@ -23,16 +23,19 @@ public class CancellationMailSender {
 	public void sendCancellationMailsToPlayers(Match match) {
 		for (MatchInvitation invitation : match.getInvitations()) {
 			Player player = invitation.getInvites();
+			sendMailTo(player);
+		}
+	}
 
-			SimpleMailMessage mailMessage = new SimpleMailMessage();
-			mailMessage.setTo(player.getEmail());
-			mailMessage.setSubject("Match cancelled");
-			mailMessage.setText("Your match has been cancelled");
-			try {
-				mailer.send(mailMessage);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
+	private void sendMailTo(Player player) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(player.getEmail());
+		mailMessage.setSubject("Match cancelled");
+		mailMessage.setText("Your match has been cancelled");
+		try {
+			mailer.send(mailMessage);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 	}
 
