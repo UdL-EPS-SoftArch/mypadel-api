@@ -23,7 +23,7 @@ public class MailConfigTest {
 		JavaMailSender mailer = mock(JavaMailSender.class);
 		doAnswer((invocationOnMock) ->  {
 			SimpleMailMessage mailMessage = (SimpleMailMessage) invocationOnMock.getArguments()[0];
-			logger.info("****************************Mock JavaMailSender sending e-mail: {}", mailMessage);
+			logger.info("Mock JavaMailSender sending e-mail: {}", mailMessage);
 			return null;
 		})
 			.when(mailer)

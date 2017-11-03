@@ -12,4 +12,3 @@ Feature: Check available courts for open matches
 		When I make a reservation on 21/10/2017-17:00 for 90 minutes with CourtType "UNDEFINED"
 		Then The match has been canceled
 		And The reservation is created on on 21/10/2017-17:00 for 90 minutes with CourtType "UNDEFINED"
-		And A cancellation mail has been sent to the players

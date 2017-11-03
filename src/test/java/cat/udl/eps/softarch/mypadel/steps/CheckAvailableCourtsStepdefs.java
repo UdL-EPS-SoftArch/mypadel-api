@@ -45,11 +45,6 @@ public class CheckAvailableCourtsStepdefs {
 
 	}
 
-	@And("^A cancellation mail has been sent to the players$")
-	public void aCancellationMailHasBeenSentToThePlayers() throws Throwable {
-		throw new PendingException();
-	}
-
 	@And("^I add the player \"([^\"]*)\" to the match$")
 	public void iAddThePlayerToTheMatch(String username) throws Throwable {
 		PublicMatch match = matchRepository.findOne(1L);
