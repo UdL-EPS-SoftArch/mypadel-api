@@ -30,7 +30,7 @@ public class CancellationMailSender {
 			mailMessage.setText("Your match has been cancelled");
 			try {
 				mailer.send(mailMessage);
-			} catch(Exception e) {
+			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
 		}

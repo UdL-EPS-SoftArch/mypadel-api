@@ -12,3 +12,4 @@ Feature: Check available courts for open matches
 		When I make a reservation on 21/10/2017-17:00 for 90 minutes with CourtType "UNDEFINED"
 		Then The match has been canceled
 		And The reservation is created on on 21/10/2017-17:00 for 90 minutes with CourtType "UNDEFINED"
+		And an email has been sent to "testplayer@mypadel.cat" with subject "Match cancelled" and containing "Your match has been cancelled"

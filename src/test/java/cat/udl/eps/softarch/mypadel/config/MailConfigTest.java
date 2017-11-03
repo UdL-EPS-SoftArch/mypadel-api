@@ -9,8 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @Configuration
 @Profile("Test")
@@ -21,7 +20,7 @@ public class MailConfigTest {
 	@Bean
 	public static JavaMailSender getJavaMailSender() {
 		JavaMailSender mailer = mock(JavaMailSender.class);
-		doAnswer((invocationOnMock) ->  {
+		doAnswer((invocationOnMock) -> {
 			SimpleMailMessage mailMessage = (SimpleMailMessage) invocationOnMock.getArguments()[0];
 			logger.info("Mock JavaMailSender sending e-mail: {}", mailMessage);
 			return null;
