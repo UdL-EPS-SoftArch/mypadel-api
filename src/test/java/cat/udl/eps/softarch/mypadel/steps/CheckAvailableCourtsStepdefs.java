@@ -6,9 +6,6 @@ import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
 import cat.udl.eps.softarch.mypadel.repository.MatchInvitationRepository;
 import cat.udl.eps.softarch.mypadel.repository.PlayerRepository;
 import cat.udl.eps.softarch.mypadel.repository.PublicMatchRepository;
-import cat.udl.eps.softarch.mypadel.utils.CancellationMailSender;
-import cucumber.api.PendingException;
-import cucumber.api.java.cs.A;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import org.mockito.ArgumentCaptor;
@@ -74,7 +71,7 @@ public class CheckAvailableCourtsStepdefs {
 	public void aCancellationMailHasBeenSentToThePlayers(String to, String subject, String bodyText) throws Throwable {
 		ArgumentCaptor<SimpleMailMessage> argument = ArgumentCaptor.forClass(SimpleMailMessage.class);
 		verify(mailer, atLeastOnce()).send(argument.capture());
-		SimpleMailMessage lastEMail = argument.getAllValues().get(argument.getAllValues().size()-1);
+		SimpleMailMessage lastEMail = argument.getAllValues().get(argument.getAllValues().size() - 1);
 		assertTrue(lastEMail.getTo()[0].equals(to));
 		assertTrue(lastEMail.getSubject().equals(subject));
 		assertThat(lastEMail.getText(), containsString(bodyText));

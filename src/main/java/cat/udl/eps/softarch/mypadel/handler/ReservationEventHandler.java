@@ -9,11 +9,9 @@ import cat.udl.eps.softarch.mypadel.utils.CancellationMailSender;
 import cat.udl.eps.softarch.mypadel.utils.ConflictiveMatchWithReservationFilter;
 import cat.udl.eps.softarch.mypadel.utils.CourtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
