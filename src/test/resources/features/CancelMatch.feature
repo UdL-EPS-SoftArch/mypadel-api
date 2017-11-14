@@ -8,3 +8,4 @@ Feature: Cancel match
 		When I create a new public match on tomorrow at same time
 		Then The response code is 201
 		And It has been cancelled
+		And The reservation has been cancelled
