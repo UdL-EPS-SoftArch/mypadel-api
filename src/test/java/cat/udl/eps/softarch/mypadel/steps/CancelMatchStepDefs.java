@@ -1,10 +1,9 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.controller.CancelationDeadlineController;
-import cat.udl.eps.softarch.mypadel.domain.CourtType;
-import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
-import cat.udl.eps.softarch.mypadel.domain.Level;
-import cat.udl.eps.softarch.mypadel.domain.PublicMatch;
+import cat.udl.eps.softarch.mypadel.domain.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,20 @@ public class CancelMatchStepDefs {
 		match.setDuration(duration);
 		match.setCourtType(CourtType.INDOOR);
 		match.setLevel(Level.ADVANCED);
+		createRepository();
+		match.setReservation(null);
 		createMatch(match);
+	}
+
+	private void createRepository() throws Exception {
+		String message = stepDefs.mapper.writeValueAsString(new Reservation());
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/reservations")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
 	}
 
 	private void createMatch(PublicMatch match) throws Exception {
@@ -68,6 +80,11 @@ public class CancelMatchStepDefs {
 			.andExpect(jsonPath("$.cancelled", is(true))
 			);
 		assertThat(cancelationDeadlineController.mailSend, is(true));
+	}
+
+	@And("^The reservation has been cancelled$")
+	public void theReservationHasBeenCancelled() throws Throwable {
+
 	}
 }
 
