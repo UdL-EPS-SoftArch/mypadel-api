@@ -95,7 +95,7 @@ public class CancelMatchStepDefs {
 
 	@And("^The reservation has been cancelled$")
 	public void theReservationHasBeenCancelled() throws Throwable {
-
+		assertThat(reservationRepository.count(), is((long)0));
 	}
 }
 
