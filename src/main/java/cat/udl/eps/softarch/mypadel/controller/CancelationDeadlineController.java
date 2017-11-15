@@ -58,7 +58,8 @@ public class CancelationDeadlineController {
 		reviewedMatch.setCancelled(true);
 		matchRepository.save(reviewedMatch);
 		Reservation reservation = reviewedMatch.getReservation();
-		reservationRepository.delete(reservation);
+		if(reservation != null)
+			reservationRepository.delete(reservation);
 	}
 
 	protected void sendMailToPlayers(List<JoinMatch> joinMatches) {
