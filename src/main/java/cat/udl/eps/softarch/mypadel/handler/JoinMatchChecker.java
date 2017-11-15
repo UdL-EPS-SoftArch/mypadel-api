@@ -5,9 +5,7 @@ import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.MatchInvitation;
 import cat.udl.eps.softarch.mypadel.domain.PrivateMatch;
 import cat.udl.eps.softarch.mypadel.handler.exception.JoinMatchException;
-import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
-import org.hibernate.mapping.Join;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
