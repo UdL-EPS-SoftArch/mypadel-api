@@ -1,7 +1,7 @@
 package cat.udl.eps.softarch.mypadel.handler;
 
 import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
-import cat.udl.eps.softarch.mypadel.handler.exception.MissingInvitationException;
+import cat.udl.eps.softarch.mypadel.handler.exception.JoinMatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
 public class JoinMatchEventHandler {
 
 	@Autowired
-	private PrivateInvitationChecker invitationChecker;
+	private JoinMatchChecker joinMatchChecker;
 
 	@HandleAfterCreate
 	@Transactional
@@ -28,9 +28,13 @@ public class JoinMatchEventHandler {
 
 	@HandleBeforeCreate
 	@Transactional
-	public void handleBeforeSave(JoinMatch joinMatch) throws MissingInvitationException {
-		if(!invitationChecker.isInvited(joinMatch)){
-			throw new MissingInvitationException("You have not been invited to this match");
+	public void handleBeforeSave(JoinMatch joinMatch) throws JoinMatchException {
+		if(!joinMatchChecker.isInvited(joinMatch)){
+			throw new JoinMatchException("You have not been invited to this match");
 		}
+		if(joinMatchChecker.isJoinedAtTheSameDatetime(joinMatch)){
+			throw new JoinMatchException("You have already joined to a match in the same datetime");
+		}
+
 	}
 }

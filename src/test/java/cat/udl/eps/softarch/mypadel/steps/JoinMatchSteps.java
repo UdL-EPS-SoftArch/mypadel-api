@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
 import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -267,5 +268,39 @@ public class JoinMatchSteps {
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isNotFound());
+	}
+
+	@When("^I try to join to another match on the same datetime$")
+	public void iTryToJoinToAnotherMatchOnTheSameDatetime() throws Throwable {
+		createPublicMatch();
+		String message = stepDefs.mapper.writeValueAsString(publicMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@And("^I joined to a \"([^\"]*)\" match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+)-(\\d+)-(\\d+)$")
+	public void iJoinedToAMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
+														   int cancelationDay, int cancelationMonth,
+														   int cancelationYear) throws Throwable {
+		this.startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
+
+		createPublicMatch();
+		String message = stepDefs.mapper.writeValueAsString(publicMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
 	}
 }
