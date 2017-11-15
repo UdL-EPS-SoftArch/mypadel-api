@@ -12,13 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-@Component
+@Service
 public class CancelationDeadlineController {
 
 	private static int REVIEW_TIME = 30;
@@ -40,6 +41,8 @@ public class CancelationDeadlineController {
 	}
 
 	private List<Match> getPossibleCancelledMatches() {
+		ZonedDateTime znd = ZonedDateTime.now(ZoneId.of("UTC"));
+		ZonedDateTime znd2 = ZonedDateTime.now(ZoneId.of("UTC")).minusMinutes(REVIEW_TIME);
 		return matchRepository.findByCancelationDeadlineBetween(
 			ZonedDateTime.now(ZoneId.of("UTC")).minusMinutes(REVIEW_TIME), ZonedDateTime.now(ZoneId.of("UTC")));
 	}
@@ -58,8 +61,10 @@ public class CancelationDeadlineController {
 		reviewedMatch.setCancelled(true);
 		matchRepository.save(reviewedMatch);
 		Reservation reservation = reviewedMatch.getReservation();
-		if(reservation != null)
+		if(reservation != null){
+			reviewedMatch.setReservation(null);
 			reservationRepository.delete(reservation);
+		}
 	}
 
 	protected void sendMailToPlayers(List<JoinMatch> joinMatches) {

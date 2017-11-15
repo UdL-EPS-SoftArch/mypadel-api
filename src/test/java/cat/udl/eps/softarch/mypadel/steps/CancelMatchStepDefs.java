@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -74,6 +75,7 @@ public class CancelMatchStepDefs {
 			.andDo(print());
 	}
 
+	@Transactional
 	@When("^The controller acts$")
 	public void theCancelDateReaches() throws Throwable {
 		cancelationDeadlineController.searchReachedDeadlines();
