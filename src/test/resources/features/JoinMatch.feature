@@ -3,11 +3,6 @@ Feature: Join match
   As a player
   I want to join a match
 
-	Scenario: Successfully joined a match
-		Given I login as "testplayer@mypadel.cat" with password "password"
-		When I join to a match
-		Then I successfully joined a match
-
 	Scenario: A player joins a public match
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		And the user joining it is "testplayer@mypadel.cat"

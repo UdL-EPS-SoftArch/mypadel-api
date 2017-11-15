@@ -66,16 +66,6 @@ public class JoinMatchSteps {
                 .andDo(print());
     }
 
-    @Then("^I successfully joined a match$")
-    public void iSuccessfullyJoinedAMatch() throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/joinMatches/1")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
 	@And("^the user joining it is \"([^\"]*)\"$")
 	public void theUserCreatingItIs(String player) throws Throwable {
 		this.player = player;
