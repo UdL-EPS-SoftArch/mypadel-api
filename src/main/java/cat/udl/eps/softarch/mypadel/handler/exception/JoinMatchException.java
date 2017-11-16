@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ResponseStatus(value= HttpStatus.FORBIDDEN)
-public class MissingInvitationException extends RuntimeException{
+public class JoinMatchException extends RuntimeException{
 
-	public MissingInvitationException(String message){ super(message); }
+	public JoinMatchException(String message){ super(message); }
 }
