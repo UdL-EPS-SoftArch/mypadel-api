@@ -43,3 +43,10 @@ Feature: Join match
 		And I joined to a "public" match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
 		When I try to join to another match on the same datetime
 		Then The response code is 403
+
+	Scenario: Reserve a court when the match is full
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		And I joined to a "public" match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
+		And there are three more players in this match
+		When I join to a created match 1
+		Then A court is reserved

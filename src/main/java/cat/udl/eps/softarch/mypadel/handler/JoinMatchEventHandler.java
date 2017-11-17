@@ -24,6 +24,10 @@ public class JoinMatchEventHandler {
 	public void handleAdminPostCreate(JoinMatch joinMatch) {
 		ZonedDateTime dateTime = ZonedDateTime.now(ZoneId.systemDefault());
 		joinMatch.setEventDate(dateTime);
+
+		if (joinMatchChecker.isMatchFull(joinMatch.getMatch())){
+			joinMatchChecker.reserveCourt(joinMatch.getMatch());
+		}
 	}
 
 	@HandleBeforeCreate
@@ -32,6 +36,7 @@ public class JoinMatchEventHandler {
 		if(!joinMatchChecker.isInvited(joinMatch)){
 			throw new JoinMatchException("You have not been invited to this match");
 		}
+
 		if(joinMatchChecker.isJoinedAtTheSameDatetime(joinMatch)){
 			throw new JoinMatchException("You have already joined to a match in the same datetime");
 		}
