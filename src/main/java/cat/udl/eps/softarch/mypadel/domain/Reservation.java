@@ -30,6 +30,9 @@ public class Reservation extends UriEntity<Long> {
 	@JsonIdentityReference(alwaysAsId = true)
 	private Court court;
 
+	@OneToOne
+	private Match reservingMatch;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -65,5 +68,13 @@ public class Reservation extends UriEntity<Long> {
 
 	public void setCourt(Court court) {
 		this.court = court;
+	}
+
+	public Match getReservingMatch() {
+		return reservingMatch;
+	}
+
+	public void setReservingMatch(Match reservingMatch) {
+		this.reservingMatch = reservingMatch;
 	}
 }
