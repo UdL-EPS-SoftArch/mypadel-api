@@ -3,7 +3,9 @@ package cat.udl.eps.softarch.mypadel.steps;
 import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
+import cat.udl.eps.softarch.mypadel.repository.ReservationRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -16,6 +18,8 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,6 +54,9 @@ public class JoinMatchSteps {
 
 	@Autowired
 	JoinMatchRepository joinMatchRepository;
+
+	@Autowired
+	ReservationRepository reservationRepository;
 
 
 	@When("^I join to a match$")
@@ -288,6 +295,65 @@ public class JoinMatchSteps {
 			post("/publicMatches")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+
+
+	@Then("^A court is reserved$")
+	public void aCourtIsReserved() throws Throwable {
+		long id = 1;
+		Reservation reservation;
+		reservation = reservationRepository.findOne(id);
+
+		String message = stepDefs.mapper.writeValueAsString(reservation);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/reservations/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
+
+	@And("^there are three more players in this match$")
+	public void thereAreThreeMorePlayersInThisMatch() throws Throwable {
+		long id = 1;
+
+		JoinMatch joinMatch_1 = new JoinMatch();
+		JoinMatch joinMatch_2 = new JoinMatch();
+		JoinMatch joinMatch_3 = new JoinMatch();
+
+		joinMatch_1.setMatch(matchRepository.findOne(id));
+		joinMatch_2.setMatch(matchRepository.findOne(id));
+		joinMatch_3.setMatch(matchRepository.findOne(id));
+
+		String message_1 = stepDefs.mapper.writeValueAsString(joinMatch_1);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/joinMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message_1)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+
+		String message_2 = stepDefs.mapper.writeValueAsString(joinMatch_2);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/joinMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message_2)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+
+		String message_3 = stepDefs.mapper.writeValueAsString(joinMatch_3);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/joinMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message_3)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print());
