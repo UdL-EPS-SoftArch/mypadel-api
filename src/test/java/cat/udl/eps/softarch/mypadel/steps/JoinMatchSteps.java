@@ -1,15 +1,14 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
+import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -17,10 +16,8 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
-import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -31,10 +28,9 @@ public class JoinMatchSteps {
     private StepDefs stepDefs;
 
 
-	private JoinMatch joinMatch = new JoinMatch();
-
+	private JoinMatch joinMatch;
 	private PublicMatch publicMatch = new PublicMatch();
-	private PrivateMatch privateMatch;
+	private PrivateMatch privateMatch = new PrivateMatch();
 	private MatchInvitation matchInv;
 
 
@@ -52,9 +48,14 @@ public class JoinMatchSteps {
 	@Autowired
 	MatchRepository matchRepository;
 
+	@Autowired
+	JoinMatchRepository joinMatchRepository;
+
 
 	@When("^I join to a match$")
     public void iJoinToAMatch() throws Throwable {
+		JoinMatch joinMatch = new JoinMatch();
+
 		String message = stepDefs.mapper.writeValueAsString(joinMatch);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/joinMatches")
@@ -65,26 +66,17 @@ public class JoinMatchSteps {
                 .andDo(print());
     }
 
-    @Then("^I successfully joined a match$")
-    public void iSuccessfullyJoinedAMatch() throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/joinMatches/1")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
 	@And("^the user joining it is \"([^\"]*)\"$")
 	public void theUserCreatingItIs(String player) throws Throwable {
 		this.player = player;
-		joinMatch.setPlayer((Player) playerRepository.findByEmail(this.player));
+		publicMatch.setMatchCreator((Player) playerRepository.findByEmail(this.player));
+		privateMatch.setMatchCreator((Player) playerRepository.findByEmail(this.player));
 	}
 
 
 	@When("^I join to a created match (\\d+)$")
-	public void iJoinToACreatedMatch(long repositoryId) throws Throwable {
-		joinMatch.setMatch(matchRepository.findOne(repositoryId));
+	public void iJoinToACreatedMatch(long id) throws Throwable {
+		joinMatch = joinMatchRepository.findOne(id);
 		String message = stepDefs.mapper.writeValueAsString(joinMatch);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/joinMatches")
@@ -115,8 +107,6 @@ public class JoinMatchSteps {
 	public void thereIsPublicMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
 															  int cancelationDay, int cancelationMonth,
 															  int cancelationYear) throws Throwable {
-		publicMatch = new PublicMatch();
-		privateMatch = new PrivateMatch();
 		startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
 			0, ZoneId.of("+00:00"));
 		this.duration = Duration.ofMinutes(duration);
@@ -229,24 +219,15 @@ public class JoinMatchSteps {
 
 	@When("^I join to a created private match (\\d+)$")
 	public void iJoinToACreatedPrivateMatch(long id) throws Throwable {
-		if(this.matchInv != null) {
-			joinMatch.setMatch(matchRepository.findOne(id));
-			if (Objects.equals(joinMatch.getMatch().getId(), this.matchInv.getInvitesTo().getId()) && Objects.equals(joinMatch.getPlayer().getId(), this.matchInv.getInvites().getId())) {
-				String message = stepDefs.mapper.writeValueAsString(joinMatch);
-				stepDefs.result = stepDefs.mockMvc.perform(
-					post("/joinMatches")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(message)
-						.accept(MediaType.APPLICATION_JSON)
-						.with(authenticate()))
-					.andDo(print());
-			}
-		}else{
+			joinMatch = joinMatchRepository.findOne(id);
+			String message = stepDefs.mapper.writeValueAsString(joinMatch);
 			stepDefs.result = stepDefs.mockMvc.perform(
-				delete("/joinMatches/{id}", id)
+				post("/joinMatches")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(message)
 					.accept(MediaType.APPLICATION_JSON)
-					.with(authenticate()));
-		}
+					.with(authenticate()))
+				.andDo(print());
 	}
 
 
@@ -276,5 +257,39 @@ public class JoinMatchSteps {
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isNotFound());
+	}
+
+	@When("^I try to join to another match on the same datetime$")
+	public void iTryToJoinToAnotherMatchOnTheSameDatetime() throws Throwable {
+		createPublicMatch();
+		String message = stepDefs.mapper.writeValueAsString(publicMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@And("^I joined to a \"([^\"]*)\" match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+)-(\\d+)-(\\d+)$")
+	public void iJoinedToAMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
+														   int cancelationDay, int cancelationMonth,
+														   int cancelationYear) throws Throwable {
+		this.startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
+
+		createPublicMatch();
+		String message = stepDefs.mapper.writeValueAsString(publicMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
 	}
 }

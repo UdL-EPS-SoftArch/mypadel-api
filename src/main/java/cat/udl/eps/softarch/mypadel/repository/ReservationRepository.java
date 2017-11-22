@@ -6,4 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface ReservationRepository extends PagingAndSortingRepository<Reservation, Long> {
+	Reservation save(Reservation persisted);
 }
