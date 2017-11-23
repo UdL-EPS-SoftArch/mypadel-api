@@ -3,14 +3,12 @@ package cat.udl.eps.softarch.mypadel.steps;
 import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -32,7 +30,7 @@ public class JoinPrivateMatchStepsDefs {
 
 	private JoinMatch joinMatch=new JoinMatch();
 
-	private MatchInvitation matchInv;
+	private MatchInvitation matchInvitation;
 	@Autowired
 	UserRepository playerRepository;
 
@@ -58,12 +56,12 @@ public class JoinPrivateMatchStepsDefs {
 		eventDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
 			0, ZoneId.of("+00:00"));
 
-		this.matchInv = new MatchInvitation();
-		this.matchInv.setEventDate(eventDate);
-		this.matchInv.setInvites((Player) playerRepository.findByEmail(this.player));
-		this.matchInv.setInvitesTo(matchRepository.findOne(id));
+		this.matchInvitation = new MatchInvitation();
+		this.matchInvitation.setEventDate(eventDate);
+		this.matchInvitation.setInvites((Player) playerRepository.findByEmail(this.player));
+		this.matchInvitation.setInvitesTo(matchRepository.findOne(id));
 
-		String message = stepDefs.mapper.writeValueAsString(matchInv);
+		String message = stepDefs.mapper.writeValueAsString(matchInvitation);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/matchInvitations")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -97,9 +95,9 @@ public class JoinPrivateMatchStepsDefs {
 
 	@When("^I join to a private match (\\d+)$")
 	public void iJoinToAPrivateMatch(Long id) throws Throwable {
-		if(this.matchInv != null) {
+		if(this.matchInvitation != null) {
 			joinMatch.setMatch(matchRepository.findOne(id));
-			if (Objects.equals(joinMatch.getMatch().getId(), this.matchInv.getInvitesTo().getId()) && Objects.equals(joinMatch.getPlayer().getId(), this.matchInv.getInvites().getId())) {
+			if (Objects.equals(joinMatch.getMatch().getId(), this.matchInvitation.getInvitesTo().getId()) && Objects.equals(joinMatch.getPlayer().getId(), this.matchInvitation.getInvites().getId())) {
 				String message = stepDefs.mapper.writeValueAsString(joinMatch);
 				stepDefs.result = stepDefs.mockMvc.perform(
 					post("/joinMatches")
@@ -117,19 +115,49 @@ public class JoinPrivateMatchStepsDefs {
 		}
 	}
 
-	@When("^the player didn't recive an invitation for Privatematch (\\d+) for (\\d+) - (\\d+) - (\\d+) at (\\d+) hours for (\\d+) minutes$")
-	public void thePlayerDidnTReciveAnInvitationForPrivatematchForAtHoursForMinutes(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
-	}
-
-	@Then("^I couldn't join a match$")
-	public void iCouldnTJoinAMatch() throws Throwable {
+	@Then("^I successfully joined a private match$")
+	public void iSuccessfullyJoinedAPrivateMatch() throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/joinMatches/{id}", id)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print())
+			.andExpect(status().isOk());
+	}
+
+	@When("^the player didn't recive an invitation for Privatematch (\\d+) for (\\d+) - (\\d+) - (\\d+) at (\\d+) hours for (\\d+) minutes$")
+	public void thePlayerDidnTReciveAnInvitationForPrivatematchForAtHoursForMinutes(Long id, int day, int month, int year, int hour, int duration) throws Throwable {
+		eventDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchInvitations/{id}", id)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchInvitations/{id}/invites", id)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchInvitations/{id}/invitesTo", id)
+				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
 	}
+
+
+
+
+	@Then("^I couldn't join a private match$")
+	public void iCouldnTJoinAPrivateMatch() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/joinInvitations/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isNotFound());
+	}
+
+
 }
