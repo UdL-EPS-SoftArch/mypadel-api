@@ -146,9 +146,6 @@ public class JoinPrivateMatchStepsDefs {
 			.andExpect(status().isNotFound());
 	}
 
-
-
-
 	@Then("^I couldn't join a private match$")
 	public void iCouldnTJoinAPrivateMatch() throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
@@ -158,6 +155,4 @@ public class JoinPrivateMatchStepsDefs {
 			.andDo(print())
 			.andExpect(status().isNotFound());
 	}
-
-
 }
