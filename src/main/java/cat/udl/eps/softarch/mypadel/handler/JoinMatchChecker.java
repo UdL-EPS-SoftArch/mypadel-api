@@ -2,10 +2,10 @@ package cat.udl.eps.softarch.mypadel.handler;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.handler.exception.JoinMatchException;
-import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.ReservationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +13,15 @@ import java.util.Objects;
 
 @Service
 public class JoinMatchChecker {
+	@Autowired
 	private MatchRepository matchRepository;
+
+	@Autowired
 	private ReservationRepository reservationRepository;
+
+	@Autowired
 	private JoinMatchRepository joinMatchRepository;
+
 	private List<Match> matchList;
 
 	boolean isInvited(JoinMatch joinMatch) throws JoinMatchException {
@@ -36,10 +42,12 @@ public class JoinMatchChecker {
 	}
 
 	boolean isJoinedAtTheSameDatetime(JoinMatch joinMatch) throws JoinMatchException{
-		matchList = matchRepository.findByStartDateBetween(joinMatch.getMatch().getStartDate(), joinMatch.getMatch().getStartDate());
+		matchList = matchRepository.findByStartDateBetween(joinMatch.getMatch().getStartDate(),
+			joinMatch.getMatch().getStartDate().plusMinutes(joinMatch.getMatch().getDuration().toMinutes()));
 
 		for(Match match : matchList){
-			if(Objects.equals(match.getStartDate(), joinMatch.getMatch().getStartDate()) && !Objects.equals(match.getId(), joinMatch.getMatch().getId())){
+			if(Objects.equals(match.getStartDate(), joinMatch.getMatch().getStartDate()) &&
+				!Objects.equals(match.getId(), joinMatch.getMatch().getId())){
 				return true;
 			}
 		}

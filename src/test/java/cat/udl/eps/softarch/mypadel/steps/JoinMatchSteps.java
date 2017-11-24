@@ -292,4 +292,66 @@ public class JoinMatchSteps {
 				.with(authenticate()))
 			.andDo(print());
 	}
+
+	@And("^There is a \"([^\"]*)\" match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+)-(\\d+)-(\\d+)$")
+	public void thereIsAMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
+														 int cancelationDay, int cancelationMonth,
+														 int cancelationYear) throws Throwable {
+		PublicMatch publicMatch = new PublicMatch();
+		publicMatch.setMatchCreator(new Player());
+		this.startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
+		publicMatch.setStartDate(startDate);
+		publicMatch.setDuration(this.duration);
+		publicMatch.setCancelationDeadline(cancelationDeadline);
+		publicMatch.setCourtType(CourtType.INDOOR);
+		publicMatch.setLevel(Level.ADVANCED);
+
+		String message = stepDefs.mapper.writeValueAsString(publicMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@And("^there are three more players in this match$")
+	public void thereAreThreeMorePlayersInThisMatch() throws Throwable {
+		JoinMatch joinMatch_1 = new JoinMatch();
+		joinMatch_1.setMatch(matchRepository.findOne((long)1));
+		String message_1 = stepDefs.mapper.writeValueAsString(joinMatch_1);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/joinMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message_1)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+
+		JoinMatch joinMatch_2 = new JoinMatch();
+		joinMatch_2.setMatch(matchRepository.findOne((long)1));
+		String message_2 = stepDefs.mapper.writeValueAsString(joinMatch_2);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/joinMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message_2)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@Then("^A court is reserved$")
+	public void aCourtIsReserved() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/reservations/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
 }
