@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.MyPadelApiApplication;
+import cat.udl.eps.softarch.mypadel.config.MailConfigTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import cucumber.api.java.Before;
@@ -30,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by http://rhizomik.net/~roberto/
  */
 @ContextConfiguration(
-        classes = {MyPadelApiApplication.class}, loader = SpringBootContextLoader.class
+        classes = {MyPadelApiApplication.class, MailConfigTest.class}, loader = SpringBootContextLoader.class
 )
 @DirtiesContext
 @RunWith(SpringRunner.class)

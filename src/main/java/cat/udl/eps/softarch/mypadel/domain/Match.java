@@ -39,6 +39,9 @@ public class Match extends UriEntity<Long> {
 	@JsonIdentityReference(alwaysAsId = true)
 	private Player matchCreator;
 
+	@OneToOne
+	private Reservation reservation;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -98,5 +101,13 @@ public class Match extends UriEntity<Long> {
 
 	public void setMatchCreator(Player matchCreator) {
 		this.matchCreator = matchCreator;
+	}
+
+	public Reservation getReservation() {
+		return reservation;
+	}
+
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
 	}
 }
