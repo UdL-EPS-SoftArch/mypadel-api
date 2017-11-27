@@ -23,10 +23,8 @@ public class CourtFilter {
 	}
 
 	private boolean courtCanBeReserved(Court court, Reservation pendingReservation) {
-		if (court.getReservations().isEmpty())
-			return true;
-		else
-			return !isOverlappingReservation(court, pendingReservation);
+		return court.getReservations().isEmpty()
+			|| !isOverlappingReservation(court, pendingReservation);
 	}
 
 
