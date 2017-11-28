@@ -40,8 +40,8 @@ Feature: Join match
 
 	Scenario: Joining to two matches in the same datetime
 		Given I login as "testplayer@mypadel.cat" with password "password"
-		And There is a "public" match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
-		And There is a "public" match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
+		And There is a match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
+		And There is a match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
 		When I join to a created match 1
 		And I join to a created match 2
 		Then The response code is 403

@@ -4,15 +4,18 @@ import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.hibernate.mapping.Join;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -76,7 +79,9 @@ public class JoinMatchSteps {
 
 	@When("^I join to a created match (\\d+)$")
 	public void iJoinToACreatedMatch(long id) throws Throwable {
-		joinMatch = joinMatchRepository.findOne(id);
+		joinMatch = new JoinMatch();
+		joinMatch.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		joinMatch.setMatch(matchRepository.findOne(id));
 		String message = stepDefs.mapper.writeValueAsString(joinMatch);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/joinMatches")
@@ -162,7 +167,7 @@ public class JoinMatchSteps {
 	}
 
 	@When("^I leave a match with id (\\d+)$")
-	public void iLeaveAMatchWithId(int id) throws Throwable {
+	public void iLeaveAMatchWithId(long id) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
 			delete("/joinMatches/{id}", id)
 				.accept(MediaType.APPLICATION_JSON)
@@ -353,5 +358,51 @@ public class JoinMatchSteps {
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isOk());
+	}
+
+	@And("^I create a public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+)-(\\d+)-(\\d+)$")
+	public void iCreateAMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
+														 int cancelationDay, int cancelationMonth,
+														 int cancelationYear) throws Throwable {
+		PublicMatch publicMatch = new PublicMatch();
+		publicMatch.setMatchCreator((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		this.startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
+		publicMatch.setStartDate(startDate);
+		publicMatch.setDuration(this.duration);
+		publicMatch.setCancelationDeadline(cancelationDeadline);
+		publicMatch.setCourtType(CourtType.INDOOR);
+		publicMatch.setLevel(Level.ADVANCED);
+
+		String message = stepDefs.mapper.writeValueAsString(publicMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@And("^There is a match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+)-(\\d+)-(\\d+)$")
+	public void thereIsAMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
+														 int cancelationDay, int cancelationMonth,
+														 int cancelationYear) throws Throwable {
+		PublicMatch publicMatch = new PublicMatch();
+		this.startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
+		publicMatch.setStartDate(startDate);
+		publicMatch.setDuration(this.duration);
+		publicMatch.setCancelationDeadline(cancelationDeadline);
+		publicMatch.setCourtType(CourtType.INDOOR);
+		publicMatch.setLevel(Level.ADVANCED);
+
+		matchRepository.save(publicMatch);
 	}
 }
