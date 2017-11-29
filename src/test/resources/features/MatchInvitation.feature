@@ -5,12 +5,16 @@ Feature: Invite player to match
 
   Scenario: Invite a player to match
     Given I login as "testadmin@mypadel.cat" with password "password"
+	  And There is public match on 1 - 10 - 2017 at 1 pm for 30 minutes and deadline 30 - 9 - 2017
+	  And I invite player "testplayer@mypadel.cat"
     When I create new match invitation for a new match with message "A player has invited you to a match."
     Then The response code is 201
-    And It has been created a new match invitation with message "A player has invited you to a match."
+	  And It has been created a new match for player "testplayer@mypadel.cat" invitation with message "A player has invited you to a match."
 
   Scenario: Invite a player to match without authentification
     Given I'm not logged in
+	  And There is public match on 1 - 10 - 2017 at 1 pm for 30 minutes and deadline 30 - 9 - 2017
+	  And I invite player "testplayer@mypadel.cat"
     When I create new match invitation for a new match with message "A player has invited you to a match."
     Then The response code is 401
     And It has not been created a new match invitation
