@@ -82,7 +82,7 @@ public class MatchInvitationStepDefs {
 	}
 
 	@And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
-	public void thereIsAPlayerWithUsernameAndEmail(String email	, String username) throws Throwable {
+	public void thereIsAPlayerWithUsernameAndEmail(String username, String email ) throws Throwable {
 		Player invited= new Player();
 		invited.setEmail(email);
 		invited.setUsername(username);
