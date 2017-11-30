@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -79,7 +78,7 @@ public class MatchInvitationStepDefs {
 			get("/matchInvitations/1/invites")//get("/matchInvitations/{id}, id")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect((ResultMatcher) jsonPath("$.email", equalTo(playerEmail) ));
+			.andExpect(jsonPath("$.email", equalTo(playerEmail) ));
 	}
 
 	@And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
