@@ -3,12 +3,14 @@ package cat.udl.eps.softarch.mypadel.steps;
 import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -27,6 +29,12 @@ public class JoinPrivateMatchStepsDefs {
 	private StepDefs stepDefs;
 
 	private ZonedDateTime eventDate;
+
+	private ZonedDateTime startDate;
+
+	private Duration duration;
+
+	private ZonedDateTime deadLine;
 
 	private JoinMatch joinMatch=new JoinMatch();
 
@@ -125,7 +133,7 @@ public class JoinPrivateMatchStepsDefs {
 			.andExpect(status().isOk());
 	}
 
-	@When("^the player didn't recive an invitation for Privatematch (\\d+) for (\\d+) - (\\d+) - (\\d+) at (\\d+) hours for (\\d+) minutes$")
+	@And("^the player didn't recive an invitation for Privatematch (\\d+) for (\\d+) - (\\d+) - (\\d+) at (\\d+) hours for (\\d+) minutes$")
 	public void thePlayerDidnTReciveAnInvitationForPrivatematchForAtHoursForMinutes(Long id, int day, int month, int year, int hour, int duration) throws Throwable {
 		eventDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
 			0, ZoneId.of("+00:00"));
@@ -154,5 +162,36 @@ public class JoinPrivateMatchStepsDefs {
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isNotFound());
+	}
+
+	@And("^there is a private match on (\\d+) - (\\d+) - (\\d+) at (\\d+) hours for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
+	public void thereIsAPrivateMatchOnAtHoursForMinutesAndDeadline(int day, int month, int year, int hours, int duration, int dayd, int monthd, int yeard) throws Throwable {
+		startDate = ZonedDateTime.of(year, month, day, hours, 0, 0,
+			0, ZoneId.of("+00:00"));
+
+		this.duration = Duration.ofMinutes(duration);
+
+		deadLine = ZonedDateTime.of(yeard, monthd,dayd,
+			hours, 0, 0,0, ZoneId.of("+00:00"));
+
+		PrivateMatch privateMatch = new PrivateMatch();
+		privateMatch.setStartDate(startDate);
+		privateMatch.setDuration(this.duration);
+		privateMatch.setCancelationDeadline(deadLine);
+		privateMatch.setCourtType(CourtType.UNDEFINED);
+
+		createPrivateMatch(privateMatch);
+
+	}
+
+	private void createPrivateMatch(PrivateMatch privateMatch) throws Throwable {
+		String message = stepDefs.mapper.writeValueAsString(privateMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/privateMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
 	}
 }
