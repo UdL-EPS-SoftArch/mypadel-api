@@ -36,54 +36,25 @@ public class MatchInvitationStepDefs {
 	private Duration duration;
 	private ZonedDateTime cancelationDeadline;
 
-	MatchInvitation matchInv = new MatchInvitation();
 
 
-	@And("^I invite player \"([^\"]*)\"$")
-	public void iInvitePlayer(String playerEmail) throws Throwable {
+	@When("^I create new match invitation for a new match for a player with username \"([^\"]*)\" with message \"([^\"]*)\"$")
+	public void iCreateNewMatchInvitationForANewMatchForAPlayerWithUsernameWithMessage(String username, String message) throws Throwable {
+		MatchInvitation matchInv = new MatchInvitation();
+		matchInv.setMessage(message);
+		matchInv.setInvites(player.findOne(username));
 
-		Player invited= new Player();
-		invited.setEmail(playerEmail);
-		invited.setUsername("PLayerTest");
-
-		player.save(invited);
-		matchInv.setInvites(invited);
-
-		/*stepDefs.result = stepDefs.mockMvc.perform(
-			get("/matchInvitations/1/invites")
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect((ResultMatcher) jsonPath("$.email", equalTo(playerEmail) ));
-
-		*///throw new PendingException();
-	}
-
-	@When("^I create new match invitation for a new match with message \"([^\"]*)\"$")
-	public void iCreateNewMatchInvitationForANewMatchWithMessage(String arg0) throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		matchInv.setMessage(arg0);
-
-		String message = stepDefs.mapper.writeValueAsString(matchInv);
+		String message1 = stepDefs.mapper.writeValueAsString(matchInv);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/matchInvitations")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(message)
+				.content(message1)
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print());
 	}
 
-	@And("^It has been created a new match invitation with message \"([^\"]*)\"$")
-	public void itHasBeenCreatedANewMatchInvitationWithMessage(String arg0) throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/matchInvitations/1")//get("/matchInvitations/{id}, id")
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect((ResultMatcher) jsonPath("$.message", equalTo(arg0) ));
-	}
-
-
+	//Scenario 2
 	@And("^It has not been created a new match invitation$")
 	public void itHasNotBeenCreatedANewMatchInvitation() throws Throwable {
 		// Write code here that turns the phrase above into concrete actions
@@ -95,6 +66,7 @@ public class MatchInvitationStepDefs {
 			.andExpect(jsonPath("$._embedded.matchInvitations", hasSize(0)));
 	}
 
+	//Scenario 1
 	@And("^It has been created a new match for player \"([^\"]*)\" invitation with message \"([^\"]*)\"$")
 	public void itHasBeenCreatedANewMatchForPlayerInvitationWithMessage(String playerEmail, String message) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
@@ -108,5 +80,13 @@ public class MatchInvitationStepDefs {
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect((ResultMatcher) jsonPath("$.email", equalTo(playerEmail) ));
+	}
+
+	@And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
+	public void thereIsAPlayerWithUsernameAndEmail(String email	, String username) throws Throwable {
+		Player invited= new Player();
+		invited.setEmail(email);
+		invited.setUsername(username);
+		player.save(invited);
 	}
 }
