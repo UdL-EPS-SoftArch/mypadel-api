@@ -52,3 +52,13 @@ Feature: Join match
 		And there are three more players in this match
 		When I join to a created match 1
 		Then A court is reserved
+
+	Scenario: Cancel a reservation when a player left a full match
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		And There is a "public" match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
+		And there are three more players in this match
+		And I join to a created match 1
+		And A court is reserved
+		When A player leaves this match
+		Then The reservation for this match is cancelled
+
