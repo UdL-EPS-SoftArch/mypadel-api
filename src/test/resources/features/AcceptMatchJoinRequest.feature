@@ -7,12 +7,14 @@ Feature: Accept MatchJoinRequest
 		And  There is a custom match created on 1 - 10 - 2017 with duration 30 minutes and deadline 30 - 9 - 2017
 		And There is a MatchJoinRequest for that match by user "player@mypadel.cat"
 		When I accept the MatchJoinRequest
-		Then The response code is 200
+		Then The status of MatchJoinRequest is ACCEPTED
+		And a joinMatch is created
 	Scenario: As the owner of a Custom Match, I reject the request
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		And  There is a custom match created on 1 - 10 - 2017 with duration 30 minutes and deadline 30 - 9 - 2017
 		And There is a MatchJoinRequest for that match by user "player@mypadel.cat"
 		When I reject the MatchJoinRequest
-		Then The response code is 200
+		Then The status of MatchJoinRequest is REJECTED
+		And a joinMatch is not created
 
 
