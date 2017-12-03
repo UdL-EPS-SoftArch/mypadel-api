@@ -1,22 +1,15 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.domain.Level;
-import cat.udl.eps.softarch.mypadel.domain.MatchResultVerification;
-import cat.udl.eps.softarch.mypadel.domain.RandomGenerator;
 import cat.udl.eps.softarch.mypadel.repository.MatchResultRepository;
 import cat.udl.eps.softarch.mypadel.repository.PlayerRepository;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 
-import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MatchResultVerificationCreateSteps {
 
@@ -35,40 +28,23 @@ public class MatchResultVerificationCreateSteps {
 	@Autowired
 	private PlayerRepository playerRepository;
 
-	@When("^I create a new MatchResultVerification$")
-	public void iCreateANewMatchResultVerification() throws Throwable {
-		matchResultCreateSteps.iCreateANewMatchResult();
-		registerPlayerStepDef.iRegisterANewPlayerWithUsernameEmailPasswordScoreAndLevel("username", "email@gmail.com", "password", 5, Level.ADVANCED.toString());
-		MatchResultVerification matchResultVerification = RandomGenerator.generateMatchResultVerification();
-		matchResultVerification.setMatchToAgree(matchResultRepository.findAll().iterator().next());
-		matchResultVerification.setPlayer(playerRepository.findAll().iterator().next());
-		String message = stepDefs.mapper.writeValueAsString(matchResultVerification);
-		stepDefs.result = stepDefs.mockMvc.perform(
-			post("/matchResultVerifications")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(message)
-				.accept(MediaType.APPLICATION_JSON)
-				.with(authenticate()))
-			.andDo(print());
+	@And("^There is a MatchResult for the public match player on \"([^\"]*)\"$")
+	public void thereIsAMatchResultForThePublicMatchPlayerOn(String dateString) throws Throwable {
+		final DateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd");
+		final Date date=dateFormat.parse(dateString);
+		// Write code here that turns the phrase above into concrete actions
+		throw new PendingException();
 	}
 
-	@And("^A new MatchResultVerification is added$")
-	public void aNewMatchResultVerificationIsAdded() throws Throwable {
-		int id = 1;
-		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/matchResultVerifications/{id}", id)
-				.accept(MediaType.APPLICATION_JSON)
-				.with(authenticate()))
-			.andDo(print())
-			.andExpect(jsonPath("$.id", is(id)));
+	@When("^I agree through a MatchResultVerification with the MatchResult of the match played on \"([^\"]*)\"$")
+	public void iAgreeThroughAMatchResultVerificationWithTheMatchResultOfTheMatchPlayedOn(String arg0) throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		throw new PendingException();
 	}
 
-	@And("^The new MatchResultVerification has not been created$")
-	public void theNewMatchResultVerificationHasNotBeenCreated() throws Throwable {
-		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/matchResultVerifications/{id}", 1)
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound());
+	@And("^A new MatchResultVerification is added for the MatchResult of the match played on \"([^\"]*)\"$")
+	public void aNewMatchResultVerificationIsAddedForTheMatchResultOfTheMatchPlayedOn(String arg0) throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		throw new PendingException();
 	}
-
 }

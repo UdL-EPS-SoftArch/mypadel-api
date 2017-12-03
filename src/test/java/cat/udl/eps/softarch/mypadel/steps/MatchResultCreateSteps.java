@@ -17,14 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class MatchResultCreateSteps {
 
-	private RandomGenerator randomGenerator = new RandomGenerator();
-
 	@Autowired
 	private StepDefs stepDefs;
 
 	@When("^I create a new MatchResult$")
 	public void iCreateANewMatchResult() throws Throwable {
-		MatchResult matchResult = randomGenerator.generateMatchResult();
+		MatchResult matchResult = RandomGenerator.generateMatchResult();
 		String message = stepDefs.mapper.writeValueAsString(matchResult);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/matchResults")

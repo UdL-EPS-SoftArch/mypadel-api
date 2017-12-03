@@ -3,20 +3,12 @@ Feature: Create a MatchResultVerification
 	As a Player/Admin
 	I want to create a new MatchResultVerification for an existing MatchResult
 
-	Scenario: An admin creates a new MatchResultVerification
-		Given I login as "testadmin@mypadel.cat" with password "password"
-		When I create a new MatchResultVerification
-		Then The response code is 201
-		And A new MatchResultVerification is added
-
 	Scenario: A player creates a new MatchResultVerification
 		Given I login as "testplayer@mypadel.cat" with password "password"
-		When I create a new MatchResultVerification
+		When I set a new public match on 1 - 10 - 2017 at 1 pm for 30 minutes
+		And I create it
 		Then The response code is 201
-		And A new MatchResultVerification is added
-
-	Scenario: Unsigned-in user tries to create a MatchResultVerification
-		Given I'm not logged in
-		When I create a new MatchResultVerification
-		Then The response code is 401
-		And The new MatchResultVerification has not been created
+		And There is a MatchResult for the public match player on "2017/10/1"
+		When I agree through a MatchResultVerification with the MatchResult of the match played on "<date>"
+		Then The response code is 201
+		And A new MatchResultVerification is added for the MatchResult of the match played on "<date>"
