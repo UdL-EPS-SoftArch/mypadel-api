@@ -20,8 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class MatchResultVerificationCreateSteps {
 
-	private RandomGenerator randomGenerator = new RandomGenerator();
-
 	@Autowired
 	private StepDefs stepDefs;
 
@@ -41,12 +39,9 @@ public class MatchResultVerificationCreateSteps {
 	public void iCreateANewMatchResultVerification() throws Throwable {
 		matchResultCreateSteps.iCreateANewMatchResult();
 		registerPlayerStepDef.iRegisterANewPlayerWithUsernameEmailPasswordScoreAndLevel("username", "email@gmail.com", "password", 5, Level.ADVANCED.toString());
-		MatchResultVerification matchResultVerification = randomGenerator.generateMatchResultVerification();
-		try {
-			matchResultVerification.setMatchToAgree(matchResultRepository.findAll().iterator().next());
-			matchResultVerification.setPlayer(playerRepository.findAll().iterator().next());
-		} catch (Exception e) {
-		}
+		MatchResultVerification matchResultVerification = RandomGenerator.generateMatchResultVerification();
+		matchResultVerification.setMatchToAgree(matchResultRepository.findAll().iterator().next());
+		matchResultVerification.setPlayer(playerRepository.findAll().iterator().next());
 		String message = stepDefs.mapper.writeValueAsString(matchResultVerification);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/matchResultVerifications")

@@ -6,10 +6,10 @@ import java.util.Random;
 public class RandomGenerator {
 
 	@NotNull
-	private final Random random=new Random();
+	private static final Random random=new Random();
 
 	@NotNull
-	public MatchResult generateMatchResult() {
+	public static MatchResult generateMatchResult() {
 		final MatchResult matchResult = new MatchResult();
 		matchResult.setDraw(random.nextBoolean());
 		matchResult.setVerified(random.nextBoolean());
@@ -17,7 +17,7 @@ public class RandomGenerator {
 	}
 
 	@NotNull
-	public MatchResultVerification generateMatchResultVerification() {
+	public static MatchResultVerification generateMatchResultVerification() {
 		final MatchResultVerification matchResultVerification = new MatchResultVerification();
 		matchResultVerification.setMatchToAgree(generateMatchResult());
 		matchResultVerification.setAgrees(random.nextBoolean());
