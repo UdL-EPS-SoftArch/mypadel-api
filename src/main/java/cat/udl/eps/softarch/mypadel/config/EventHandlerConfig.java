@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.mypadel.config;
 
+import cat.udl.eps.softarch.mypadel.eventlistener.MatchEventListener;
 import cat.udl.eps.softarch.mypadel.eventlistener.MatchResultEventListener;
 import cat.udl.eps.softarch.mypadel.eventlistener.MatchResultVerificationEventListener;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,12 @@ import javax.validation.constraints.NotNull;
 
 @Configuration
 public class EventHandlerConfig {
+
+	@Bean
+	@NotNull
+	public MatchEventListener matchEventListener() {
+		return new MatchEventListener();
+	}
 
 	@Bean
 	@NotNull
