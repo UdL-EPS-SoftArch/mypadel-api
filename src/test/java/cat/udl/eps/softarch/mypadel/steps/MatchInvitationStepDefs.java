@@ -57,6 +57,6 @@ public class MatchInvitationStepDefs {
 			get("/matchInvitations/1")//get("/matchInvitations/{id}, id")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect((ResultMatcher) jsonPath("$.message", equalTo(arg0) ));
+			.andExpect(jsonPath("$.message", equalTo(arg0) ));
 	}
 }
