@@ -9,6 +9,6 @@ Feature: Create a MatchResultVerification
 		And I create it
 		Then The response code is 201
 		And There is a MatchResult for the public match player on "2017/10/1"
-		When I agree through a MatchResultVerification with the MatchResult of the match played on "<date>"
+		When I agree through a MatchResultVerification with the MatchResult of the match played on "2017/10/1"
 		Then The response code is 201
-		And A new MatchResultVerification is added for the MatchResult of the match played on "<date>"
+		And A new MatchResultVerification is added for the MatchResult of the match played on "2017/10/1"

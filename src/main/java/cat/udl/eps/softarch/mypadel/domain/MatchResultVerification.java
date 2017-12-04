@@ -24,12 +24,12 @@ public class MatchResultVerification extends UriEntity<Integer> {
 
 	@JsonIdentityReference(alwaysAsId = true)
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private MatchResult matchToAgree;
 
 	@JsonIdentityReference(alwaysAsId = true)
 	@NotNull
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Player player;
 
 	//endregion

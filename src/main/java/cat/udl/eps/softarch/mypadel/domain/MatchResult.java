@@ -18,7 +18,7 @@ public class MatchResult extends UriEntity<Integer> {
 	@NotNull
 	private Integer id;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JsonIdentityReference(alwaysAsId = true)
 	private Match match;
 
