@@ -61,10 +61,12 @@ public class MatchResultVerificationCreateSteps {
 
 	@And("^A new MatchResultVerification is added for the MatchResult of the match played on \"([^\"]*)\"$")
 	public void aNewMatchResultVerificationIsAddedForTheMatchResultOfTheMatchPlayedOn(String dateString) throws Throwable {
-		stepDefs.mockMvc.perform(
+		stepDefs.result=stepDefs.mockMvc.perform(
 			get("/matchResultVerifications/1")
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
-			.andExpect(jsonPath("$.id", is(1)));
+			.andExpect(jsonPath("$.id", is(1)))
+			.andExpect(jsonPath("$._links.matchToAgree.href", is("http://localhost/matchResultVerifications/1/matchToAgree")))
+			.andExpect(jsonPath("$._links.player.href", is("http://localhost/matchResultVerifications/1/player")));
 	}
 }
