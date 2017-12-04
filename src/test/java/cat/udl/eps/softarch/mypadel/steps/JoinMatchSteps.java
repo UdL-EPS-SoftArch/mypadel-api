@@ -424,4 +424,21 @@ public class JoinMatchSteps {
 				.with(authenticate()))
 		;
 	}
+
+	@And("^The match (\\d+) has no longer a reservation$")
+	public void theMatchHasNoLongerAReservation(long id) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matches/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matches/{id}/reservation", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isNotFound());
+	}
 }

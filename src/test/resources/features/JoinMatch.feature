@@ -61,4 +61,5 @@ Feature: Join match
 		And A court is reserved
 		When A player leaves this match
 		Then The reservation for this match is cancelled
+		And The match 1 has no longer a reservation
 
