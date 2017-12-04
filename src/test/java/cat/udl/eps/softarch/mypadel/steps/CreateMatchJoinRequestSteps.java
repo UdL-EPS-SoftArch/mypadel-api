@@ -1,25 +1,27 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.domain.*;
+import cat.udl.eps.softarch.mypadel.domain.CourtType;
+import cat.udl.eps.softarch.mypadel.domain.CustomMatch;
+import cat.udl.eps.softarch.mypadel.domain.MatchJoinRequest;
+import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.repository.CustomMatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
-
-import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class CreateMatchJoinRequestSteps {
@@ -68,7 +70,7 @@ public class CreateMatchJoinRequestSteps {
 		}
 
 
-	@When("^The player \"([^\"]*)\" creates a new matchJoinRequest for the match on (\\d+) - (\\d+) - (\\d+)  with message \"([^\"]*)\"$")
+	@When("^The player \"([^\"]*)\" creates a new matchJoinRequest for the match on (\\d+) - (\\d+) - (\\d+) with message \"([^\"]*)\"$")
 	public void thePlayerCreatesANewMatchJoinRequestForTheMatchOnWithMessage(String username, int day, int month, int year, String message) throws Throwable {
 		// Write code here that turns the phrase above into concrete actions
 		startDate = ZonedDateTime.of(year, month, day, 0, 0, 0,
