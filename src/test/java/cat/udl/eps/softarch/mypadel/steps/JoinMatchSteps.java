@@ -406,27 +406,8 @@ public class JoinMatchSteps {
 		matchRepository.save(publicMatch);
 	}
 
-	@Then("^The reservation for this match is cancelled$")
-	public void theReservationForThisMatchIsCancelled() throws Throwable {
-		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/reservations/1")
-				.accept(MediaType.APPLICATION_JSON)
-				.with(authenticate()))
-			.andDo(print())
-			.andExpect(status().isNotFound());
-	}
-
-	@When("^A player leaves this match$")
-	public void aPlayerLeavesThisMatch() throws Throwable {
-		stepDefs.result = stepDefs.mockMvc.perform(
-			delete("/joinMatches/1")
-				.accept(MediaType.APPLICATION_JSON)
-				.with(authenticate()))
-		;
-	}
-
-	@And("^The match (\\d+) has no longer a reservation$")
-	public void theMatchHasNoLongerAReservation(long id) throws Throwable {
+	@Then("^The reservation for the match (\\d+) is cancelled$")
+	public void theReservationForTheMatchIsCancelled(long id) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/matches/{id}", id)
 				.accept(MediaType.APPLICATION_JSON)
@@ -440,5 +421,14 @@ public class JoinMatchSteps {
 				.with(authenticate()))
 			.andDo(print())
 			.andExpect(status().isNotFound());
+	}
+
+	@When("^A player leaves this match$")
+	public void aPlayerLeavesThisMatch() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			delete("/joinMatches/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+		;
 	}
 }

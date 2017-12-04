@@ -60,6 +60,5 @@ Feature: Join match
 		And I join to a created match 1
 		And A court is reserved
 		When A player leaves this match
-		Then The reservation for this match is cancelled
-		And The match 1 has no longer a reservation
+		Then The reservation for the match 1 is cancelled
 
