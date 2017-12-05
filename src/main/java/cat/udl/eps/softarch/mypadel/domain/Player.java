@@ -29,8 +29,9 @@ public class Player extends User {
         this.level = level;
     }
 
-
-
+	@OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+	@JsonIdentityReference(alwaysAsId = true)
+	private List<MatchJoinRequest> matchJoinRequests = new ArrayList<>();
 
     @OneToMany (mappedBy = "invites")
 	@JsonIdentityReference(alwaysAsId = true)
@@ -43,11 +44,6 @@ public class Player extends User {
 	public void setInvitations(List<MatchInvitation> invitations) {
 		this.invitations = invitations;
 	}
-
-
-
-
-
 
 	@Override
 	@Transient

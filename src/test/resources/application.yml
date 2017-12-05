@@ -1,6 +1,5 @@
-logging:
-    level:
-        org:
-            hibernate: error
-            springframework.core: error
-            springframework.web: error
+logging.level.org:
+  hibernate: error
+  springframework:
+    core: error
+    web: error

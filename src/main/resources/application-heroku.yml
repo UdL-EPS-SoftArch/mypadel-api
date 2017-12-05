@@ -1,11 +1,20 @@
 spring:
-    datasource:
-        driverClassName: org.postgresql.Driver
-        initialSize: 5
-        maxActive: 10
-        maxIdle: 5
-        minIdle: 2
-        removeAbandoned: true
-    jpa:
-        hibernate:
-            ddl-auto: update
+  datasource:
+    driverClassName: org.postgresql.Driver
+    initialSize: 5
+    maxActive: 10
+    maxIdle: 5
+    minIdle: 2
+    removeAbandoned: true
+  jpa.hibernate:
+  ddl-auto: update
+spring.mail:
+  host: smtp.gmail.com
+  password: admin123456789
+  port: 587
+  properties.mail.smtp:
+    auth: true
+    starttls:
+      enable: true
+      required: true
+  username: technogado@gmail.com

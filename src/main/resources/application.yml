@@ -1,6 +1,15 @@
-logging:
-    level:
-        org:
-            hibernate: warn
-            springframework.core: warn
-            springframework.web: warn
+logging.level.org:
+  hibernate: warn
+  springframework:
+    core: warn
+    web: warn
+spring.mail:
+  host: smtp.gmail.com
+  password: admin123456789
+  port: 587
+  properties.mail.smtp:
+    auth: true
+    starttls:
+      enable: true
+      required: true
+  username: technogado@gmail.com
