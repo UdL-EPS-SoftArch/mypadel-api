@@ -69,4 +69,11 @@ public class JoinMatchChecker {
 		List<JoinMatch> joinMatchList = joinMatchRepository.findByMatch(match);
 		return joinMatchList.size() == 4;
 	}
+
+	void cancelReservation(Match match) {
+		Reservation reservation = match.getReservation();
+		match.setReservation(null);
+		reservation.setReservingMatch(null);
+		reservationRepository.delete(reservation.getId());
+	}
 }

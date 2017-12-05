@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
 import cat.udl.eps.softarch.mypadel.handler.exception.JoinMatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
+import org.springframework.data.rest.core.annotation.HandleAfterDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,13 @@ public class JoinMatchEventHandler {
 		if(joinMatchChecker.isJoinedAtTheSameDatetime(joinMatch)){
 			throw new JoinMatchException("You have already joined to a match in the same datetime");
 		}
+	}
 
+	@HandleAfterDelete
+	@Transactional
+	public void handleAfterDelete(JoinMatch joinMatch){
+		if (!joinMatchChecker.isMatchFull(joinMatch.getMatch())){
+			joinMatchChecker.cancelReservation(joinMatch.getMatch());
+		}
 	}
 }
