@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 
 
 public class MatchInvitationHandler {

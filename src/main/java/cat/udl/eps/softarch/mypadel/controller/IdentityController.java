@@ -1,6 +1,5 @@
 package cat.udl.eps.softarch.mypadel.controller;
 
-import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.domain.User;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;

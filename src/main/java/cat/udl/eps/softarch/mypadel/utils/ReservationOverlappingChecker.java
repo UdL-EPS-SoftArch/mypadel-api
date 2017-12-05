@@ -24,12 +24,7 @@ public class ReservationOverlappingChecker {
 		ZonedDateTime pendingEndDate = pendingStartDate.plus(pendingReservation.getDuration());
 		ZonedDateTime otherStartDate = other.getStartDate();
 		ZonedDateTime otherEndDate = otherStartDate.plus(other.getDuration());
-		if (otherEndDate.isBefore(pendingStartDate)) {
-			return false;
-		} else if (otherStartDate.isAfter(pendingEndDate)) {
-			return false;
-		} else {
-			return true;
-		}
+		return !otherEndDate.isBefore(pendingStartDate)
+			&& !otherStartDate.isAfter(pendingEndDate);
 	}
 }
