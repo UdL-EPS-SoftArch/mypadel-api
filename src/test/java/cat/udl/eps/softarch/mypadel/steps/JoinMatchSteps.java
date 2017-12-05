@@ -402,4 +402,30 @@ public class JoinMatchSteps {
 
 		matchRepository.save(publicMatch);
 	}
+
+	@Then("^The reservation for the match (\\d+) is cancelled$")
+	public void theReservationForTheMatchIsCancelled(long id) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matches/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matches/{id}/reservation", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isNotFound());
+	}
+
+	@When("^A player leaves this match$")
+	public void aPlayerLeavesThisMatch() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			delete("/joinMatches/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+		;
+	}
 }
