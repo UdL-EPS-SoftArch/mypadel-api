@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MatchResultVerificationCreateSteps {
 
@@ -68,5 +69,16 @@ public class MatchResultVerificationCreateSteps {
 			.andExpect(jsonPath("$.id", is(1)))
 			.andExpect(jsonPath("$._links.matchToAgree.href", is("http://localhost/matchResultVerifications/1/matchToAgree")))
 			.andExpect(jsonPath("$._links.player.href", is("http://localhost/matchResultVerifications/1/player")));
+		stepDefs.mockMvc.perform(
+			get("/matchResultVerifications/1/matchToAgree")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andExpect(status().is(200));
+		stepDefs.mockMvc.perform(
+			get("/matchResultVerifications/1/player")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andExpect(status().is(200));
 	}
+
 }
