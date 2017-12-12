@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.MatchResult;
+import cat.udl.eps.softarch.mypadel.domain.RandomGenerator;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CreateMatchResultSteps {
+public class MatchResultCreateSteps {
 
 	@Autowired
 	private StepDefs stepDefs;
 
 	@When("^I create a new MatchResult$")
 	public void iCreateANewMatchResult() throws Throwable {
-		MatchResult matchResult = new MatchResult ();
+		MatchResult matchResult = RandomGenerator.generateMatchResult();
 		String message = stepDefs.mapper.writeValueAsString(matchResult);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/matchResults")

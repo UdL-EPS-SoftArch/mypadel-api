@@ -1,7 +1,10 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
 import javax.persistence.*;
-import java.util.ArrayList;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 
 /**
  * Represents the result of a match
@@ -10,40 +13,36 @@ import java.util.ArrayList;
 @Table(name = "MatchResult")
 public class MatchResult extends UriEntity<Integer> {
 
-	//TODO Add Players and NotNull Checkings
-	//TODO Talk about if having Lists as winning or losing its the best way (also the isDraw property)
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@NotNull
+	private Integer id;
 
-	private ArrayList<Player> winningPair;
+	@OneToOne(fetch = FetchType.EAGER)
+	@JsonIdentityReference(alwaysAsId = true)
+	private Match match;
 
-	private ArrayList<Player> losingPair;
+	@JsonIdentityReference(alwaysAsId = true)
+	private HashSet<Player> winningPair;
+
+	@JsonIdentityReference(alwaysAsId = true)
+	private HashSet<Player> losingPair;
+
+	@JsonIdentityReference(alwaysAsId = true)
+	private HashSet<MatchResultVerification> verifications;
 
 	private boolean isDraw;
 
-	private Match match;
+	private boolean isVerified;
 
+	@NotNull
 	@Override
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
 
-	public ArrayList<Player> getWinningPair () { return this.winningPair; }
-
-	public void setWinningPair (ArrayList<Player> winners) { this.winningPair = winners; }
-
-	public ArrayList<Player> getLosingPair () { return this.losingPair; }
-
-	public void setLosingPair (ArrayList<Player> losers) { this.losingPair = losers; }
-
-	public boolean isDraw() {
-		return isDraw;
-	}
-
-	public void setDraw(boolean draw) {
-		isDraw = draw;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Match getMatch() {
@@ -54,4 +53,71 @@ public class MatchResult extends UriEntity<Integer> {
 		this.match = match;
 	}
 
+	public HashSet<Player> getWinningPair() {
+		return winningPair;
+	}
+
+	public void setWinningPair(HashSet<Player> winningPair) {
+		this.winningPair = winningPair;
+	}
+
+	public HashSet<Player> getLosingPair() {
+		return losingPair;
+	}
+
+	public void setLosingPair(HashSet<Player> losingPair) {
+		this.losingPair = losingPair;
+	}
+
+	public HashSet<MatchResultVerification> getVerifications() {
+		return verifications;
+	}
+
+	public void setVerifications(HashSet<MatchResultVerification> verifications) {
+		this.verifications = verifications;
+	}
+
+	public boolean isDraw() {
+		return isDraw;
+	}
+
+	public void setDraw(boolean draw) {
+		isDraw = draw;
+	}
+
+	public boolean isVerified() {
+		return isVerified;
+	}
+
+	public void setVerified(boolean verified) {
+		isVerified = verified;
+	}
+
+	@Override
+	public boolean equals(/* TODO Nullable */ Object object) {
+		if (this == object) return true;
+		if (!(object instanceof MatchResult)) return false;
+
+		final MatchResult that = (MatchResult) object;
+
+		return isDraw == that.isDraw
+			&& isVerified == that.isVerified
+			&& (id != null ? id.equals(that.id) : that.id == null)
+			&& (match != null ? match.equals(that.match) : that.match == null)
+			&& (winningPair != null ? winningPair.equals(that.winningPair) : that.winningPair == null)
+			&& (losingPair != null ? losingPair.equals(that.losingPair) : that.losingPair == null)
+			&& (verifications != null ? verifications.equals(that.verifications) : that.verifications == null);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (match != null ? match.hashCode() : 0);
+		result = 31 * result + (winningPair != null ? winningPair.hashCode() : 0);
+		result = 31 * result + (losingPair != null ? losingPair.hashCode() : 0);
+		result = 31 * result + (verifications != null ? verifications.hashCode() : 0);
+		result = 31 * result + (isDraw ? 1 : 0);
+		result = 31 * result + (isVerified ? 1 : 0);
+		return result;
+	}
 }
