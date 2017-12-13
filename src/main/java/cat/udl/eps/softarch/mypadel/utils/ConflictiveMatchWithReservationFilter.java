@@ -33,12 +33,11 @@ public class ConflictiveMatchWithReservationFilter {
 		initAvailableCourtTypes();
 		ZonedDateTime starDateTime = reservation.getStartDate();
 		ZonedDateTime endDateTime = reservation.getStartDate().plus(reservation.getDuration());
-		List<Match> matches = matchRepository.findByStartDateBetween(starDateTime, endDateTime)
+		return matchRepository.findByStartDateBetween(starDateTime, endDateTime)
 			.stream()
 			.filter(m -> !isReserved(m))
 			.filter(m -> !hasAvailableCourt(m))
 			.collect(toList());
-		return matches;
 	}
 
 	private void initAvailableCourtTypes() {
