@@ -42,6 +42,9 @@ public class Match extends UriEntity<Long> {
 	@OneToOne
 	private Reservation reservation;
 
+	@OneToOne
+	private MatchResult matchResult;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -109,5 +112,11 @@ public class Match extends UriEntity<Long> {
 
 	public void setReservation(Reservation reservation) {
 		this.reservation = reservation;
+	}
+
+	public void setMatchResult(MatchResult matchResult){ this.matchResult = matchResult; }
+
+	public MatchResult getMatchResult() {
+		return matchResult;
 	}
 }

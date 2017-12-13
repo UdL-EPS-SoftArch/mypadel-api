@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -436,10 +437,14 @@ public class JoinMatchSteps {
 
 	@When("^I don't agree with the match result of the match (\\d+)$")
 	public void iDonTAgreeWithTheMatchResultOfTheMatch(int id) throws Throwable {
+		MatchResult matchResult = matchResultRepository.findOne(1) ;
+		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
 		MatchResultVerification matchResultVerification = new MatchResultVerification();
 		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
 		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
 		matchResultVerification.setAgrees(false);
+		matchResultVerifications.add(matchResultVerification);
+		matchResult.setVerifications(matchResultVerifications);
 		matchResultVerificationRepository.save(matchResultVerification);
 	}
 }

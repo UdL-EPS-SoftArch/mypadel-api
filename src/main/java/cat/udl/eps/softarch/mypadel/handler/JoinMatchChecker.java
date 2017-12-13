@@ -2,13 +2,11 @@ package cat.udl.eps.softarch.mypadel.handler;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.handler.exception.JoinMatchException;
-import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
-import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
-import cat.udl.eps.softarch.mypadel.repository.MatchResultVerificationRepository;
-import cat.udl.eps.softarch.mypadel.repository.ReservationRepository;
+import cat.udl.eps.softarch.mypadel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +20,9 @@ public class JoinMatchChecker {
 
 	@Autowired
 	private JoinMatchRepository joinMatchRepository;
+
+	@Autowired
+	private MatchResultRepository matchResultRepository;
 
 	@Autowired
 	private MatchResultVerificationRepository matchResultVerificationRepository;
@@ -82,14 +83,22 @@ public class JoinMatchChecker {
 	}
 
 	boolean pendingResult(JoinMatch joinMatch){
+		List<JoinMatch> joinMatches;
+		List<MatchResult> matchResults;
 		List<MatchResultVerification> matchResultVerifications;
-		Player player;
+		Player player = joinMatch.getPlayer();
 
-		player = joinMatch.getPlayer();
-		matchResultVerifications = matchResultVerificationRepository.findByPlayer(player);
-		for(MatchResultVerification m : matchResultVerifications){
-			if(!m.isAgrees()){
-				return true;
+		joinMatches = joinMatchRepository.findByPlayer(joinMatch.getPlayer());
+
+		for(JoinMatch j : joinMatches){
+			matchResults = matchResultRepository.findByMatch(j.getMatch());
+			for(MatchResult matchResult : matchResults){
+				matchResultVerifications = matchResultVerificationRepository.findByMatchToAgree(matchResult);
+				for(MatchResultVerification matchResultVerification: matchResultVerifications){
+					if(!matchResultVerification.isAgrees()){
+						return true;
+					}
+				}
 			}
 		}
 		return false;

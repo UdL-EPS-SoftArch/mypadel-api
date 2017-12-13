@@ -33,7 +33,7 @@ public class JoinMatchEventHandler {
 
 	@HandleBeforeCreate
 	@Transactional
-	public void handleBeforeSave(JoinMatch joinMatch) throws JoinMatchException {
+	public void handleBeforeCreate(JoinMatch joinMatch) throws JoinMatchException {
 		if(joinMatchChecker.pendingResult(joinMatch)){
 			throw new JoinMatchException("You have to verify previous matches");
 		}
