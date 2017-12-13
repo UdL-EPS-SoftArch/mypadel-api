@@ -1,9 +1,8 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
-import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
-import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
-import cat.udl.eps.softarch.mypadel.repository.UserRepository;
+import cat.udl.eps.softarch.mypadel.repository.*;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -50,6 +49,12 @@ public class JoinMatchSteps {
 
 	@Autowired
 	JoinMatchRepository joinMatchRepository;
+
+	@Autowired
+	MatchResultRepository matchResultRepository;
+
+	@Autowired
+	MatchResultVerificationRepository matchResultVerificationRepository;
 
 
 	@When("^I join to a match$")
@@ -427,5 +432,14 @@ public class JoinMatchSteps {
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 		;
+	}
+
+	@When("^I don't agree with the match result of the match (\\d+)$")
+	public void iDonTAgreeWithTheMatchResultOfTheMatch(int id) throws Throwable {
+		MatchResultVerification matchResultVerification = new MatchResultVerification();
+		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification.setAgrees(false);
+		matchResultVerificationRepository.save(matchResultVerification);
 	}
 }
