@@ -65,6 +65,8 @@ Feature: Join match
 	Scenario: Join a match when a player has a pending match result
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		And There is a "public" match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
-		When I don't agree with the match result of the match 1
+		And I join to a created match 1
+		And I don't agree with the match result of the match 1
 		And There is a "public" match on 11 - 12 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
+		When I join to a created match 2
 		Then The response code is 403
