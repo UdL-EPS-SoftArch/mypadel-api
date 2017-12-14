@@ -82,21 +82,24 @@ public class JoinMatchChecker {
 	}
 
 	boolean pendingResult(JoinMatch joinMatch){
-		JoinMatch joinMatch1;
-		MatchResult matchResult;
+		List<JoinMatch> joinMatches;
+		List<MatchResult> matchResults;
 		List<MatchResultVerification> matchResultVerifications;
 		Player player = joinMatch.getPlayer();
 
-		joinMatch1 = joinMatchRepository.findByPlayerAndMatchBefore(joinMatch.getPlayer(), joinMatch.getMatch());
-		matchResult = matchResultRepository.findByMatch(joinMatch1.getMatch());
-		matchResultVerifications = matchResultVerificationRepository.findByMatchToAgree(matchResult);
-		for(MatchResultVerification m : matchResultVerifications){
-			if(!m.isAgrees()){
-				return true;
+		joinMatches = joinMatchRepository.findByPlayer(joinMatch.getPlayer());
+
+		for(JoinMatch j : joinMatches){
+			matchResults = matchResultRepository.findByMatch(j.getMatch());
+			for(MatchResult matchResult : matchResults){
+				matchResultVerifications = matchResultVerificationRepository.findByMatchToAgree(matchResult);
+				for(MatchResultVerification matchResultVerification: matchResultVerifications){
+					if(!matchResultVerification.isAgrees()){
+						return true;
+					}
+				}
 			}
 		}
-
-
 		return false;
 	}
 }
