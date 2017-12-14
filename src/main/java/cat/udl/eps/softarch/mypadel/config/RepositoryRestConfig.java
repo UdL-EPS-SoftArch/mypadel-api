@@ -7,9 +7,6 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by albertberga on 04/05/16.
- */
 @Configuration
 public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
 
@@ -17,18 +14,19 @@ public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.exposeIdsFor(Admin.class);
         config.exposeIdsFor(MatchResult.class);
-        config.exposeIdsFor(Player.class);
+		config.exposeIdsFor(MatchResultVerification.class);
+		config.exposeIdsFor(Player.class);
         config.exposeIdsFor(PublicMatch.class);
 		config.exposeIdsFor(CustomMatch.class);
         config.exposeIdsFor(Court.class);
 		config.exposeIdsFor(Reservation.class);
 		config.exposeIdsFor(MatchJoinRequest.class);
-
         config.exposeIdsFor(JoinMatch.class);
-		config.exposeIdsFor(PrivateMatch.class);
+    config.exposeIdsFor(PrivateMatch.class); 
     }
 
-    @PostConstruct
-    public void init() {
+	@PostConstruct
+	public void init() {
     }
+
 }

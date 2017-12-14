@@ -4,18 +4,15 @@ import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import cat.udl.eps.softarch.mypadel.repository.UserRepository;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.hibernate.mapping.Join;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -404,5 +401,31 @@ public class JoinMatchSteps {
 		publicMatch.setLevel(Level.ADVANCED);
 
 		matchRepository.save(publicMatch);
+	}
+
+	@Then("^The reservation for the match (\\d+) is cancelled$")
+	public void theReservationForTheMatchIsCancelled(long id) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matches/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matches/{id}/reservation", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isNotFound());
+	}
+
+	@When("^A player leaves this match$")
+	public void aPlayerLeavesThisMatch() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			delete("/joinMatches/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+		;
 	}
 }

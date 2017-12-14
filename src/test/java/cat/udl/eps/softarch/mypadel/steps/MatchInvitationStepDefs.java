@@ -1,19 +1,14 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
-import cat.udl.eps.softarch.mypadel.domain.CourtType;
-import cat.udl.eps.softarch.mypadel.domain.Level;
 import cat.udl.eps.softarch.mypadel.domain.MatchInvitation;
 import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.repository.PlayerRepository;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.Duration;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -72,7 +67,7 @@ public class MatchInvitationStepDefs {
 			get("/matchInvitations/1")//get("/matchInvitations/{id}, id")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect((status().isOk()))
-			.andExpect((ResultMatcher) jsonPath("$.message", equalTo(message) ));
+			.andExpect(jsonPath("$.message", equalTo(message)));
 
 		stepDefs.result = stepDefs.mockMvc.perform(
 			get("/matchInvitations/1/invites")//get("/matchInvitations/{id}, id")
