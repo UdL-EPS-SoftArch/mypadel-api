@@ -9,5 +9,5 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface MatchResultRepository extends PagingAndSortingRepository<MatchResult, Integer> {
-	List<MatchResult> findByMatch(Match match);
+	MatchResult findByMatch(Match match);
 }
