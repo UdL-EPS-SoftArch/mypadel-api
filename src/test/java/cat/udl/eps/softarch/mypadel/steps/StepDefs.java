@@ -27,20 +27,21 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Created by http://rhizomik.net/~roberto/
- */
 @ContextConfiguration(
-        classes = {MyPadelApiApplication.class, MailConfigTest.class}, loader = SpringBootContextLoader.class
+	classes = {MyPadelApiApplication.class, MailConfigTest.class},
+	loader = SpringBootContextLoader.class
 )
 @DirtiesContext
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @ActiveProfiles("Test")
 public class StepDefs {
+
     @Autowired
     protected WebApplicationContext wac;
+
     protected MockMvc mockMvc;
+
     protected ResultActions result;
 
     protected ObjectMapper mapper = new ObjectMapper();

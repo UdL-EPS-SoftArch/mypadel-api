@@ -76,7 +76,9 @@ public class JoinMatchSteps {
 
 	@When("^I join to a created match (\\d+)$")
 	public void iJoinToACreatedMatch(long id) throws Throwable {
-		joinMatch = joinMatchRepository.findOne(id);
+		joinMatch = new JoinMatch();
+		joinMatch.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		joinMatch.setMatch(matchRepository.findOne(id));
 		String message = stepDefs.mapper.writeValueAsString(joinMatch);
 		stepDefs.result = stepDefs.mockMvc.perform(
 			post("/joinMatches")
@@ -162,7 +164,7 @@ public class JoinMatchSteps {
 	}
 
 	@When("^I leave a match with id (\\d+)$")
-	public void iLeaveAMatchWithId(int id) throws Throwable {
+	public void iLeaveAMatchWithId(long id) throws Throwable {
 		stepDefs.result = stepDefs.mockMvc.perform(
 			delete("/joinMatches/{id}", id)
 				.accept(MediaType.APPLICATION_JSON)
@@ -291,5 +293,139 @@ public class JoinMatchSteps {
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 			.andDo(print());
+	}
+
+	@And("^There is a \"([^\"]*)\" match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+)-(\\d+)-(\\d+)$")
+	public void thereIsAMatchOnAtPmForMinutesAndDeadline(String matchType, int day, int month, int year, int hour, int duration,
+														 int cancelationDay, int cancelationMonth,
+														 int cancelationYear) throws Throwable {
+		PublicMatch publicMatch = new PublicMatch();
+		publicMatch.setMatchCreator(new Player());
+		this.startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
+		publicMatch.setStartDate(startDate);
+		publicMatch.setDuration(this.duration);
+		publicMatch.setCancelationDeadline(cancelationDeadline);
+		publicMatch.setCourtType(CourtType.INDOOR);
+		publicMatch.setLevel(Level.ADVANCED);
+
+		String message = stepDefs.mapper.writeValueAsString(publicMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@And("^there are three more players in this match$")
+	public void thereAreThreeMorePlayersInThisMatch() throws Throwable {
+		JoinMatch joinMatch_1 = new JoinMatch();
+		joinMatch_1.setMatch(matchRepository.findOne((long)1));
+		String message_1 = stepDefs.mapper.writeValueAsString(joinMatch_1);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/joinMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message_1)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+
+		JoinMatch joinMatch_2 = new JoinMatch();
+		joinMatch_2.setMatch(matchRepository.findOne((long)1));
+		String message_2 = stepDefs.mapper.writeValueAsString(joinMatch_2);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/joinMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message_2)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@Then("^A court is reserved$")
+	public void aCourtIsReserved() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/reservations/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
+
+	@And("^I create a public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+)-(\\d+)-(\\d+)$")
+	public void iCreateAMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
+														 int cancelationDay, int cancelationMonth,
+														 int cancelationYear) throws Throwable {
+		PublicMatch publicMatch = new PublicMatch();
+		publicMatch.setMatchCreator((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		this.startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
+		publicMatch.setStartDate(startDate);
+		publicMatch.setDuration(this.duration);
+		publicMatch.setCancelationDeadline(cancelationDeadline);
+		publicMatch.setCourtType(CourtType.INDOOR);
+		publicMatch.setLevel(Level.ADVANCED);
+
+		String message = stepDefs.mapper.writeValueAsString(publicMatch);
+		stepDefs.result = stepDefs.mockMvc.perform(
+			post("/publicMatches")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(message)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print());
+	}
+
+	@And("^There is a match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes and deadline (\\d+)-(\\d+)-(\\d+)$")
+	public void thereIsAMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration,
+														 int cancelationDay, int cancelationMonth,
+														 int cancelationYear) throws Throwable {
+		PublicMatch publicMatch = new PublicMatch();
+		this.startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
+			0, ZoneId.of("+00:00"));
+		this.duration = Duration.ofMinutes(duration);
+		cancelationDeadline = ZonedDateTime.of(cancelationYear, cancelationMonth, cancelationDay,
+			hour, 0, 0, 0, ZoneId.of("+00:00"));
+		publicMatch.setStartDate(startDate);
+		publicMatch.setDuration(this.duration);
+		publicMatch.setCancelationDeadline(cancelationDeadline);
+		publicMatch.setCourtType(CourtType.INDOOR);
+		publicMatch.setLevel(Level.ADVANCED);
+
+		matchRepository.save(publicMatch);
+	}
+
+	@Then("^The reservation for the match (\\d+) is cancelled$")
+	public void theReservationForTheMatchIsCancelled(long id) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matches/{id}", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isOk());
+
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matches/{id}/reservation", id)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+			.andDo(print())
+			.andExpect(status().isNotFound());
+	}
+
+	@When("^A player leaves this match$")
+	public void aPlayerLeavesThisMatch() throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			delete("/joinMatches/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.with(authenticate()))
+		;
 	}
 }

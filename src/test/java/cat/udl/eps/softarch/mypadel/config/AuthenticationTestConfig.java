@@ -6,18 +6,12 @@ import cat.udl.eps.softarch.mypadel.domain.User;
 import cat.udl.eps.softarch.mypadel.repository.AdminRepository;
 import cat.udl.eps.softarch.mypadel.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * Created by http://rhizomik.net/~roberto/
- */
+
 @Configuration
 @Profile("Test")
 public class AuthenticationTestConfig extends GlobalAuthenticationConfigurerAdapter {
