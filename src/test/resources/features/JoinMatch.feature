@@ -62,11 +62,22 @@ Feature: Join match
 		When A player leaves this match
 		Then The reservation for the match 1 is cancelled
 
-	Scenario: Join a match when a player has a pending match result
+	Scenario: A player can't join a match when a player has a pending match result
 		Given I login as "testplayer@mypadel.cat" with password "password"
 		And There is a "public" match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
 		And I join to a created match 1
 		And I don't agree with the match result of the match 1
+		And The other player agree with the result of the match 1
 		And There is a "public" match on 11 - 12 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
 		When I join to a created match 2
 		Then The response code is 403
+
+	Scenario: Join a match when a player does not have a pending match result
+		Given I login as "testplayer@mypadel.cat" with password "password"
+		And There is a "public" match on 11 - 10 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
+		And I join to a created match 1
+		And I agree with the match result of the match 1
+		And The other player agree with the result of the match 1
+		And There is a "public" match on 11 - 12 - 2017 at 1 pm for 30 minutes and deadline 10-10-2017
+		When I join to a created match 2
+		Then The response code is 201

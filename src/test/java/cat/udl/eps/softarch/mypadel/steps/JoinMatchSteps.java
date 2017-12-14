@@ -447,4 +447,40 @@ public class JoinMatchSteps {
 		matchResult.setVerifications(matchResultVerifications);
 		matchResultVerificationRepository.save(matchResultVerification);
 	}
+
+	@And("^I agree with the match result of the match (\\d+)$")
+	public void iAgreeWithTheMatchResultOfTheMatch(int id) throws Throwable {
+		MatchResult matchResult = matchResultRepository.findOne(1) ;
+		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
+		MatchResultVerification matchResultVerification = new MatchResultVerification();
+		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification.setAgrees(true);
+		matchResultVerifications.add(matchResultVerification);
+		matchResult.setVerifications(matchResultVerifications);
+		matchResultVerificationRepository.save(matchResultVerification);
+	}
+
+	@And("^The other player agree with the result of the match (\\d+)$")
+	public void theOtherPlayerAgreeWithTheResultOfTheMatch(int id) throws Throwable {
+		MatchResult matchResult = matchResultRepository.findOne(1) ;
+		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
+		MatchResultVerification matchResultVerification = new MatchResultVerification();
+		MatchResultVerification matchResultVerification1 = new MatchResultVerification();
+		MatchResultVerification matchResultVerification2 = new MatchResultVerification();
+		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification1.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification2.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification1.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification2.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification.setAgrees(true);
+		matchResultVerification1.setAgrees(true);
+		matchResultVerification2.setAgrees(true);
+		matchResultVerifications.add(matchResultVerification);
+		matchResultVerifications.add(matchResultVerification1);
+		matchResultVerifications.add(matchResultVerification2);
+		matchResult.setVerifications(matchResultVerifications);
+		matchResultVerificationRepository.save(matchResultVerification);
+	}
 }
