@@ -11,5 +11,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface JoinMatchRepository extends PagingAndSortingRepository<JoinMatch, Long> {
 	List<JoinMatch> findByMatch(Match match);
-	List<JoinMatch> findByPlayer(Player player);
+	JoinMatch findByPlayerAndMatchBefore(Player player, Match match);
 }
