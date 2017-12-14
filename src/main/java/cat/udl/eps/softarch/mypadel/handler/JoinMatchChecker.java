@@ -87,7 +87,7 @@ public class JoinMatchChecker {
 		List<MatchResultVerification> matchResultVerifications;
 		Player player = joinMatch.getPlayer();
 
-		joinMatches = joinMatchRepository.findByPlayer(joinMatch.getPlayer());
+		joinMatches = joinMatchRepository.findByPlayer(player);
 
 		for(JoinMatch j : joinMatches){
 			matchResults = matchResultRepository.findByMatch(j.getMatch());
