@@ -22,6 +22,7 @@ public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
 		config.exposeIdsFor(Reservation.class);
 		config.exposeIdsFor(MatchJoinRequest.class);
         config.exposeIdsFor(JoinMatch.class);
+        config.exposeIdsFor(PrivateMatch.class);
     }
 
 	@PostConstruct
