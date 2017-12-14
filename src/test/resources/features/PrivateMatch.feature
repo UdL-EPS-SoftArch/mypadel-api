@@ -20,6 +20,6 @@ Feature: Create a private match
 
 	Scenario: An admin creates a private match
 		Given I login as "testadmin@mypadel.cat" with password "password"
-		When I create a new private match on 12 - 10 - 2017 at 18 hours for 60 minutes and deadline 11 - 10 - 2017
+		When I create a new private match on 12 - 10 - 2017 at 18 hours for 60 minutes and deadline 11 - 10 - 2017 for the user "testplayer@mypadel.cat"
 		Then The response code is 201
 		And A private match has been created

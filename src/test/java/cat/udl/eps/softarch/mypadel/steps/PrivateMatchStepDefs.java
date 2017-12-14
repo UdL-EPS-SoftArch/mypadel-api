@@ -1,9 +1,9 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.CourtType;
-import cat.udl.eps.softarch.mypadel.domain.Level;
+import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.domain.PrivateMatch;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import cat.udl.eps.softarch.mypadel.repository.UserRepository;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
@@ -33,6 +33,9 @@ public class PrivateMatchStepDefs {
 	private Duration duration;
 
 	private ZonedDateTime deadLine;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@When("^I create a new private match on (\\d+) - (\\d+) - (\\d+) at (\\d+) hours for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+)$")
 	public void iCreateANewPrivateMatchOnAtHoursForMinutesAndDeadline(int day, int month, int year, int hours, int duration, int dayd, int monthd, int yeard) throws Throwable {
@@ -96,5 +99,25 @@ public class PrivateMatchStepDefs {
 			get("/privateMatches/1")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
+	}
+
+	@When("^I create a new private match on (\\d+) - (\\d+) - (\\d+) at (\\d+) hours for (\\d+) minutes and deadline (\\d+) - (\\d+) - (\\d+) for the user \"([^\"]*)\"$")
+	public void iCreateANewPrivateMatchOnAtHoursForMinutesAndDeadlineForTheUser(int day, int month, int year, int hours, int duration, int dayd, int monthd, int yeard, String username) throws Throwable {
+		startDate = ZonedDateTime.of(year, month, day, hours, 0, 0,
+			0, ZoneId.of("+00:00"));
+
+		this.duration = Duration.ofMinutes(duration);
+
+		deadLine = ZonedDateTime.of(yeard, monthd,dayd,
+			hours, 0, 0,0, ZoneId.of("+00:00"));
+
+		PrivateMatch privateMatch = new PrivateMatch();
+		privateMatch.setStartDate(startDate);
+		privateMatch.setDuration(this.duration);
+		privateMatch.setCancelationDeadline(deadLine);
+		privateMatch.setCourtType(CourtType.UNDEFINED);
+		privateMatch.setMatchCreator((Player) userRepository.findByEmail(username));
+
+		createPrivateMatch(privateMatch);
 	}
 }
