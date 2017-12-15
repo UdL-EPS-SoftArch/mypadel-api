@@ -33,13 +33,17 @@ public class JoinMatchEventHandler {
 
 	@HandleBeforeCreate
 	@Transactional
-	public void handleBeforeSave(JoinMatch joinMatch) throws JoinMatchException {
+	public void handleBeforeCreate(JoinMatch joinMatch) throws JoinMatchException {
 		if(!joinMatchChecker.isInvited(joinMatch)){
 			throw new JoinMatchException("You have not been invited to this match");
 		}
 
 		if(joinMatchChecker.isJoinedAtTheSameDatetime(joinMatch)){
 			throw new JoinMatchException("You have already joined to a match in the same datetime");
+		}
+
+		if(joinMatchChecker.pendingResult(joinMatch)){
+			throw new JoinMatchException("You have to verify previous matches");
 		}
 	}
 

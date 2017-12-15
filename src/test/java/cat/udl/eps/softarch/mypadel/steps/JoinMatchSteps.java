@@ -1,9 +1,8 @@
 package cat.udl.eps.softarch.mypadel.steps;
 
 import cat.udl.eps.softarch.mypadel.domain.*;
-import cat.udl.eps.softarch.mypadel.repository.JoinMatchRepository;
-import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
-import cat.udl.eps.softarch.mypadel.repository.UserRepository;
+import cat.udl.eps.softarch.mypadel.repository.*;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -13,6 +12,7 @@ import org.springframework.http.MediaType;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -50,6 +50,12 @@ public class JoinMatchSteps {
 
 	@Autowired
 	JoinMatchRepository joinMatchRepository;
+
+	@Autowired
+	MatchResultRepository matchResultRepository;
+
+	@Autowired
+	MatchResultVerificationRepository matchResultVerificationRepository;
 
 
 	@When("^I join to a match$")
@@ -427,5 +433,54 @@ public class JoinMatchSteps {
 				.accept(MediaType.APPLICATION_JSON)
 				.with(authenticate()))
 		;
+	}
+
+	@When("^I don't agree with the match result of the match (\\d+)$")
+	public void iDonTAgreeWithTheMatchResultOfTheMatch(int id) throws Throwable {
+		MatchResult matchResult = matchResultRepository.findOne(1) ;
+		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
+		MatchResultVerification matchResultVerification = new MatchResultVerification();
+		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification.setAgrees(false);
+		matchResultVerifications.add(matchResultVerification);
+		matchResult.setVerifications(matchResultVerifications);
+		matchResultVerificationRepository.save(matchResultVerification);
+	}
+
+	@And("^I agree with the match result of the match (\\d+)$")
+	public void iAgreeWithTheMatchResultOfTheMatch(int id) throws Throwable {
+		MatchResult matchResult = matchResultRepository.findOne(1) ;
+		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
+		MatchResultVerification matchResultVerification = new MatchResultVerification();
+		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification.setAgrees(true);
+		matchResultVerifications.add(matchResultVerification);
+		matchResult.setVerifications(matchResultVerifications);
+		matchResultVerificationRepository.save(matchResultVerification);
+	}
+
+	@And("^The other player agree with the result of the match (\\d+)$")
+	public void theOtherPlayerAgreeWithTheResultOfTheMatch(int id) throws Throwable {
+		MatchResult matchResult = matchResultRepository.findOne(1) ;
+		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
+		MatchResultVerification matchResultVerification = new MatchResultVerification();
+		MatchResultVerification matchResultVerification1 = new MatchResultVerification();
+		MatchResultVerification matchResultVerification2 = new MatchResultVerification();
+		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification1.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification2.setMatchToAgree(matchResultRepository.findOne(id));
+		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification1.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification2.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
+		matchResultVerification.setAgrees(true);
+		matchResultVerification1.setAgrees(true);
+		matchResultVerification2.setAgrees(true);
+		matchResultVerifications.add(matchResultVerification);
+		matchResultVerifications.add(matchResultVerification1);
+		matchResultVerifications.add(matchResultVerification2);
+		matchResult.setVerifications(matchResultVerifications);
+		matchResultVerificationRepository.save(matchResultVerification);
 	}
 }
