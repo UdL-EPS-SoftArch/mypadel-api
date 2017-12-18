@@ -5,7 +5,7 @@ Feature: Create a MatchResultVerification
 
 	Scenario: A player creates a new MatchResultVerification
 		Given I login as "testplayer@mypadel.cat" with password "password"
-		When I set a new public match on 1 - 10 - 2017 at 1 pm for 30 minutes
+		When I set a new public match on 1-10-2017 at 13h for 30 minutes
 		And I create it
 		Then The response code is 201
 		And There is a MatchResult for the public match player on "2017/10/1"
