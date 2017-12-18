@@ -3,6 +3,8 @@ package cat.udl.eps.softarch.mypadel.handler;
 import cat.udl.eps.softarch.mypadel.domain.*;
 import cat.udl.eps.softarch.mypadel.handler.exception.JoinMatchException;
 import cat.udl.eps.softarch.mypadel.repository.*;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +48,11 @@ public class JoinMatchChecker {
 	}
 
 	boolean isJoinedAtTheSameDatetime(JoinMatch joinMatch) throws JoinMatchException{
-		matchList = matchRepository.findByStartDateBetween(joinMatch.getMatch().getStartDate(),
-			joinMatch.getMatch().getStartDate().plusMinutes(joinMatch.getMatch().getDuration().toMinutes()));
+		matchList = matchRepository.findByStartDateStringBetween(
+			joinMatch.getMatch().getStartDate()
+				.withZoneSameInstant(ZoneId.of("Z")).format(DateTimeFormatter.ISO_DATE_TIME),
+			joinMatch.getMatch().getStartDate().plusMinutes(joinMatch.getMatch().getDuration().toMinutes())
+				.withZoneSameInstant(ZoneId.of("Z")).format(DateTimeFormatter.ISO_DATE_TIME));
 
 		for(Match match : matchList){
 			if(Objects.equals(match.getStartDate(), joinMatch.getMatch().getStartDate()) &&

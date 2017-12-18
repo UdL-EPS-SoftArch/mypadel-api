@@ -1,20 +1,21 @@
 package cat.udl.eps.softarch.mypadel.utils;
 
+import static cat.udl.eps.softarch.mypadel.domain.CourtType.INDOOR;
+import static cat.udl.eps.softarch.mypadel.domain.CourtType.OUTDOOR;
+import static java.util.stream.Collectors.toList;
+
 import cat.udl.eps.softarch.mypadel.domain.Court;
 import cat.udl.eps.softarch.mypadel.domain.CourtType;
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Reservation;
 import cat.udl.eps.softarch.mypadel.repository.CourtRepository;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.ZonedDateTime;
-import java.util.List;
-
-import static cat.udl.eps.softarch.mypadel.domain.CourtType.INDOOR;
-import static cat.udl.eps.softarch.mypadel.domain.CourtType.OUTDOOR;
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class ConflictiveMatchWithReservationFilter {
@@ -33,7 +34,9 @@ public class ConflictiveMatchWithReservationFilter {
 		initAvailableCourtTypes();
 		ZonedDateTime starDateTime = reservation.getStartDate();
 		ZonedDateTime endDateTime = reservation.getStartDate().plus(reservation.getDuration());
-		return matchRepository.findByStartDateBetween(starDateTime, endDateTime)
+		return matchRepository.findByStartDateStringBetween(
+			starDateTime.withZoneSameInstant(ZoneId.of("Z")).format(DateTimeFormatter.ISO_DATE_TIME),
+			endDateTime.withZoneSameInstant(ZoneId.of("Z")).format(DateTimeFormatter.ISO_DATE_TIME))
 			.stream()
 			.filter(m -> !isReserved(m))
 			.filter(m -> !hasAvailableCourt(m))

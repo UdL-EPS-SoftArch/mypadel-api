@@ -5,6 +5,8 @@ import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.handler.exception.CreateMatchException;
 import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,8 +57,11 @@ class MatchChecker {
 	private boolean hasAnotherMatchOnThatTime(Player player, Match match) {
 		ZonedDateTime startDate = match.getStartDate();
 		Duration matchDuration = match.getDuration();
-		List<Match> possibleMatches = matchRepository.findByStartDateBetween(startDate,
-			startDate.plusMinutes(matchDuration.toMinutes()));
+		List<Match> possibleMatches = matchRepository.findByStartDateStringBetween(
+			startDate
+				.withZoneSameInstant(ZoneId.of("Z")).format(DateTimeFormatter.ISO_DATE_TIME),
+			startDate.plusMinutes(matchDuration.toMinutes())
+				.withZoneSameInstant(ZoneId.of("Z")).format(DateTimeFormatter.ISO_DATE_TIME));
 
 		return !possibleMatches.isEmpty() && playerHasMatchCreated(possibleMatches, player);
 	}

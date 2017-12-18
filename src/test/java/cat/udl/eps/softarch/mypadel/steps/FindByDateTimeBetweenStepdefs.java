@@ -36,7 +36,7 @@ public class FindByDateTimeBetweenStepdefs {
 	public void iListTheMatchesBetweenAnd(String from, String to) throws Throwable {
 
 		stepDefs.result = stepDefs.mockMvc.perform(
-			get("/matches/search/findByStartDateBetween?from={from}&to={to}", from, to)
+			get("/matches/search/findByStartDateStringBetween?from={from}&to={to}", from, to)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 			.andDo(print());
