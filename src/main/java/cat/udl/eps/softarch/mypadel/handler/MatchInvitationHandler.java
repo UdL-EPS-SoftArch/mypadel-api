@@ -5,12 +5,15 @@ import cat.udl.eps.softarch.mypadel.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
+import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
 
-
+@Component
+@RepositoryEventHandler
 public class MatchInvitationHandler {
     final Logger logger = LoggerFactory.getLogger(MatchInvitation.class);
 
@@ -19,7 +22,6 @@ public class MatchInvitationHandler {
     public void handleMatchInvitationPreCreate(MatchInvitation match) {
         logger.info("Before creating: {}", match.toString());
         match.setEventDate(ZonedDateTime.now());
-
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		match.setCreatedBy(user);
 	}

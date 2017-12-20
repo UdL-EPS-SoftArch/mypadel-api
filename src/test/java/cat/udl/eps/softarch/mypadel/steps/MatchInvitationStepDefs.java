@@ -88,4 +88,13 @@ public class MatchInvitationStepDefs {
 		invited.setUsername(username);
 		player.save(invited);
 	}
+
+	@And("^Match is created by \"([^\"]*)\"$")
+	public void matchIsCreatedBy(String playerEmail) throws Throwable {
+		stepDefs.result = stepDefs.mockMvc.perform(
+			get("/matchInvitations/1/createdBy")//get("/matchInvitations/{id}, id")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.email", equalTo(playerEmail) ));
+	}
 }
