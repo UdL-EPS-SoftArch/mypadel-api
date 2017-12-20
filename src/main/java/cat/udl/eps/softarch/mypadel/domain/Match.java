@@ -1,6 +1,8 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -19,6 +21,9 @@ public class Match extends UriEntity<Long> {
 
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private ZonedDateTime startDate;
+
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private String startDateString;
 
 	@NotNull
 	private Duration duration;
@@ -54,8 +59,14 @@ public class Match extends UriEntity<Long> {
 		return startDate;
 	}
 
+	public String getStartDateString() {
+		return startDateString;
+	}
+
 	public void setStartDate(ZonedDateTime startDate) {
 		this.startDate = startDate;
+		this.startDateString = this.startDate.withZoneSameInstant(ZoneId.of("Z"))
+									.format(DateTimeFormatter.ISO_DATE_TIME);
 	}
 
 	public Duration getDuration() {

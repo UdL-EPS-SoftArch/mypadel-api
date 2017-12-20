@@ -41,7 +41,7 @@ public class CreateMatchStepDefs {
 	@Autowired
 	private PublicMatchRepository publicMatchRepository;
 
-	@When("^I set a new public match on (\\d+) - (\\d+) - (\\d+) at (\\d+) pm for (\\d+) minutes$")
+	@When("^I set a new public match on (\\d+)-(\\d+)-(\\d+) at (\\d+)h for (\\d+) minutes$")
 	public void iSetANewPublicMatchOnAtPmForMinutesAndDeadline(int day, int month, int year, int hour, int duration) throws Throwable {
 		startDate = ZonedDateTime.of(year, month, day, hour, 0, 0,
 			0, ZoneId.of("+00:00"));
@@ -69,7 +69,7 @@ public class CreateMatchStepDefs {
 			.andDo(print());
 	}
 
-	@And("^I create a match with a similar hour, (\\d+) pm$")
+	@And("^I create a match with a similar hour, (\\d+)h$")
 	public void iCreateAMatchWithASimilarHourPm(int matchHour) throws Throwable {
 		match.setStartDate(match.getStartDate().withHour(matchHour));
 		String message = stepDefs.mapper.writeValueAsString(match);
