@@ -13,6 +13,8 @@ import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Component
 @RepositoryEventHandler
@@ -39,6 +41,8 @@ public class MatchEventHandler {
 	public void createJoinMatch(Match match) {
 		JoinMatch joinMatch = new JoinMatch();
 		joinMatch.setPlayer(match.getMatchCreator());
+		ZonedDateTime eventDate = ZonedDateTime.now(ZoneId.systemDefault());
+		joinMatch.setEventDate(eventDate);
 		joinMatch.setMatch(match);
 		joinMatchRepository.save(joinMatch);
 	}
