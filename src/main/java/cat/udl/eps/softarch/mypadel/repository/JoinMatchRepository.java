@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
 import cat.udl.eps.softarch.mypadel.domain.Match;
 import cat.udl.eps.softarch.mypadel.domain.Player;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
@@ -12,4 +13,5 @@ import java.util.List;
 public interface JoinMatchRepository extends PagingAndSortingRepository<JoinMatch, Long> {
 	List<JoinMatch> findByMatch(Match match);
 	List<JoinMatch> findByPlayer(Player player);
+	List<JoinMatch> findByPlayerUsername(@Param("text") String text);
 }
