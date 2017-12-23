@@ -1,12 +1,16 @@
 package cat.udl.eps.softarch.mypadel.handler;
 
 import cat.udl.eps.softarch.mypadel.domain.JoinMatch;
+import cat.udl.eps.softarch.mypadel.domain.Player;
 import cat.udl.eps.softarch.mypadel.handler.exception.JoinMatchException;
+import cat.udl.eps.softarch.mypadel.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleAfterDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -22,9 +26,12 @@ public class JoinMatchEventHandler {
 
 	@HandleAfterCreate
 	@Transactional
-	public void handleAdminPostCreate(JoinMatch joinMatch) {
+	public void handlePostCreate(JoinMatch joinMatch) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		ZonedDateTime dateTime = ZonedDateTime.now(ZoneId.systemDefault());
 		joinMatch.setEventDate(dateTime);
+		joinMatch.setPlayer((Player) auth.getPrincipal());
+
 
 		if (joinMatchChecker.isMatchFull(joinMatch.getMatch())){
 			joinMatchChecker.reserveCourt(joinMatch.getMatch());
