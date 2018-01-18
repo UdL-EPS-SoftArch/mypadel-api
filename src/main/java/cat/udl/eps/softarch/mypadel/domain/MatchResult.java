@@ -1,10 +1,15 @@
 package cat.udl.eps.softarch.mypadel.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Represents the result of a match
@@ -18,18 +23,24 @@ public class MatchResult extends UriEntity<Integer> {
 	@NotNull
 	private Integer id;
 
-	@OneToOne(fetch = FetchType.EAGER)
 	@JsonIdentityReference(alwaysAsId = true)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Match match;
 
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JsonIdentityReference(alwaysAsId = true)
-	private HashSet<Player> winningPair;
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Player> winningPair;
 
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JsonIdentityReference(alwaysAsId = true)
-	private HashSet<Player> losingPair;
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Player> losingPair;
 
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JsonIdentityReference(alwaysAsId = true)
-	private HashSet<MatchResultVerification> verifications;
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<MatchResultVerification> verifications;
 
 	private boolean isDraw;
 
@@ -53,27 +64,27 @@ public class MatchResult extends UriEntity<Integer> {
 		this.match = match;
 	}
 
-	public HashSet<Player> getWinningPair() {
+	public List<Player> getWinningPair() {
 		return winningPair;
 	}
 
-	public void setWinningPair(HashSet<Player> winningPair) {
+	public void setWinningPair(List<Player> winningPair) {
 		this.winningPair = winningPair;
 	}
 
-	public HashSet<Player> getLosingPair() {
+	public List<Player> getLosingPair() {
 		return losingPair;
 	}
 
-	public void setLosingPair(HashSet<Player> losingPair) {
+	public void setLosingPair(List<Player> losingPair) {
 		this.losingPair = losingPair;
 	}
 
-	public HashSet<MatchResultVerification> getVerifications() {
+	public List<MatchResultVerification> getVerifications() {
 		return verifications;
 	}
 
-	public void setVerifications(HashSet<MatchResultVerification> verifications) {
+	public void setVerifications(List<MatchResultVerification> verifications) {
 		this.verifications = verifications;
 	}
 

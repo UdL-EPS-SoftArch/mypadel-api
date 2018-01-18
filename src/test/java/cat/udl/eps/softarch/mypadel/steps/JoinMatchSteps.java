@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 import static cat.udl.eps.softarch.mypadel.steps.AuthenticationStepDefs.authenticate;
@@ -438,7 +440,7 @@ public class JoinMatchSteps {
 	@When("^I don't agree with the match result of the match (\\d+)$")
 	public void iDonTAgreeWithTheMatchResultOfTheMatch(int id) throws Throwable {
 		MatchResult matchResult = matchResultRepository.findOne(1) ;
-		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
+		List<MatchResultVerification> matchResultVerifications = new ArrayList<>();
 		MatchResultVerification matchResultVerification = new MatchResultVerification();
 		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
 		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
@@ -451,7 +453,7 @@ public class JoinMatchSteps {
 	@And("^I agree with the match result of the match (\\d+)$")
 	public void iAgreeWithTheMatchResultOfTheMatch(int id) throws Throwable {
 		MatchResult matchResult = matchResultRepository.findOne(1) ;
-		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
+		List<MatchResultVerification> matchResultVerifications = new ArrayList<>();
 		MatchResultVerification matchResultVerification = new MatchResultVerification();
 		matchResultVerification.setMatchToAgree(matchResultRepository.findOne(id));
 		matchResultVerification.setPlayer((Player) playerRepository.findByEmail("testplayer@mypadel.cat"));
@@ -464,7 +466,7 @@ public class JoinMatchSteps {
 	@And("^The other player agree with the result of the match (\\d+)$")
 	public void theOtherPlayerAgreeWithTheResultOfTheMatch(int id) throws Throwable {
 		MatchResult matchResult = matchResultRepository.findOne(1) ;
-		HashSet<MatchResultVerification> matchResultVerifications = new HashSet<>();
+		List<MatchResultVerification> matchResultVerifications = new ArrayList<>();
 		MatchResultVerification matchResultVerification = new MatchResultVerification();
 		MatchResultVerification matchResultVerification1 = new MatchResultVerification();
 		MatchResultVerification matchResultVerification2 = new MatchResultVerification();
